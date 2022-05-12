@@ -5,7 +5,7 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import CourseList from 'src/components/Course/List';
 import PageHeader from './PageHeader';
 
-function Courses() {
+const Courses = () => {
   return (
     <>
       <Helmet>
@@ -32,6 +32,6 @@ function Courses() {
       <Footer />
     </>
   );
-}
+};
 
 export default Courses;

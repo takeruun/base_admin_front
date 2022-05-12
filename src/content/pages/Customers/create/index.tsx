@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import Footer from 'src/components/Footer';
 import Form from 'src/components/Customer/Form';
 
-function CreateCustomers() {
+const CreateCustomers = () => {
   return (
     <>
       <Helmet>
@@ -27,6 +27,6 @@ function CreateCustomers() {
       <Footer />
     </>
   );
-}
+};
 
 export default CreateCustomers;

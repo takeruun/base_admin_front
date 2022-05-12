@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import Footer from 'src/components/Footer';
 import OrderInfo from './OrderInfo';
 
-function Order() {
+const Order = () => {
   return (
     <>
       <Helmet>
@@ -28,6 +28,6 @@ function Order() {
       <Footer />
     </>
   );
-}
+};
 
 export default Order;

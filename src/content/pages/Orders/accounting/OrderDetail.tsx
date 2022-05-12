@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useContext, ChangeEvent } from 'react';
+import { useEffect, useState, useContext, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
@@ -77,7 +77,7 @@ type FormInputType = {
   paymentMethod: string;
 };
 
-const OrderDetail: FC = () => {
+const OrderDetail = () => {
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
   const { orderId } = useParams();

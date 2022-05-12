@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { VFC } from 'react';
 import { Typography, Button, Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import EventTwoToneIcon from '@mui/icons-material/EventTwoTone';
@@ -8,7 +8,7 @@ interface PageHeaderProps {
   handleCreateEvent?: () => void;
 }
 
-const PageHeader: FC<PageHeaderProps> = ({ handleCreateEvent }) => {
+const PageHeader: VFC<PageHeaderProps> = ({ handleCreateEvent }) => {
   const { t }: { t: any } = useTranslation();
 
   return (

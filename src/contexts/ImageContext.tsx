@@ -1,5 +1,5 @@
 import {
-  FC,
+  VFC,
   createContext,
   useReducer,
   Dispatch,
@@ -82,7 +82,7 @@ type Props = {
   children: ReactNode;
 };
 
-export const ImageProvider: FC<Props> = ({ children }: Props) => {
+export const ImageProvider: VFC<Props> = ({ children }: Props) => {
   const [state, dispatch] = useReducer(ImageReducer, initialState);
 
   return (

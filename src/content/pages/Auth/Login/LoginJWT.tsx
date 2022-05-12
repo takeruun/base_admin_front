@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import type { FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Box, Button, TextField, Link, CircularProgress } from '@mui/material';
@@ -19,7 +18,7 @@ const schema = Yup.object({
   password: Yup.string().required()
 });
 
-const LoginJWT: FC = () => {
+const LoginJWT = () => {
   const { login } = useAuth() as any;
   const isMountedRef = useRefMounted();
   const { t }: { t: any } = useTranslation();

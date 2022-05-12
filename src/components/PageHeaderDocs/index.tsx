@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { VFC } from 'react';
 import PropTypes from 'prop-types';
 
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,7 @@ const RootWrapper = styled(Box)(
 `
 );
 
-const PageHeader: FC<PageHeaderProps> = ({ heading, subheading, ...rest }) => {
+const PageHeader: VFC<PageHeaderProps> = ({ heading, subheading, ...rest }) => {
   const { t }: { t: any } = useTranslation();
 
   return (

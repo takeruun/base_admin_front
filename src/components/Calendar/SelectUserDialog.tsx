@@ -1,4 +1,4 @@
-import { FC, useState, ChangeEvent, useEffect, memo } from 'react';
+import { VFC, useState, ChangeEvent, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -25,7 +25,7 @@ interface SelectUserDialogPropsType {
   handleSetUserName: (userName: string) => void;
 }
 
-const SelectUserDialog: FC<SelectUserDialogPropsType> = memo(
+const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
   ({ handleSelectUser, handleCloseDialog, handleSetUserName }) => {
     const { t }: { t: any } = useTranslation();
     const { getUsers, totalCount, users } = useAllUsers();

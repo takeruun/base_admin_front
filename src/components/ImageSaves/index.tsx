@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, Collapse, Divider } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -7,7 +7,7 @@ import ExpandMore from 'src/components/molecule/ExpandMore';
 import ImageRegister from './ImageRegister';
 import ImagesList from './ImagesList';
 
-const ImageSavesBody: FC = () => {
+const ImageSavesBody = () => {
   const { t }: { t: any } = useTranslation();
 
   const [imageRegisterExpand, setImageRegisterExpand] = useState(true);

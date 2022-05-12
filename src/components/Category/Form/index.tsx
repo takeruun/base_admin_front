@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -22,7 +21,7 @@ type FormInputType = {
   name: string;
 };
 
-const Form: FC = () => {
+const Form = () => {
   const navigate = useNavigate();
   const { t }: { t: any } = useTranslation();
 

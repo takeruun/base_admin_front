@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import FullCalendar, { EventClickArg, EventDropArg } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -111,7 +111,7 @@ const FullCalendarWrapper = styled(Box)(
 `
 );
 
-const Calender: FC = () => {
+const Calender = () => {
   const theme = useTheme();
   const calendarRef = useRef<FullCalendar | null>(null);
   const mobile = useMediaQuery(theme.breakpoints.down('md'));

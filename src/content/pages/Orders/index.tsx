@@ -6,7 +6,7 @@ import { Grid } from '@mui/material';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import OrderList from 'src/components/Order/List';
 
-function Orders() {
+const Orders = () => {
   return (
     <>
       <Helmet>
@@ -33,6 +33,6 @@ function Orders() {
       <Footer />
     </>
   );
-}
+};
 
 export default Orders;

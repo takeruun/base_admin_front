@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { VFC, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
@@ -9,7 +9,7 @@ interface ScrollbarProps {
   children?: ReactNode;
 }
 
-const Scrollbar: FC<ScrollbarProps> = ({ className, children, ...rest }) => {
+const Scrollbar: VFC<ScrollbarProps> = ({ className, children, ...rest }) => {
   const theme = useTheme();
 
   return (

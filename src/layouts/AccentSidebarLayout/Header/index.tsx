@@ -80,7 +80,7 @@ const pageTitle = (path: string): string => {
   }
 };
 
-function Header() {
+const Header = () => {
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -124,6 +124,6 @@ function Header() {
       </Box>
     </HeaderWrapper>
   );
-}
+};
 
 export default Header;

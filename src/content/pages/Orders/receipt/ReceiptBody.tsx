@@ -1,4 +1,4 @@
-import { FC, useState, createRef, useCallback } from 'react';
+import { VFC, useState, createRef, useCallback } from 'react';
 import { Stage, Layer, Image, Group } from 'react-konva';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import useImage from 'use-image';
@@ -25,7 +25,7 @@ const BaseImage = () => {
   return <Image image={image} height={350} width={850} />;
 };
 
-const ReceiptBody: FC<ReceiptBodyProps> = ({
+const ReceiptBody: VFC<ReceiptBodyProps> = ({
   texts,
   handleSetTexts,
   handleCHangeWidth,

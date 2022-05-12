@@ -141,7 +141,7 @@ const searchTerms = {
   ]
 };
 
-function HeaderSearch() {
+const HeaderSearch = () => {
   const { t }: { t: any } = useTranslation();
   const theme = useTheme();
 
@@ -574,6 +574,6 @@ function HeaderSearch() {
       </DialogWrapper>
     </>
   );
-}
+};
 
 export default HeaderSearch;

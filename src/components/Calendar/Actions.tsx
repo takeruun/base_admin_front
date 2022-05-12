@@ -1,4 +1,4 @@
-import { ElementType, FC, memo } from 'react';
+import { ElementType, VFC, memo } from 'react';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Grid, IconButton, Tooltip, Typography } from '@mui/material';
@@ -52,7 +52,7 @@ const viewOptions: ViewOption[] = [
   }
 ];
 
-const Actions: FC<ActionsProps> = memo(
+const Actions: VFC<ActionsProps> = memo(
   ({ date, onNext, onPrevious, onToday, changeView, view }) => {
     const { t }: { t: any } = useTranslation();
 

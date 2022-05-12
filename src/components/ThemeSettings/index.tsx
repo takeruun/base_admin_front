@@ -1,11 +1,4 @@
-import {
-  FC,
-  useContext,
-  useRef,
-  useState,
-  useCallback,
-  useEffect
-} from 'react';
+import { useContext, useRef, useState, useCallback, useEffect } from 'react';
 import {
   Popover,
   styled,
@@ -200,7 +193,7 @@ const CheckSelected = styled(Box)(
   `
 );
 
-const ThemeSettings: FC = () => {
+const ThemeSettings = () => {
   const { t }: { t: any } = useTranslation();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);

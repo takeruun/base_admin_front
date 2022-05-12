@@ -5,7 +5,7 @@ import TodayReservationList from './TodayReservationList';
 import SaleData from './SaleData';
 import CalendarTodayReservation from './CalendarTodayReservation';
 
-function DashboardReports() {
+const DashboardReports = () => {
   return (
     <>
       <Helmet>
@@ -37,6 +37,6 @@ function DashboardReports() {
       <Footer />
     </>
   );
-}
+};
 
 export default DashboardReports;

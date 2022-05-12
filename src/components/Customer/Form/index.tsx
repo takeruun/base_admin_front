@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { VFC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
@@ -92,7 +92,7 @@ const PostalCodeMask = React.forwardRef<HTMLInputElement, CustomProps>(
   }
 );
 
-const Form: FC<FormPropsType> = ({ user }) => {
+const Form: VFC<FormPropsType> = ({ user }) => {
   const navigate = useNavigate();
   const { t }: { t: any } = useTranslation();
   const schema = Yup.object({
@@ -101,7 +101,7 @@ const Form: FC<FormPropsType> = ({ user }) => {
     familyNameKana: Yup.string().required(t('Family name kana is required.')),
     givenNameKana: Yup.string().required(t('Given name kana is required.')),
     postalCode: Yup.string().required(t('Postal code is required.')),
-    prefecture: Yup.string().required(t('Need select prefecure.')),
+    prefecture: Yup.string().required(t('Need select prefecure')),
     address1: Yup.string().required(t('Municipalities is required.')),
     address2: Yup.string().required(t('House number is required.')),
     phoneNumber: Yup.string().required(t('Phone number is required.')),

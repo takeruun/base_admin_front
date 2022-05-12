@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { VFC, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { Outlet } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ interface BaseLayoutProps {
   children?: ReactNode;
 }
 
-const BaseLayout: FC<BaseLayoutProps> = ({ children }) => {
+const BaseLayout: VFC<BaseLayoutProps> = ({ children }) => {
   return (
     <Box
       sx={{

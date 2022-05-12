@@ -8,7 +8,7 @@ import type { ApexOptions } from 'apexcharts';
 import numeral from 'numeral';
 import request from 'src/hooks/useRequest';
 
-function PageHeader() {
+const PageHeader = () => {
   const { t }: { t: any } = useTranslation();
   const theme = useTheme();
   const initalChartOption: ApexOptions = {
@@ -142,6 +142,6 @@ function PageHeader() {
       </Grid>
     </>
   );
-}
+};
 
 export default PageHeader;

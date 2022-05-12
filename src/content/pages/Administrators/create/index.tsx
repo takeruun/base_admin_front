@@ -1,10 +1,9 @@
-import { FC } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Grid from '@mui/material/Grid';
 import Footer from 'src/components/Footer';
 import Form from 'src/components/Administrator/Form';
 
-const CreateAdministrators: FC = () => {
+const CreateAdministrators = () => {
   return (
     <>
       <Helmet>

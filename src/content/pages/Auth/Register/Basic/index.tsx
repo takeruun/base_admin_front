@@ -32,7 +32,7 @@ const TopWrapper = styled(Box)(
 `
 );
 
-function RegisterBasic() {
+const RegisterBasic = () => {
   const { method } = useAuth() as any;
   const { t }: { t: any } = useTranslation();
 
@@ -93,6 +93,6 @@ function RegisterBasic() {
       </MainContent>
     </>
   );
-}
+};
 
 export default RegisterBasic;

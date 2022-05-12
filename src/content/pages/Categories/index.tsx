@@ -5,7 +5,7 @@ import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import CategoryList from 'src/components/Category/List';
 
-function Categories() {
+const Categories = () => {
   return (
     <>
       <Helmet>
@@ -32,6 +32,6 @@ function Categories() {
       <Footer />
     </>
   );
-}
+};
 
 export default Categories;

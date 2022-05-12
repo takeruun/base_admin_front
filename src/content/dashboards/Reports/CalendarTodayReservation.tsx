@@ -21,7 +21,7 @@ const FullCalendarWrapper = styled(Box)(
 `
 );
 
-function CalendarTodayReservation() {
+const CalendarTodayReservation = () => {
   const { t }: { t: any } = useTranslation();
   const calendarRef = useRef<FullCalendar | null>(null);
   const [date, setDate] = useState<Date>(new Date());
@@ -107,6 +107,6 @@ function CalendarTodayReservation() {
       </Card>
     </>
   );
-}
+};
 
 export default CalendarTodayReservation;

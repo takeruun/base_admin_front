@@ -1,5 +1,5 @@
 import {
-  FC,
+  VFC,
   ReactElement,
   Ref,
   useState,
@@ -77,7 +77,7 @@ interface UpdateOrderFormProps {
   handleClose: () => void;
 }
 
-const UpdateOrderForm: FC<UpdateOrderFormProps> = memo(
+const UpdateOrderForm: VFC<UpdateOrderFormProps> = memo(
   ({ orderInfo, handleClose }) => {
     const { t }: { t: any } = useTranslation();
     const getFontRate = useContext(FontRateContext);

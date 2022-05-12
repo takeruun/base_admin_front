@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import Footer from 'src/components/Footer';
 import OrderDetail from './OrderDetail';
 
-function Accounting() {
+const Accounting = () => {
   const { t }: { t: any } = useTranslation();
 
   return (
@@ -31,6 +31,6 @@ function Accounting() {
       <Footer />
     </>
   );
-}
+};
 
 export default Accounting;

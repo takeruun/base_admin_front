@@ -24,7 +24,7 @@ const TopWrapper = styled(Box)(
 `
 );
 
-function LoginBasic() {
+const LoginBasic = () => {
   const { method } = useAuth() as any;
   const { t }: { t: any } = useTranslation();
 
@@ -85,6 +85,6 @@ function LoginBasic() {
       </MainContent>
     </>
   );
-}
+};
 
 export default LoginBasic;

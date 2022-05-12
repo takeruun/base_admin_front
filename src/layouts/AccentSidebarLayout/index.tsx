@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { VFC, ReactNode } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import ThemeSettings from 'src/components/ThemeSettings';
@@ -10,7 +10,7 @@ interface AccentSidebarLayoutProps {
   children?: ReactNode;
 }
 
-const AccentSidebarLayout: FC<AccentSidebarLayoutProps> = () => {
+const AccentSidebarLayout: VFC<AccentSidebarLayoutProps> = () => {
   const theme = useTheme();
 
   return (

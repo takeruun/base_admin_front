@@ -1,6 +1,4 @@
-export {};
 import {
-  FC,
   ChangeEvent,
   useState,
   ReactElement,
@@ -86,7 +84,7 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const List: FC = () => {
+const List = () => {
   const { t }: { t: any } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();

@@ -22,7 +22,7 @@ type FormInputType = {
   terms: boolean;
 };
 
-function RegisterJWT() {
+const RegisterJWT = () => {
   const { t }: { t: any } = useTranslation();
 
   const schema = Yup.object({
@@ -160,6 +160,6 @@ function RegisterJWT() {
       </Button>
     </form>
   );
-}
+};
 
 export default RegisterJWT;

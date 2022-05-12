@@ -1,5 +1,5 @@
 import {
-  FC,
+  VFC,
   createContext,
   useReducer,
   Dispatch,
@@ -156,7 +156,7 @@ type Props = {
   children: ReactNode;
 };
 
-export const OrderCalendarProvider: FC<Props> = ({ children }) => {
+export const OrderCalendarProvider: VFC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(OrderCalendarReducer, initialState);
 
   return (

@@ -1,5 +1,4 @@
 import {
-  FC,
   useContext,
   useState,
   useEffect,
@@ -29,7 +28,7 @@ export type textHtmlProps = {
   initialHtml?: string;
 };
 
-const Receipt: FC = () => {
+const Receipt = () => {
   const { t }: { t: any } = useTranslation();
   const { orderId } = useParams();
   const navigate = useNavigate();

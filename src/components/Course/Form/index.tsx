@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
@@ -34,7 +34,7 @@ type FormInputType = {
   price: number;
 };
 
-const Form: FC = () => {
+const Form = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const { t }: { t: any } = useTranslation();

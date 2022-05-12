@@ -6,7 +6,7 @@ import Footer from 'src/components/Footer';
 import { useOrder } from 'src/hooks/useOrder';
 import Form from 'src/components/Order/Form';
 
-function EditOrder() {
+export const EditOrder = () => {
   const { orderId } = useParams();
   const { getOrder, order, loading } = useOrder();
 
@@ -38,6 +38,6 @@ function EditOrder() {
       <Footer />
     </>
   );
-}
+};
 
 export default EditOrder;

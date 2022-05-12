@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { VFC, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 
@@ -65,7 +65,7 @@ const LabelWrapper = styled('span')(
 `
 );
 
-const Label: FC<LabelProps> = ({
+const Label: VFC<LabelProps> = ({
   className,
   color = 'secondary',
   children,

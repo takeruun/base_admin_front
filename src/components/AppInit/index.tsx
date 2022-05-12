@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 
 import Logo from 'src/components/LogoSign';
 
-function AppInit() {
+const AppInit = () => {
   return (
     <Box
       sx={{
@@ -21,6 +21,6 @@ function AppInit() {
       <Logo />
     </Box>
   );
-}
+};
 
 export default AppInit;

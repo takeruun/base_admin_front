@@ -75,7 +75,7 @@ type FormInputType = {
   email: string;
 };
 
-function RecoverPasswordBasic() {
+const RecoverPasswordBasic = () => {
   const { t }: { t: any } = useTranslation();
 
   const [openAlert, setOpenAlert] = useState(true);
@@ -275,6 +275,6 @@ function RecoverPasswordBasic() {
       </DialogWrapper>
     </>
   );
-}
+};
 
 export default RecoverPasswordBasic;

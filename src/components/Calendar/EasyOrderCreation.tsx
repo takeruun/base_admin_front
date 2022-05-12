@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, memo } from 'react';
+import { VFC, useState, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import {
@@ -31,7 +31,7 @@ export type FormIputType = {
   memo: string;
 };
 
-const EasyOrderCreation: FC<EasyOrderCreationPropsType> = memo(
+const EasyOrderCreation: VFC<EasyOrderCreationPropsType> = memo(
   ({ onClose, selectDate, selectTime }) => {
     const { t }: { t: any } = useTranslation();
     const { postEasyOrderCreation } = useOrderCalendar();

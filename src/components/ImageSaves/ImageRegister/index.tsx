@@ -1,4 +1,4 @@
-import { FC, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
 import { buildStyles } from 'react-circular-progressbar';
@@ -46,7 +46,7 @@ const AvatarDanger = styled(Avatar)(
 `
 );
 
-const ImageRegister: FC = () => {
+const ImageRegister = () => {
   const { t }: { t: any } = useTranslation();
   const { usingRate, capacityMessage, gaugeColor, getAllCapacity } =
     useAllCapacity();

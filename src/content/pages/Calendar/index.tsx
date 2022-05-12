@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Grid } from '@mui/material';
@@ -8,7 +7,7 @@ import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import PageHeader from './PageHeader';
 
-function ApplicationsCalendar() {
+const ApplicationsCalendar = () => {
   const navigate = useNavigate();
 
   const handleAddClick = (): void => {
@@ -40,6 +39,6 @@ function ApplicationsCalendar() {
       <Footer />
     </>
   );
-}
+};
 
 export default ApplicationsCalendar;

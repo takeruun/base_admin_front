@@ -39,24 +39,24 @@ const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
   }
 }));
 
-function Logo() {
+const Logo = () => {
   const { t }: { t: any } = useTranslation();
   const theme = useTheme();
 
   return (
-    <TooltipWrapper title={t('example Admin')} arrow>
+    <TooltipWrapper title={t('Art Admin')} arrow>
       <LogoWrapper to="/">
         <Avatar
           sx={{
             bgcolor: green[500]
           }}
-          alt={'example'}
+          alt={'art'}
         >
-          example
+          ART
         </Avatar>
       </LogoWrapper>
     </TooltipWrapper>
   );
-}
+};
 
 export default Logo;

@@ -1,6 +1,6 @@
-import { FC, useState, useEffect, useCallback, forwardRef } from 'react';
+import { VFC, useEffect, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import {
   Autocomplete,
   CardContent,
@@ -17,12 +17,8 @@ import { IMaskInput } from 'react-imask';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import ja from 'date-fns/locale/ja';
-import axios from 'axios';
 
-import { FontRateContext } from 'src/theme/ThemeProvider';
-import { usePrefectures } from 'src/hooks/usePrefectures';
-import { useOccupations } from 'src/hooks/useOccupations';
-import { OrderFormInputType } from './index';
+import { useUserFormState } from './store';
 
 const FormLabelStyle = styled('p')(
   () => `
@@ -60,17 +56,19 @@ const PostalCodeMask = forwardRef<HTMLInputElement, CustomProps>(
   }
 );
 
-const UserForm: FC = () => {
+const UserForm: VFC = () => {
   const { t }: { t: any } = useTranslation();
   const {
     control,
     setValue,
-    watch,
-    formState: { errors }
-  } = useFormContext<OrderFormInputType>();
+    formState: { errors },
 
-  const { getPrefectures, prefectures } = usePrefectures();
-  const { getOccupations, occupations } = useOccupations();
+    prefectures,
+    occupations,
+    getPrefectures,
+    getOccupations,
+    updateAddress
+  } = useUserFormState();
 
   useEffect(() => {
     getPrefectures();
@@ -78,28 +76,9 @@ const UserForm: FC = () => {
   }, []);
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
-      if (name === 'user.postalCode' && value.user.postalCode.length >= 7) {
-        axios
-          .get('https://zipcloud.ibsnet.co.jp/api/search', {
-            params: {
-              zipcode: value.user.postalCode
-            }
-          })
-          .then((res) => {
-            if (res['data']['results']) {
-              setValue(
-                'user.prefecture',
-                res['data']['results'][0]['address1']
-              );
-              setValue('user.address1', res['data']['results'][0]['address2']);
-              setValue('user.address2', res['data']['results'][0]['address3']);
-            }
-          });
-      }
-    });
+    const subscription = updateAddress();
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [updateAddress]);
 
   return (
     <CardContent>

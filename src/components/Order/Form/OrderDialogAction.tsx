@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { VFC, memo } from 'react';
 import { Button, CircularProgress, DialogActions } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ type OrderDialogActionPropsType = {
   editing: boolean;
 };
 
-const OrderDialogAction: FC<OrderDialogActionPropsType> = memo(
+const OrderDialogAction: VFC<OrderDialogActionPropsType> = memo(
   ({ isSubmitting, editing }) => {
     const { t }: { t: any } = useTranslation();
     const navigate = useNavigate();

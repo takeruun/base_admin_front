@@ -58,7 +58,7 @@ const ButtonNotify = styled(Button)(
 `
 );
 
-function StatusComingSoon() {
+const StatusComingSoon = () => {
   const { t }: { t: any } = useTranslation();
 
   const calculateTimeLeft = () => {
@@ -203,6 +203,6 @@ function StatusComingSoon() {
       </MainContent>
     </>
   );
-}
+};
 
 export default StatusComingSoon;

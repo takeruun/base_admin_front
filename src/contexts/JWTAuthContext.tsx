@@ -1,4 +1,4 @@
-import { FC, ReactNode, createContext, useEffect, useReducer } from 'react';
+import { VFC, ReactNode, createContext, useEffect, useReducer } from 'react';
 import { User } from 'src/models/user';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -113,7 +113,7 @@ const AuthContext = createContext<AuthContextValue>({
   register: () => Promise.resolve()
 });
 
-export const AuthProvider: FC<AuthProviderProps> = (props) => {
+export const AuthProvider: VFC<AuthProviderProps> = (props) => {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialAuthState);
 

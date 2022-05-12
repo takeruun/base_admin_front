@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { VFC } from 'react';
 import numeral from 'numeral';
 import { useTranslation } from 'react-i18next';
 import {
@@ -18,7 +18,7 @@ interface OrderItemPropsType {
   orderItems: OrderItem[];
 }
 
-const OrderItemInfo: FC<OrderItemPropsType> = ({
+const OrderItemInfo: VFC<OrderItemPropsType> = ({
   productType,
   orderItems = []
 }) => {

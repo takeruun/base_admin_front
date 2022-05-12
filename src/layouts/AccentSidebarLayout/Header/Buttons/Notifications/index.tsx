@@ -78,7 +78,7 @@ const IconButtonWrapper = styled(IconButton)(
 `
 );
 
-function HeaderNotifications() {
+const HeaderNotifications = () => {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const theme = useTheme();
@@ -150,6 +150,6 @@ function HeaderNotifications() {
       </Popover>
     </>
   );
-}
+};
 
 export default HeaderNotifications;

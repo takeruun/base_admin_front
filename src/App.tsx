@@ -11,7 +11,7 @@ import { CssBaseline } from '@mui/material';
 import ThemeProvider from './theme/ThemeProvider';
 import AppInit from './components/AppInit';
 
-function App() {
+const App = () => {
   const content = useRoutes(router);
   const auth = useAuth();
 
@@ -31,5 +31,5 @@ function App() {
       </LocalizationProvider>
     </ThemeProvider>
   );
-}
+};
 export default App;

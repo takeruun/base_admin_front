@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, memo } from 'react';
+import { VFC, useState, useEffect, memo } from 'react';
 import { Html } from 'react-konva-utils';
 import { textHtmlProps } from 'src/content/pages/Orders/receipt';
 import { convertToRaw, EditorState, ContentState } from 'draft-js';
@@ -40,7 +40,7 @@ const EditorWrapper = styled('div')<{
   }
 }));
 
-const TextInputHtml: FC<TextInputHtmlProps> = memo(
+const TextInputHtml: VFC<TextInputHtmlProps> = memo(
   ({ textProps, isEditing }) => {
     const [editorState, setEditorState] = useState<EditorState>(
       EditorState.createEmpty()

@@ -1,4 +1,4 @@
-import { FC, ReactNode, memo } from 'react';
+import { VFC, ReactNode, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Control, Controller } from 'react-hook-form';
 import styled from '@mui/material/styles/styled';
@@ -22,7 +22,7 @@ interface UserTextFieldFormPropsType {
   textFieldProps: TextFieldProps;
 }
 
-const UserTextFieldForm: FC<UserTextFieldFormPropsType> = memo(
+const UserTextFieldForm: VFC<UserTextFieldFormPropsType> = memo(
   ({ label, control, name, error, helperText, textFieldProps }) => {
     const { t }: { t: any } = useTranslation();
 

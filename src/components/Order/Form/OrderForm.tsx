@@ -1,6 +1,6 @@
-import { FC, useState, useEffect, useCallback, useContext } from 'react';
+import { VFC, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import {
   Box,
   CardContent,
@@ -19,7 +19,7 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
 import { FontRateContext } from 'src/theme/ThemeProvider';
 import { Order } from 'src/models/order';
-import { ProductType, Course, Goods } from 'src/models/product';
+import { Course, Goods } from 'src/models/product';
 import NumberFormatCustom from 'src/components/NumberFormatCustom';
 
 import DialogSelectSearchOrderItem from './DialogSelectSearchOrderItem';
@@ -27,7 +27,7 @@ import DialogSelectSearchDiscount from './DialogSelectSearchDiscount';
 import OrderDialogAction from './OrderDialogAction';
 import SelectUser from './SelectUser';
 import OrderItemsForm from './OrderItemsForm';
-import { OrderFormInputType } from './index';
+import { useOrderFormState } from './store';
 
 interface OrderFormPropsType {
   removeOrderItem: (orderItemId?: number) => void;
@@ -42,71 +42,44 @@ const FormLabelStyle = styled('p')(
   `
 );
 
-const OrderForm: FC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
+const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
   const { t }: { t: any } = useTranslation();
   const getFontRate = useContext(FontRateContext);
   const fontRate = getFontRate();
+
   const {
     control,
-    setValue,
     getValues,
-    watch,
-    formState: { errors, isSubmitting }
-  } = useFormContext<OrderFormInputType>();
+    formState,
 
-  const [selectProductIds, setSelectProductIds] = useState<number[]>([]);
-  const handleAddSelectProductIds = useCallback(
-    (productId: number) => setSelectProductIds((prev) => [...prev, productId]),
-    []
-  );
+    selectProductIds,
+    searchProductType,
+    orderItemOpen,
+    discountOrderItem,
+    discoutOpen,
 
-  const [searchProductType, setSearchProductType] = useState<ProductType>();
+    setInitialSelectProductIds,
+    handleCreateOrderItemOpen,
+    handleCreateOrderItemClose,
+    handleDiscountOpen,
+    handleDiscountClose,
+    updateOrderPrice,
+    updateSelectProductIds
+  } = useOrderFormState();
 
-  const [orderItemOpen, setOrderItemOpen] = useState<boolean>(false);
-  const handleCreateOrderItemOpen = useCallback((pt: ProductType) => {
-    setSearchProductType(pt);
-    setOrderItemOpen(true);
-  }, []);
-  const handleCreateOrderItemClose = useCallback(
-    () => setOrderItemOpen(false),
-    []
-  );
-
-  const [discountOrderItem, setDiscountOrderItem] = useState<number>();
-  const [discoutOpen, setDiscountOpen] = useState<boolean>(false);
-  const handleDiscountOpen = useCallback((index: number) => {
-    setDiscountOrderItem(index);
-    setDiscountOpen(true);
-  }, []);
-  const handleDiscountClose = useCallback(() => setDiscountOpen(false), []);
+  const { errors, isSubmitting } = formState;
 
   useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      var subTotalPrice = 0;
-      if (name.includes('orderItems')) {
-        value.orderItems.forEach(
-          (orderItem) =>
-            (subTotalPrice +=
-              (orderItem.price - orderItem.discountAmount) * orderItem.quantity)
-        );
-
-        var totalPrice = subTotalPrice;
-        setValue('subTotalPrice', subTotalPrice);
-        setValue('totalPrice', totalPrice);
-      }
-    });
+    const subscription = updateOrderPrice();
     return () => subscription.unsubscribe();
-  }, [watch, setValue]);
+  }, [updateOrderPrice]);
 
   useEffect(() => {
-    var productIds = [];
-    if (Boolean(order)) {
-      order.orderItems.forEach((orderItem) => {
-        productIds.push(orderItem.productId);
-      });
-      setSelectProductIds(productIds);
-    }
-  }, [order]);
+    const subscription = updateSelectProductIds();
+    return () => subscription.unsubscribe();
+  }, [updateSelectProductIds]);
+
+  useEffect(() => setInitialSelectProductIds(order), [order]);
 
   return (
     <CardContent>
@@ -394,8 +367,6 @@ const OrderForm: FC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
       >
         <DialogSelectSearchOrderItem
           handleCreateOrderItemClose={handleCreateOrderItemClose}
-          handleAddSelectProductIds={handleAddSelectProductIds}
-          intialOrderItemIds={selectProductIds}
           productType={searchProductType}
         />
       </Dialog>

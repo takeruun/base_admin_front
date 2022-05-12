@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState, useContext } from 'react';
+import { VFC, ReactNode, useState, useContext } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { SidebarContext } from 'src/contexts/SidebarContext';
@@ -46,7 +46,7 @@ const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
   }
 }));
 
-const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
+const SidebarMenuItem: VFC<SidebarMenuItemProps> = ({
   children,
   link,
   icon: Icon,

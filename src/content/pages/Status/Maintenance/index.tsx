@@ -27,7 +27,7 @@ const MainContent = styled(Box)(
 `
 );
 
-function StatusMaintenance() {
+const StatusMaintenance = () => {
   const { t }: { t: any } = useTranslation();
 
   return (
@@ -110,6 +110,6 @@ function StatusMaintenance() {
       </MainContent>
     </>
   );
-}
+};
 
 export default StatusMaintenance;

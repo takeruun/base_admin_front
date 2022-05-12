@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { VFC, memo } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
@@ -46,7 +46,7 @@ interface AddEditEventModalProps {
   onDeleteComplete?: () => void;
 }
 
-const EventDrawer: FC<AddEditEventModalProps> = memo(
+const EventDrawer: VFC<AddEditEventModalProps> = memo(
   ({ event, onCancel, onDeleteComplete }) => {
     const { t }: { t: any } = useTranslation();
     const { enqueueSnackbar } = useSnackbar();

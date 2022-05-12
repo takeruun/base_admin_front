@@ -3,7 +3,7 @@ import Footer from 'src/components/Footer';
 import Form from 'src/components/Category/Form';
 import Grid from '@mui/material/Grid';
 
-function CreateCategories() {
+const CreateCategories = () => {
   return (
     <>
       <Helmet>
@@ -26,6 +26,6 @@ function CreateCategories() {
       <Footer />
     </>
   );
-}
+};
 
 export default CreateCategories;

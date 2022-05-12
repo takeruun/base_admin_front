@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { VFC, memo } from 'react';
 import { Html } from 'react-konva-utils';
 import { styled } from '@mui/material';
 import { textHtmlProps } from 'src/content/pages/Orders/receipt';
@@ -16,7 +16,7 @@ const HtmlDiv = styled('div')(
   `
 );
 
-const TextHtml: FC<TextHtmlProps> = memo(({ textProps, isEditing }) => {
+const TextHtml: VFC<TextHtmlProps> = memo(({ textProps, isEditing }) => {
   return (
     <>
       <Html

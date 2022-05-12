@@ -253,7 +253,7 @@ const reduceChildRoutes = ({
   return ev;
 };
 
-function SidebarMenu() {
+const SidebarMenu = () => {
   const location = useLocation();
   const { t }: { t: any } = useTranslation();
 
@@ -278,6 +278,6 @@ function SidebarMenu() {
       ))}
     </>
   );
-}
+};
 
 export default SidebarMenu;

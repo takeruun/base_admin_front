@@ -97,7 +97,7 @@ const LogoText = styled(Box)(
 `
 );
 
-function Logo() {
+const Logo = () => {
   const { t }: { t: any } = useTranslation();
 
   return (
@@ -122,6 +122,6 @@ function Logo() {
       </Box>
     </LogoWrapper>
   );
-}
+};
 
 export default Logo;

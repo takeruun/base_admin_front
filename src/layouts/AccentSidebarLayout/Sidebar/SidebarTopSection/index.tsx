@@ -74,7 +74,7 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-function SidebarTopSection() {
+const SidebarTopSection = () => {
   const { t }: { t: any } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -206,6 +206,6 @@ function SidebarTopSection() {
       </Popover>
     </>
   );
-}
+};
 
 export default SidebarTopSection;

@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { VFC, useContext, useEffect, useState } from 'react';
 import parse from 'html-react-parser';
 import { Box, Container, styled } from '@mui/material';
 import { ReceiptTextsContext } from 'src/contexts/ReceiptTextsContext';
@@ -35,7 +35,7 @@ const BaseImage = () => {
   return <Image image={image} height={350} width={850} />;
 };
 
-const ReceiptPreview: FC = () => {
+const ReceiptPreview = () => {
   const { receiptTexts } = useContext(ReceiptTextsContext);
 
   return (

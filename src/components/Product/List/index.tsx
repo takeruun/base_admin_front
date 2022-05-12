@@ -1,5 +1,5 @@
 import {
-  FC,
+  VFC,
   ChangeEvent,
   useState,
   ReactElement,
@@ -81,7 +81,7 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const Results: FC<ResultsProps> = () => {
+const Results: VFC<ResultsProps> = () => {
   const { t }: { t: any } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
 

@@ -1,4 +1,4 @@
-import { FC, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -31,7 +31,7 @@ const LabelTypography = styled('p')(
   `
 );
 
-const OrderInfo: FC = () => {
+const OrderInfo = () => {
   const { t }: { t: any } = useTranslation();
   const { orderId } = useParams();
   const navigate = useNavigate();

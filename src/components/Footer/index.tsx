@@ -10,7 +10,7 @@ const FooterWrapper = styled(Card)(
 `
 );
 
-function Footer() {
+const Footer = () => {
   return (
     <FooterWrapper
       className="footer-wrapper"
@@ -44,6 +44,6 @@ function Footer() {
       </Box>
     </FooterWrapper>
   );
-}
+};
 
 export default Footer;

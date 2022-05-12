@@ -4,7 +4,7 @@ import { Grid, Typography, Button } from '@mui/material';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { Link } from 'react-router-dom';
 
-function PageHeader() {
+const PageHeader = () => {
   const { t }: { t: any } = useTranslation();
 
   return (
@@ -34,6 +34,6 @@ function PageHeader() {
       </Grid>
     </>
   );
-}
+};
 
 export default PageHeader;

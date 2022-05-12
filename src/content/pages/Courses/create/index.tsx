@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Footer from 'src/components/Footer';
 import Form from 'src/components/Course/Form';
 
-function CreateCourses() {
+const CreateCourses = () => {
   return (
     <>
       <Helmet>
@@ -26,6 +26,6 @@ function CreateCourses() {
       <Footer />
     </>
   );
-}
+};
 
 export default CreateCourses;

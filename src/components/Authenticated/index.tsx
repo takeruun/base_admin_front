@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { VFC, ReactNode, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useAuth from 'src/hooks/useAuth';
@@ -8,7 +8,7 @@ interface AuthenticatedProps {
   children: ReactNode;
 }
 
-const Authenticated: FC<AuthenticatedProps> = (props: { children: any }) => {
+const Authenticated: VFC<AuthenticatedProps> = (props: { children: any }) => {
   const { children } = props;
   const auth = useAuth();
   const location = useLocation();

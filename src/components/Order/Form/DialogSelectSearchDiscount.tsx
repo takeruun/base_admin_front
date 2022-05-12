@@ -1,9 +1,4 @@
-import { useState, useEffect, ChangeEvent, FC, memo } from 'react';
-import {
-  useFormContext,
-  UseFormSetValue,
-  UseFormGetValues
-} from 'react-hook-form';
+import { useEffect, VFC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -26,9 +21,7 @@ import {
 import numeral from 'numeral';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 
-import { useAllDiscounts } from 'src/hooks/useDiscount';
-import { Discount, Percentage, PriceReduction } from 'src/models/discount';
-import type { OrderFormInputType } from '..';
+import { useDialogSelectSearchDiscountState } from './store';
 
 type DialogSelectSearchDiscountProps = {
   open: boolean;
@@ -36,45 +29,24 @@ type DialogSelectSearchDiscountProps = {
   handleDiscountClose: () => void;
 };
 
-const DialogSelectSearchDiscount: FC<DialogSelectSearchDiscountProps> = memo(
+const DialogSelectSearchDiscount: VFC<DialogSelectSearchDiscountProps> = memo(
   ({ open, discountOrderItem, handleDiscountClose }) => {
     const { t }: { t: any } = useTranslation();
-    const [formValue, setFormValue] = useState(null);
-    const [page, setPage] = useState<number>(0);
-    const [limit, setLimit] = useState<number>(10);
-    const { getDiscounts, totalCount, discounts } = useAllDiscounts();
-    const { control, setValue, getValues } =
-      useFormContext<OrderFormInputType>();
+    const {
+      control,
 
-    const handlePageChange = (_event: any, newPage: number): void => {
-      setPage(newPage);
-    };
+      formValue,
+      page,
+      limit,
+      discounts,
+      totalCount,
 
-    const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-      setLimit(parseInt(event.target.value));
-    };
-
-    const settingDiscount = (discount: Discount) => {
-      const price = getValues(`orderItems.${discountOrderItem}.price`);
-      var newPrice = 0;
-      if (discount.discountType == Percentage) {
-        setValue(
-          `orderItems.${discountOrderItem}.discountRate`,
-          discount.amount
-        );
-        newPrice = price * ((100 - discount.amount) / 100);
-      } else if (discount.discountType == PriceReduction) {
-        newPrice = price - discount.amount;
-      }
-
-      setValue(`orderItems.${discountOrderItem}.discountId`, discount.id);
-      setValue(
-        `orderItems.${discountOrderItem}.discountAmount`,
-        price - newPrice
-      );
-      setValue(`orderItems.${discountOrderItem}.discountName`, discount.name);
-      handleDiscountClose();
-    };
+      getDiscounts,
+      handleSetFromValue,
+      handlePageChange,
+      handleLimitChange,
+      settingDiscount
+    } = useDialogSelectSearchDiscountState();
 
     useEffect(() => {
       getDiscounts({ offset: page * limit, limit });
@@ -109,7 +81,7 @@ const DialogSelectSearchDiscount: FC<DialogSelectSearchDiscountProps> = memo(
                     sx={{
                       m: 0
                     }}
-                    onChange={(e) => setFormValue(e.target.value)}
+                    onChange={(e) => handleSetFromValue(e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -152,7 +124,10 @@ const DialogSelectSearchDiscount: FC<DialogSelectSearchDiscountProps> = memo(
                               <TableRow
                                 hover
                                 key={index}
-                                onClick={() => settingDiscount(discount)}
+                                onClick={() => {
+                                  settingDiscount(discountOrderItem, discount);
+                                  handleDiscountClose();
+                                }}
                               >
                                 <TableCell>
                                   <Typography noWrap>{discount.id}</Typography>

@@ -1,12 +1,9 @@
-import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import Footer from 'src/components/Footer';
-import { useOrder } from 'src/hooks/useOrder';
 import Form from 'src/components/Order/Form';
 
-function CreateOrder() {
+export const CreateOrder = () => {
   return (
     <>
       <Helmet>
@@ -31,6 +28,6 @@ function CreateOrder() {
       <Footer />
     </>
   );
-}
+};
 
 export default CreateOrder;

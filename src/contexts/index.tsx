@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { VFC, ReactNode } from 'react';
 import { SidebarProvider } from './SidebarContext';
 import { AuthProvider } from './JWTAuthContext';
 import { ReceiptTextsProvider } from './ReceiptTextsContext';
@@ -10,7 +10,7 @@ type Props = {
   children: ReactNode;
 };
 
-export const RootContextProvider: FC<Props> = ({ children }) => {
+export const RootContextProvider: VFC<Props> = ({ children }) => {
   return (
     <SidebarProvider>
       <AuthProvider>

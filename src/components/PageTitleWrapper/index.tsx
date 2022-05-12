@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { VFC, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { Box, styled } from '@mui/material';
 
@@ -13,7 +13,7 @@ interface PageTitleWrapperProps {
   children?: ReactNode;
 }
 
-const PageTitleWrapper: FC<PageTitleWrapperProps> = ({ children }) => {
+const PageTitleWrapper: VFC<PageTitleWrapperProps> = ({ children }) => {
   return (
     <>
       <PageTitle className="MuiPageTitle-wrapper">{children}</PageTitle>

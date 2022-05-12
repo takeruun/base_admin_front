@@ -57,7 +57,7 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-function HeaderUserbox() {
+const HeaderUserbox = () => {
   const { t }: { t: any } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -202,6 +202,6 @@ function HeaderUserbox() {
       </Popover>
     </>
   );
-}
+};
 
 export default HeaderUserbox;

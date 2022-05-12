@@ -1,4 +1,4 @@
-import { FC, useRef, useEffect, memo } from 'react';
+import { VFC, useRef, useEffect, memo } from 'react';
 import { Rect, Transformer } from 'react-konva';
 import { textHtmlProps } from 'src/content/pages/Orders/receipt';
 import TextHtml from './TextHtml';
@@ -13,7 +13,7 @@ interface TextUsageProps {
   changePosition: (x: number, y: number) => void;
 }
 
-const TextUsage: FC<TextUsageProps> = memo(
+const TextUsage: VFC<TextUsageProps> = memo(
   ({
     textProps,
     selected,

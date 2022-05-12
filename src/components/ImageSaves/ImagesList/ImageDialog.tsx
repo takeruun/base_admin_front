@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useState, useContext } from 'react';
+import { VFC, memo, useEffect, useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { useForm, Controller } from 'react-hook-form';
@@ -28,7 +28,7 @@ type FormInputType = {
   description: string;
 };
 
-const ImageDialog: FC<ImageDialogPropsType> = memo(
+const ImageDialog: VFC<ImageDialogPropsType> = memo(
   ({ image, handleChangeSelectImage }) => {
     const { t }: { t: any } = useTranslation();
     const dispatchImage = useImageDispatch();

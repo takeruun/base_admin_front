@@ -5,7 +5,7 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import PageHeader from './PageHeader';
 import AdministratorList from 'src/components/Administrator/List';
 
-function Administrators() {
+const Administrators = () => {
   return (
     <>
       <Helmet>
@@ -32,6 +32,6 @@ function Administrators() {
       <Footer />
     </>
   );
-}
+};
 
 export default Administrators;

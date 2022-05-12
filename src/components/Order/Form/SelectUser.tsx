@@ -1,5 +1,4 @@
-import { useState, useEffect, ChangeEvent, FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useEffect, VFC } from 'react';
 import {
   Button,
   Box,
@@ -22,9 +21,7 @@ import {
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { useTranslation } from 'react-i18next';
 
-import { useAllUsers } from 'src/hooks/useUser';
-import { OrderFormInputType } from './index';
-import type { User } from 'src/models/user';
+import { useSelectUserState } from './store';
 
 const UnderLineTypography = styled(Typography)(
   () => `
@@ -36,50 +33,29 @@ const UnderLineTypography = styled(Typography)(
 `
 );
 
-const SelectUser: FC = () => {
+const SelectUser: VFC = () => {
   const { t }: { t: any } = useTranslation();
-  const { setValue, getValues } = useFormContext<OrderFormInputType>();
+  const {
+    getValues,
+    open,
+    formValue,
+    page,
+    limit,
+    users,
+    totalCount,
 
-  const [open, setOpen] = useState<boolean>(false);
-  const [formValue, setFormValue] = useState(null);
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const { getUsers, totalCount, users } = useAllUsers();
-
-  const handleClose = () => setOpen(false);
-
-  const handleSelecUser = (user: User) => {
-    setValue('userId', user.id);
-    setValue('user.id', user.id);
-    setValue('user.familyName', user.familyName);
-    setValue('user.givenName', user.givenName);
-    setValue('user.familyNameKana', user.familyNameKana);
-    setValue('user.givenNameKana', user.givenNameKana);
-    setValue('user.postalCode', user.postalCode);
-    setValue('user.prefecture', user.prefecture);
-    setValue('user.address1', user.address1);
-    setValue('user.address2', user.address2);
-    setValue('user.address3', user.address3);
-    setValue('user.phoneNumber', user.phoneNumber);
-    setValue('user.homePhoneNumber', user.homePhoneNumber);
-    setValue('user.email', user.email);
-    setValue('user.gender', user.gender);
-    setValue('user.birthday', user.birthday);
-    setValue('user.occupation', user.occupation);
-    setValue('user.firstVisitDate', user.firstVisitDate);
-    setValue('user.memo', user.memo ? user.memo : '');
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
+    getUsers,
+    handleSetFromValue,
+    handleOpen,
+    handleClose,
+    handleSelectUser,
+    handlePageChange,
+    handleLimitChange
+  } = useSelectUserState();
 
   useEffect(() => {
     getUsers({ offset: page * limit, limit });
-  }, [getUsers]);
+  }, [page, limit]);
 
   return (
     <>
@@ -87,7 +63,7 @@ const SelectUser: FC = () => {
         {getValues('user.familyNameKana')}
         {getValues('user.givenNameKana')}
       </Typography>
-      <UnderLineTypography noWrap variant="h3" onClick={() => setOpen(true)}>
+      <UnderLineTypography noWrap variant="h3" onClick={handleOpen}>
         {Boolean(getValues('userId'))
           ? `
               ${getValues('user.familyName')}
@@ -114,7 +90,7 @@ const SelectUser: FC = () => {
                 sx={{
                   m: 0
                 }}
-                onChange={(e) => setFormValue(e.target.value)}
+                onChange={(e) => handleSetFromValue(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -157,7 +133,7 @@ const SelectUser: FC = () => {
                             hover
                             key={user.id}
                             onClick={() => {
-                              handleSelecUser(user);
+                              handleSelectUser(user);
                               handleClose();
                             }}
                           >

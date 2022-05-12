@@ -6,7 +6,7 @@ import { Grid } from '@mui/material';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import CustomerList from 'src/components/Customer/List';
 
-function Customers() {
+const Customers = () => {
   return (
     <>
       <Helmet>
@@ -33,6 +33,6 @@ function Customers() {
       <Footer />
     </>
   );
-}
+};
 
 export default Customers;

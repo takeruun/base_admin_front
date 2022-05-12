@@ -1,4 +1,4 @@
-import { FC, useState, createContext } from 'react';
+import { VFC, useState, createContext, ReactNode } from 'react';
 import { textHtmlProps } from 'src/content/pages/Orders/receipt';
 
 type newProps = textHtmlProps & {
@@ -14,7 +14,11 @@ export const ReceiptTextsContext = createContext<ReceiptTextsContextType>(
   {} as ReceiptTextsContextType
 );
 
-export const ReceiptTextsProvider: FC = ({ children }) => {
+type Props = {
+  children: ReactNode;
+};
+
+export const ReceiptTextsProvider: VFC<Props> = ({ children }) => {
   const [receiptTexts, setReceiptTexts] = useState<newProps[]>([]);
   const handleReceiptTexts = (receiptTexts: newProps[]) => {
     setReceiptTexts(receiptTexts);

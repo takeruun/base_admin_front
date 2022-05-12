@@ -43,13 +43,13 @@ const TypographySecondary = styled(Typography)(
 `
 );
 
-function Status500() {
+const Status500 = () => {
   const { t }: { t: any } = useTranslation();
 
   const [pending, setPending] = useState(false);
-  function handleClick() {
+  const handleClick = () => {
     setPending(true);
-  }
+  };
 
   return (
     <>
@@ -140,7 +140,7 @@ function Status500() {
                     my: 2
                   }}
                 >
-                  {t('example Admin')}
+                  {t('Art Admin')}
                 </TypographyPrimary>
                 <TypographySecondary
                   variant="h4"
@@ -163,6 +163,6 @@ function Status500() {
       </MainContent>
     </>
   );
-}
+};
 
 export default Status500;

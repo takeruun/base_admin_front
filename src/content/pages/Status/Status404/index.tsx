@@ -39,7 +39,7 @@ const ButtonSearch = styled(Button)(
 `
 );
 
-function Status404() {
+const Status404 = () => {
   const { t }: { t: any } = useTranslation();
 
   return (
@@ -114,6 +114,6 @@ function Status404() {
       </MainContent>
     </>
   );
-}
+};
 
 export default Status404;

@@ -1,11 +1,10 @@
-import { FC, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Grid } from '@mui/material';
 
 import Footer from 'src/components/Footer';
 import ImageSavesBody from 'src/components/ImageSaves';
 
-const ImageSaves: FC = () => {
+const ImageSaves = () => {
   return (
     <>
       <Helmet>

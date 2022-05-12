@@ -27,7 +27,7 @@ type FormInputType = {
   price: number;
 };
 
-function Form() {
+const Form = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const { t }: { t: any } = useTranslation();
@@ -192,6 +192,6 @@ function Form() {
       </Card>
     </>
   );
-}
+};
 
 export default Form;

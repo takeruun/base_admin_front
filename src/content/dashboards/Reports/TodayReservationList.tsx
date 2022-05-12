@@ -1,11 +1,4 @@
-import {
-  FC,
-  useEffect,
-  useState,
-  ChangeEvent,
-  Fragment,
-  useCallback
-} from 'react';
+import { useEffect, useState, ChangeEvent, Fragment, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -81,7 +74,7 @@ const getOrderStatusLabel = (status: Status) => {
   else if (status === 'キャンセル') return <LabelCancel>{status}</LabelCancel>;
 };
 
-const TodayReservationList: FC = () => {
+const TodayReservationList = () => {
   const { t }: { t: any } = useTranslation();
   const { orders } = useOrderState();
   const { getTodayReservationOrders } = useOrder();

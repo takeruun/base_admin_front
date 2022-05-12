@@ -7,7 +7,7 @@ import Form from 'src/components/Customer/Form';
 
 import { useGetUser } from 'src/hooks/useUser';
 
-function EditCustomers() {
+const EditCustomers = () => {
   const { userId } = useParams();
   const { getUser, user, loading } = useGetUser();
 
@@ -38,6 +38,6 @@ function EditCustomers() {
       <Footer />
     </>
   );
-}
+};
 
 export default EditCustomers;

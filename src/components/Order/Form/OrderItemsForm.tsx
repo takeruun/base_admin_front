@@ -1,4 +1,4 @@
-import { FC, FocusEvent, memo, useEffect, useState } from 'react';
+import { VFC, FocusEvent, memo, useEffect, useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import {
   Button,
@@ -24,7 +24,8 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import numeral from 'numeral';
 
 import { ProductType, Course, Goods } from 'src/models/product';
-import { OrderFormInputType } from './index';
+import { OrderFormInputType } from './types';
+import { useOrderItemsFormState } from './store';
 
 type OrderItemsProps = {
   productType: ProductType;
@@ -55,7 +56,7 @@ const IconButtonError = styled(IconButton)(
 `
 );
 
-const OrderItemsForm: FC<OrderItemsProps> = memo(
+const OrderItemsForm: VFC<OrderItemsProps> = memo(
   ({
     productType,
     handleCreateOrderItemOpen,
@@ -63,67 +64,25 @@ const OrderItemsForm: FC<OrderItemsProps> = memo(
     handleDiscountOpen
   }) => {
     const { t }: { t: any } = useTranslation();
-    const { control, setValue, getValues, watch } =
-      useFormContext<OrderFormInputType>();
-    const { remove } = useFieldArray({
+    const {
       control,
-      name: 'orderItems',
-      keyName: 'key'
-    });
+      setValue,
+      remove,
 
-    const watchOrderItems = watch('orderItems');
-    const orderItems = watchOrderItems.filter((field, index) => {
-      if (watchOrderItems[index].productType === productType)
-        return {
-          ...field,
-          ...watchOrderItems[index]
-        };
-    });
+      orderItemSubPrice,
+      getOrderItems,
+      getOrderItemIndex,
+      productTypeName,
+      handleChangeDiscountRate,
+      updateOrderItemSubPrice
+    } = useOrderItemsFormState();
 
-    const [orderItemSubPrice, setOrderItemSubPrice] = useState<number>(0);
-
-    const getOrderItemIndex = (productId: number): number =>
-      watchOrderItems.findIndex(
-        (orderItem) => orderItem.productId === productId
-      );
-
-    const productTypeName = (): string => {
-      if (productType == Course) return 'Course';
-      else if (productType == Goods) return 'Goods';
-      else return 'Other';
-    };
-
-    const handleChangeDiscountRate = (
-      event: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>,
-      orderItemIndex: number
-    ) => {
-      const price = getValues(`orderItems.${orderItemIndex}.price`);
-      setValue(
-        `orderItems.${orderItemIndex}.discountAmount`,
-        price - price * ((100 - parseInt(event.target.value)) / 100)
-      );
-      setValue(
-        `orderItems.${orderItemIndex}.discountRate`,
-        parseInt(event.target.value)
-      );
-    };
+    const orderItems = getOrderItems(productType);
 
     useEffect(() => {
-      const subscription = watch((value, { name }) => {
-        if (name.includes('orderItems')) {
-          var orderItemSubPrice = 0;
-          value.orderItems.map((orderItem) => {
-            if (orderItem.productType === productType) {
-              orderItemSubPrice +=
-                (orderItem.price - orderItem.discountAmount) *
-                orderItem.quantity;
-            }
-          });
-          setOrderItemSubPrice(orderItemSubPrice);
-        }
-      });
+      const subscription = updateOrderItemSubPrice(productType);
       return () => subscription.unsubscribe();
-    }, [watch]);
+    }, [updateOrderItemSubPrice]);
 
     return (
       <TableContainer>
@@ -331,7 +290,7 @@ const OrderItemsForm: FC<OrderItemsProps> = memo(
                   variant="outlined"
                   onClick={() => handleCreateOrderItemOpen(productType)}
                 >
-                  {t(`Add ${productTypeName()} order item`)}
+                  {t(`Add ${productTypeName(productType)} order item`)}
                 </Button>
               </TableCell>
               <TableCell colSpan={6} align="right">
@@ -341,7 +300,7 @@ const OrderItemsForm: FC<OrderItemsProps> = memo(
                   color="text.secondary"
                   fontWeight="bold"
                 >
-                  {t(`${productTypeName()} sub total price`)}:
+                  {t(`${productTypeName(productType)} sub total price`)}:
                 </Typography>
                 <Typography variant="h3" fontWeight="bold">
                   ¥{numeral(orderItemSubPrice).format(`0,0`)}

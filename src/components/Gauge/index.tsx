@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { VFC, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 
@@ -283,7 +283,7 @@ const GaugeWrapper = styled(CircularProgressbarWithChildren)(
 `
 );
 
-const Gauge: FC<GaugeProps> = ({
+const Gauge: VFC<GaugeProps> = ({
   className,
   color = 'primary',
   size = 'medium',

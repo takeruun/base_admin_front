@@ -50,7 +50,7 @@ const EmptyResultsWrapper = styled('img')(
 `
 );
 
-function SaleData() {
+const SaleData = () => {
   const { t }: { t: any } = useTranslation();
   const theme = useTheme();
   const sections = [
@@ -411,6 +411,6 @@ function SaleData() {
       </CardActionsWrapper>
     </Card>
   );
-}
+};
 
 export default SaleData;

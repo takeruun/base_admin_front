@@ -5,7 +5,7 @@ import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import ProductList from 'src/components/Product/List';
 
-function Products() {
+const Products = () => {
   return (
     <>
       <Helmet>
@@ -32,6 +32,6 @@ function Products() {
       <Footer />
     </>
   );
-}
+};
 
 export default Products;

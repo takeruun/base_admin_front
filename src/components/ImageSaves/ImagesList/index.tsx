@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Autocomplete,
@@ -21,7 +21,7 @@ import { useImageState } from 'src/contexts/ImageContext';
 import { FileDataType } from 'src/models/fileData';
 import ImageDialog from './ImageDialog';
 
-const ImagesList: FC = () => {
+const ImagesList = () => {
   const { t }: { t: any } = useTranslation();
   const { getImages } = useImages();
   const { loading: destroyLoading, destroyFiles } = useDestroyFiles();

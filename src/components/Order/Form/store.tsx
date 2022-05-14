@@ -9,9 +9,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ProductType, Course, Goods } from 'src/models/product';
 import type { Order } from 'src/models/order';
-import type { User } from 'src/models/user';
+import type { Customer } from 'src/models/customer';
 import { Discount, Percentage, PriceReduction } from 'src/models/discount';
-import { useUser } from 'src/hooks/useUser';
+import { useCustomer } from 'src/hooks/useCustomer';
 import request from 'src/hooks/useRequest';
 import { usePrefectures } from 'src/hooks/usePrefectures';
 import { useOccupations } from 'src/hooks/useOccupations';
@@ -381,9 +381,9 @@ export const useOrderItemsFormState = () => {
   return store;
 };
 
-export const useSelectUserState = () => {
+export const useSelectCustomerState = () => {
   const { setValue, getValues } = useFormContext<OrderFormInputType>();
-  const { getUsers, users, totalCount } = useUser();
+  const { customers, totalCostomerCount, getCustomers } = useCustomer();
 
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState(null);
@@ -395,26 +395,26 @@ export const useSelectUserState = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSelectUser = (user: User) => {
-    setValue('userId', user.id);
-    setValue('user.id', user.id);
-    setValue('user.familyName', user.familyName);
-    setValue('user.givenName', user.givenName);
-    setValue('user.familyNameKana', user.familyNameKana);
-    setValue('user.givenNameKana', user.givenNameKana);
-    setValue('user.postalCode', user.postalCode);
-    setValue('user.prefecture', user.prefecture);
-    setValue('user.address1', user.address1);
-    setValue('user.address2', user.address2);
-    setValue('user.address3', user.address3);
-    setValue('user.phoneNumber', user.phoneNumber);
-    setValue('user.homePhoneNumber', user.homePhoneNumber);
-    setValue('user.email', user.email);
-    setValue('user.gender', user.gender);
-    setValue('user.birthday', user.birthday);
-    setValue('user.occupation', user.occupation);
-    setValue('user.firstVisitDate', user.firstVisitDate);
-    setValue('user.memo', user.memo ? user.memo : '');
+  const handleSelectUser = (customer: Customer) => {
+    setValue('userId', customer.id);
+    setValue('user.id', customer.id);
+    setValue('user.familyName', customer.familyName);
+    setValue('user.givenName', customer.givenName);
+    setValue('user.familyNameKana', customer.familyNameKana);
+    setValue('user.givenNameKana', customer.givenNameKana);
+    setValue('user.postalCode', customer.postalCode);
+    setValue('user.prefecture', customer.prefecture);
+    setValue('user.address1', customer.address1);
+    setValue('user.address2', customer.address2);
+    setValue('user.address3', customer.address3);
+    setValue('user.phoneNumber', customer.phoneNumber);
+    setValue('user.homePhoneNumber', customer.homePhoneNumber);
+    setValue('user.email', customer.email);
+    setValue('user.gender', customer.gender);
+    setValue('user.birthday', customer.birthday);
+    setValue('user.occupation', customer.occupation);
+    setValue('user.firstVisitDate', customer.firstVisitDate);
+    setValue('user.memo', customer.memo ? customer.memo : '');
   };
 
   const handlePageChange = (_event: any, newPage: number): void => {
@@ -430,10 +430,10 @@ export const useSelectUserState = () => {
     formValue,
     page,
     limit,
-    users,
-    totalCount,
+    customers,
+    totalCostomerCount,
 
-    getUsers,
+    getCustomers,
     handleSetFromValue,
     handleOpen,
     handleClose,
@@ -445,7 +445,7 @@ export const useSelectUserState = () => {
   return store;
 };
 
-export const useUserFormState = () => {
+export const useCustomerFormState = () => {
   const {
     control,
     setValue,

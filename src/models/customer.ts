@@ -23,7 +23,4 @@ export interface Customer {
   nextVisitDate: string;
   previousVisitDate: string;
   lastVistDates: number;
-  avatar: string;
-  name: string;
-  jobtitle: string;
 }

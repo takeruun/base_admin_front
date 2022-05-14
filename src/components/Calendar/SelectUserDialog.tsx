@@ -17,7 +17,7 @@ import {
   InputAdornment
 } from '@mui/material';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import { useAllUsers } from 'src/hooks/useUser';
+import { useCustomer } from 'src/hooks/useCustomer';
 
 interface SelectUserDialogPropsType {
   handleSelectUser: (userId: number) => void;
@@ -28,8 +28,8 @@ interface SelectUserDialogPropsType {
 const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
   ({ handleSelectUser, handleCloseDialog, handleSetUserName }) => {
     const { t }: { t: any } = useTranslation();
-    const { getUsers, totalCount, users } = useAllUsers();
-    const [formValue, setFormValue] = useState('');
+    const { customers, totalCostomerCount, getCustomers } = useCustomer();
+    const [query, setQuery] = useState('');
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(5);
 
@@ -41,7 +41,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
     };
 
     useEffect(() => {
-      getUsers({ offset: page * limit, limit });
+      getCustomers({ offset: page * limit, limit });
     }, [page, limit]);
 
     return (
@@ -63,7 +63,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                 sx={{
                   m: 0
                 }}
-                onChange={(e) => setFormValue(e.target.value)}
+                onChange={(e) => setQuery(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -76,7 +76,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                         variant="contained"
                         size="small"
                         onClick={() =>
-                          getUsers({ offset: page * limit, limit })
+                          getCustomers({ offset: page * limit, limit, query })
                         }
                       >
                         {t('Search')}
@@ -99,7 +99,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {users.map((user) => {
+                    {customers.map((user) => {
                       return (
                         <TableRow
                           hover
@@ -128,7 +128,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
               </TableContainer>
               <TablePagination
                 component="div"
-                count={totalCount}
+                count={totalCostomerCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleLimitChange}
                 page={page}

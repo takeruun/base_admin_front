@@ -8,9 +8,28 @@ import type { Customer } from 'src/models/customer';
 export const useCustomer = () => {
   const { t }: { t: any } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
+  const [customer, setCustomer] = useState<Customer>();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [totalCostomerCount, setTotalCostomerCount] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const getCustomer = useCallback((customerId: number) => {
+    setLoading(true);
+    try {
+      request({
+        url: `/v1/users/${customerId}`,
+        method: 'GET'
+      })
+        .then((response) => {
+          setCustomer(response.data.user);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   const getCustomers = useCallback((params) => {
     try {
@@ -49,8 +68,10 @@ export const useCustomer = () => {
   }, []);
 
   return {
+    customer,
     customers,
     totalCostomerCount,
+    getCustomer,
     getCustomers,
     deleteCustomer
   };

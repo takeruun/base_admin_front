@@ -9,10 +9,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import request from 'src/hooks/useRequest';
 import { usePrefectures } from 'src/hooks/usePrefectures';
 import { useOccupations } from 'src/hooks/useOccupations';
-import type { User } from 'src/models/user';
+import type { Customer } from 'src/models/customer';
+
 import type { FormInputType } from './types';
 
-export const useUserFormState = (userId?: number) => {
+export const useCustomerFormState = (userId?: number) => {
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
 
@@ -74,25 +75,25 @@ export const useUserFormState = (userId?: number) => {
     });
   };
 
-  const setUser = useCallback((user?: User) => {
-    if (Boolean(user)) {
-      setValue('familyName', user.familyName);
-      setValue('givenName', user.givenName);
-      setValue('familyNameKana', user.familyNameKana);
-      setValue('givenNameKana', user.givenNameKana);
-      setValue('postalCode', user.postalCode);
-      setValue('prefecture', user.prefecture);
-      setValue('address1', user.address1);
-      setValue('address2', user.address2);
-      setValue('address3', user.address3);
-      setValue('phoneNumber', user.phoneNumber);
-      setValue('homePhoneNumber', user.homePhoneNumber);
-      setValue('email', user.email);
-      setValue('gender', user.gender);
-      setValue('birthday', user.birthday);
-      setValue('occupation', user.occupation);
-      setValue('firstVisitDate', user.firstVisitDate);
-      setValue('memo', user.memo ? user.memo : '');
+  const setCustomer = useCallback((customer?: Customer) => {
+    if (Boolean(customer)) {
+      setValue('familyName', customer.familyName);
+      setValue('givenName', customer.givenName);
+      setValue('familyNameKana', customer.familyNameKana);
+      setValue('givenNameKana', customer.givenNameKana);
+      setValue('postalCode', customer.postalCode);
+      setValue('prefecture', customer.prefecture);
+      setValue('address1', customer.address1);
+      setValue('address2', customer.address2);
+      setValue('address3', customer.address3);
+      setValue('phoneNumber', customer.phoneNumber);
+      setValue('homePhoneNumber', customer.homePhoneNumber);
+      setValue('email', customer.email);
+      setValue('gender', customer.gender);
+      setValue('birthday', customer.birthday);
+      setValue('occupation', customer.occupation);
+      setValue('firstVisitDate', customer.firstVisitDate);
+      setValue('memo', customer.memo ? customer.memo : '');
     }
   }, []);
 
@@ -128,7 +129,7 @@ export const useUserFormState = (userId?: number) => {
     formState: { errors, isSubmitting },
     onSubmit,
 
-    setUser,
+    setCustomer,
     updateAddress,
     prefectures,
     occupations,

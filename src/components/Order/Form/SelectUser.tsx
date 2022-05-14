@@ -21,7 +21,7 @@ import {
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { useTranslation } from 'react-i18next';
 
-import { useSelectUserState } from './store';
+import { useSelectCustomerState } from './store';
 
 const UnderLineTypography = styled(Typography)(
   () => `
@@ -41,20 +41,20 @@ const SelectUser: VFC = () => {
     formValue,
     page,
     limit,
-    users,
-    totalCount,
+    customers,
+    totalCostomerCount,
 
-    getUsers,
+    getCustomers,
     handleSetFromValue,
     handleOpen,
     handleClose,
     handleSelectUser,
     handlePageChange,
     handleLimitChange
-  } = useSelectUserState();
+  } = useSelectCustomerState();
 
   useEffect(() => {
-    getUsers({ offset: page * limit, limit });
+    getCustomers({ offset: page * limit, limit });
   }, [page, limit]);
 
   return (
@@ -103,7 +103,7 @@ const SelectUser: VFC = () => {
                         variant="contained"
                         size="small"
                         onClick={() =>
-                          getUsers({ offset: page * limit, limit })
+                          getCustomers({ offset: page * limit, limit })
                         }
                       >
                         {t('Search')}
@@ -127,7 +127,7 @@ const SelectUser: VFC = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {users.map((user) => {
+                      {customers.map((user) => {
                         return (
                           <TableRow
                             hover
@@ -154,7 +154,7 @@ const SelectUser: VFC = () => {
                 <Box>
                   <TablePagination
                     component="div"
-                    count={totalCount}
+                    count={totalCostomerCount}
                     onPageChange={handlePageChange}
                     onRowsPerPageChange={handleLimitChange}
                     page={page}

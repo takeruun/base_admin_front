@@ -16,7 +16,7 @@ export type OrderItemFormInputType = {
   discountName?: string;
 };
 
-export type UserFormInputType = {
+export type CustomerFormInputType = {
   id?: number | null;
   familyName: string;
   givenName: string;
@@ -50,7 +50,7 @@ export type OrderFormInputType = {
   discountAmount: number;
   subTotalPrice: number;
   totalPrice: number;
-  user: UserFormInputType;
+  user: CustomerFormInputType;
 };
 
 export type SelectSearchOrderItemFormInputType = {

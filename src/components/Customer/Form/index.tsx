@@ -21,12 +21,12 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import ja from 'date-fns/locale/ja';
 
-import type { User } from 'src/models/user';
+import type { Customer } from 'src/models/customer';
 import UserDialogAction from 'src/components/Customer/Form/UserDialogAction';
-import { useUserFormState } from './store';
+import { useCustomerFormState } from './store';
 
 interface FormPropsType {
-  user?: User;
+  customer?: Customer;
 }
 
 const FormLabelStyle = styled('p')(
@@ -64,7 +64,7 @@ const PostalCodeMask = React.forwardRef<HTMLInputElement, CustomProps>(
   }
 );
 
-const Form: VFC<FormPropsType> = ({ user }) => {
+const Form: VFC<FormPropsType> = ({ customer }) => {
   const { t }: { t: any } = useTranslation();
   const {
     control,
@@ -73,15 +73,15 @@ const Form: VFC<FormPropsType> = ({ user }) => {
     formState: { errors, isSubmitting },
     onSubmit,
 
-    setUser,
+    setCustomer,
     updateAddress,
     prefectures,
     occupations,
     getPrefectures,
     getOccupations
-  } = useUserFormState(user?.id);
+  } = useCustomerFormState(customer?.id);
 
-  useEffect(() => setUser(user), [user]);
+  useEffect(() => setCustomer(customer), [customer]);
 
   useEffect(() => {
     const subscription = updateAddress();
@@ -478,7 +478,7 @@ const Form: VFC<FormPropsType> = ({ user }) => {
             </Grid>
             <UserDialogAction
               isSubmitting={isSubmitting}
-              editing={Boolean(user)}
+              editing={Boolean(customer)}
             />
           </form>
         </CardContent>

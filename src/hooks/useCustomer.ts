@@ -17,11 +17,11 @@ export const useCustomer = () => {
     setLoading(true);
     try {
       request({
-        url: `/v1/users/${customerId}`,
+        url: `/v1/customers/${customerId}`,
         method: 'GET'
       })
         .then((response) => {
-          setCustomer(response.data.user);
+          setCustomer(response.data.customer);
         })
         .finally(() => {
           setLoading(false);
@@ -34,14 +34,14 @@ export const useCustomer = () => {
   const getCustomers = useCallback((params) => {
     try {
       request({
-        url: `/v1/users`,
+        url: `/v1/customers`,
         method: 'GET',
         reqParams: {
           params
         }
       })
         .then((response) => {
-          setCustomers(response.data.users);
+          setCustomers(response.data.customers);
           setTotalCostomerCount(response.data.totalCount);
         })
         .finally(() => {});
@@ -52,7 +52,7 @@ export const useCustomer = () => {
 
   const deleteCustomer = useCallback((deleteId: number) => {
     request({
-      url: `/v1/users/${deleteId}`,
+      url: `/v1/customers/${deleteId}`,
       method: 'DELETE'
     }).then(() => {
       setCustomers((prev) => prev.filter((c) => c.id !== deleteId));

@@ -178,11 +178,12 @@ const OrderDetail = () => {
                             variant="subtitle2"
                             sx={{ mb: '-3px' }}
                           >
-                            {order.user.familyNameKana}{' '}
-                            {order.user.givenNameKana}
+                            {order.customer.familyNameKana}{' '}
+                            {order.customer.givenNameKana}
                           </Typography>
                           <UnderLineTypography noWrap variant="h3">
-                            {order.user.familyName} {order.user.givenName}
+                            {order.customer.familyName}{' '}
+                            {order.customer.givenName}
                           </UnderLineTypography>
                         </Box>
                         <Box sx={{ pl: 4 }}>

@@ -40,7 +40,7 @@ export type CustomerFormInputType = {
 };
 
 export type OrderFormInputType = {
-  userId: number;
+  customerId: number;
   dateOfVisit: string;
   dateOfVisitTime: string;
   dateOfExit: string;
@@ -50,7 +50,7 @@ export type OrderFormInputType = {
   discountAmount: number;
   subTotalPrice: number;
   totalPrice: number;
-  user: CustomerFormInputType;
+  customer: CustomerFormInputType;
 };
 
 export type SelectSearchOrderItemFormInputType = {

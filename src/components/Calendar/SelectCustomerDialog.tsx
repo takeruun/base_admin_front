@@ -19,14 +19,14 @@ import {
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { useCustomer } from 'src/hooks/useCustomer';
 
-interface SelectUserDialogPropsType {
-  handleSelectUser: (userId: number) => void;
+interface SelectCustomerIdDialogPropsType {
+  handleSelectCustomer: (customerId: number) => void;
   handleCloseDialog: () => void;
   handleSetUserName: (userName: string) => void;
 }
 
-const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
-  ({ handleSelectUser, handleCloseDialog, handleSetUserName }) => {
+const SelectCustomerDialog: VFC<SelectCustomerIdDialogPropsType> = memo(
+  ({ handleSelectCustomer, handleCloseDialog, handleSetUserName }) => {
     const { t }: { t: any } = useTranslation();
     const { customers, totalCostomerCount, getCustomers } = useCustomer();
     const [query, setQuery] = useState('');
@@ -84,7 +84,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                     </InputAdornment>
                   )
                 }}
-                placeholder={t('Search by user name')}
+                placeholder={t('Search by customer name')}
                 fullWidth
                 variant="outlined"
               />
@@ -99,25 +99,25 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {customers.map((user) => {
+                    {customers.map((customer) => {
                       return (
                         <TableRow
                           hover
-                          key={user.id}
+                          key={customer.id}
                           onClick={() => {
-                            handleSelectUser(user.id);
+                            handleSelectCustomer(customer.id);
                             handleSetUserName(
-                              `${user.familyName}${user.givenName}`
+                              `${customer.familyName}${customer.givenName}`
                             );
                             handleCloseDialog();
                           }}
                         >
                           <TableCell>
-                            <Typography noWrap>{user.id}</Typography>
+                            <Typography noWrap>{customer.id}</Typography>
                           </TableCell>
                           <TableCell>
                             <Typography noWrap variant="h5">
-                              {user.familyName} {user.givenName}
+                              {customer.familyName} {customer.givenName}
                             </Typography>
                           </TableCell>
                         </TableRow>
@@ -144,4 +144,4 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
   }
 );
 
-export default SelectUserDialog;
+export default SelectCustomerDialog;

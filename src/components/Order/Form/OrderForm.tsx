@@ -25,7 +25,7 @@ import NumberFormatCustom from 'src/components/NumberFormatCustom';
 import DialogSelectSearchOrderItem from './DialogSelectSearchOrderItem';
 import DialogSelectSearchDiscount from './DialogSelectSearchDiscount';
 import OrderDialogAction from './OrderDialogAction';
-import SelectUser from './SelectUser';
+import SelectCustomer from './SelectCustomer';
 import OrderItemsForm from './OrderItemsForm';
 import { useOrderFormState } from './store';
 
@@ -52,7 +52,6 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
     getValues,
     formState,
 
-    selectProductIds,
     searchProductType,
     orderItemOpen,
     discountOrderItem,
@@ -94,7 +93,7 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
               }}
             >
               <Box sx={{ alignSelf: 'flex-end' }}>
-                <SelectUser />
+                <SelectCustomer />
               </Box>
               <Box sx={{ pl: 4 }}>
                 <FormControl

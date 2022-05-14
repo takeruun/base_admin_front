@@ -92,14 +92,14 @@ const Receipt = () => {
           method: 'GET'
         });
         const order: Order = response.data.order;
-        const user = order.user;
+        const customer = order.customer;
 
         setTexts(
           texts.map((text) => {
             if (text.htmlRef.current !== null) {
               switch (text.id) {
                 case 1:
-                  text.htmlRef.current.innerHTML = `<p>${user.familyName} ${user.givenName}</p>`;
+                  text.htmlRef.current.innerHTML = `<p>${customer.familyName} ${customer.givenName}</p>`;
                   text.htmlRef.current.style.fontSize = '18px';
                   break;
                 case 2:

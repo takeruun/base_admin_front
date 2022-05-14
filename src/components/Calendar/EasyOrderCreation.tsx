@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { useOrderCalendar } from 'src/hooks/useOrderCalendar';
-import SelectUserDialog from './SelectUserDialog';
+import SelectCustomerDialog from './SelectCustomerDialog';
 
 interface EasyOrderCreationPropsType {
   onClose: () => void;
@@ -24,7 +24,7 @@ interface EasyOrderCreationPropsType {
 }
 
 export type FormIputType = {
-  userId: number;
+  customerId: number;
   dateOfVisit: string;
   dateOfVisitTime: string;
   dateOfExit: string;
@@ -43,7 +43,7 @@ const EasyOrderCreation: VFC<EasyOrderCreationPropsType> = memo(
       formState: { errors, isSubmitting }
     } = useForm<FormIputType>({
       defaultValues: {
-        userId: 0,
+        customerId: 0,
         dateOfVisit: selectDate,
         dateOfVisitTime: selectTime ?? '',
         dateOfExit: '',
@@ -56,8 +56,8 @@ const EasyOrderCreation: VFC<EasyOrderCreationPropsType> = memo(
 
     const handleOpenDialog = useCallback(() => setDialogOpen(true), []);
     const handleCloseDialog = useCallback(() => setDialogOpen(false), []);
-    const handleSelectUser = useCallback(
-      (userId: number) => setValue('userId', userId),
+    const handleSelectCustomer = useCallback(
+      (customerId: number) => setValue('customerId', customerId),
       []
     );
     const handleSetUserName = useCallback(
@@ -105,7 +105,7 @@ const EasyOrderCreation: VFC<EasyOrderCreationPropsType> = memo(
                   sx={{ '&:hover': { cursor: 'pointer' } }}
                   onClick={handleOpenDialog}
                 >
-                  {getValues('userId') == 0
+                  {getValues('customerId') == 0
                     ? `${t('Customer select')}`
                     : `${userName}`}
                 </Typography>
@@ -256,8 +256,8 @@ const EasyOrderCreation: VFC<EasyOrderCreationPropsType> = memo(
           </form>
         </DialogContent>
         <Dialog open={dialogOpen} fullWidth onClose={handleCloseDialog}>
-          <SelectUserDialog
-            handleSelectUser={handleSelectUser}
+          <SelectCustomerDialog
+            handleSelectCustomer={handleSelectCustomer}
             handleCloseDialog={handleCloseDialog}
             handleSetUserName={handleSetUserName}
           />

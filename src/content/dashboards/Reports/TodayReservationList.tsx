@@ -158,8 +158,8 @@ const TodayReservationList = () => {
                         onClick={() => {
                           setOrderInfo({
                             orderId: order.id,
-                            name: `${order.user.familyName}${order.user.givenName}`,
-                            phoneNumber: order.user.phoneNumber
+                            name: `${order.customer.familyName}${order.customer.givenName}`,
+                            phoneNumber: order.customer.phoneNumber
                           });
                           handleOpen();
                         }}
@@ -172,7 +172,7 @@ const TodayReservationList = () => {
                             flexBasis: '20%'
                           }}
                         >
-                          {`${order.user.familyName} ${order.user.givenName}`}
+                          {`${order.customer.familyName} ${order.customer.givenName}`}
                         </Typography>
                         <Typography
                           sx={{

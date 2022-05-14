@@ -1,5 +1,5 @@
 import { OrderItem } from './orderItem';
-import { User } from './user';
+import { Customer } from './customer';
 
 export type Status = '予約' | '完了' | 'キャンセル';
 export type PaymentMethod = 'クレジットカード' | 'PayPay' | '現金' | '未設定';
@@ -31,7 +31,7 @@ export const paymentMethods = [CreditCard, Paypay, Cache];
 
 export interface Order {
   id: number;
-  userId: number;
+  customerId: number;
   status: Status;
   dateOfVisit: string;
   dateOfExit: string;
@@ -42,5 +42,5 @@ export interface Order {
   createdAt: string;
   orderItems: OrderItem[];
   taxRate: number;
-  user: User;
+  customer: Customer;
 }

@@ -13,7 +13,7 @@ import type { Customer } from 'src/models/customer';
 
 import type { FormInputType } from './types';
 
-export const useCustomerFormState = (userId?: number) => {
+export const useCustomerFormState = (customerId?: number) => {
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
 
@@ -63,8 +63,10 @@ export const useCustomerFormState = (userId?: number) => {
 
   const onSubmit = async (data: FormInputType) => {
     request({
-      url: Boolean(userId) ? `/v1/users/${userId}` : '/v1/users',
-      method: Boolean(userId) ? 'PUT' : 'POST',
+      url: Boolean(customerId)
+        ? `/v1/customers/${customerId}`
+        : '/v1/customers',
+      method: Boolean(customerId) ? 'PUT' : 'POST',
       reqParams: {
         data: {
           ...data

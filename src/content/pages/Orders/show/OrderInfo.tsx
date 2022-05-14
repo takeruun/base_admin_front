@@ -74,16 +74,16 @@ const OrderInfo = () => {
                     }}
                   >
                     <Typography noWrap variant="subtitle2">
-                      {order.user.familyNameKana}
-                      {order.user.givenNameKana}
+                      {order.customer.familyNameKana}
+                      {order.customer.givenNameKana}
                     </Typography>
                     <Typography
                       noWrap
                       variant="h3"
                       sx={{ textDecoration: 'underline' }}
                     >
-                      {order.user.familyName}
-                      {order.user.givenName}
+                      {order.customer.familyName}
+                      {order.customer.givenName}
                     </Typography>
                   </Box>
                   <Box

@@ -48,7 +48,7 @@ const SelectUser: VFC = () => {
     handleSetFromValue,
     handleOpen,
     handleClose,
-    handleSelectUser,
+    handleSelectCustomer,
     handlePageChange,
     handleLimitChange
   } = useSelectCustomerState();
@@ -60,14 +60,14 @@ const SelectUser: VFC = () => {
   return (
     <>
       <Typography noWrap variant="subtitle2">
-        {getValues('user.familyNameKana')}
-        {getValues('user.givenNameKana')}
+        {getValues('customer.familyNameKana')}
+        {getValues('customer.givenNameKana')}
       </Typography>
       <UnderLineTypography noWrap variant="h3" onClick={handleOpen}>
-        {Boolean(getValues('userId'))
+        {Boolean(getValues('customerId'))
           ? `
-              ${getValues('user.familyName')}
-              ${getValues('user.givenName')}
+              ${getValues('customer.familyName')}
+              ${getValues('customer.givenName')}
               `
           : 'お客様選択'}
       </UnderLineTypography>
@@ -111,7 +111,7 @@ const SelectUser: VFC = () => {
                     </InputAdornment>
                   )
                 }}
-                placeholder={t('Search by user name')}
+                placeholder={t('Search by customer name')}
                 fullWidth
                 variant="outlined"
               />
@@ -127,22 +127,22 @@ const SelectUser: VFC = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {customers.map((user) => {
+                      {customers.map((customer) => {
                         return (
                           <TableRow
                             hover
-                            key={user.id}
+                            key={customer.id}
                             onClick={() => {
-                              handleSelectUser(user);
+                              handleSelectCustomer(customer);
                               handleClose();
                             }}
                           >
                             <TableCell>
-                              <Typography noWrap>{user.id}</Typography>
+                              <Typography noWrap>{customer.id}</Typography>
                             </TableCell>
                             <TableCell>
                               <Typography noWrap variant="h5">
-                                {user.familyName} {user.givenName}
+                                {customer.familyName} {customer.givenName}
                               </Typography>
                             </TableCell>
                           </TableRow>

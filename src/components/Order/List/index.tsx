@@ -197,7 +197,8 @@ const List = () => {
                         <TableCell>
                           <Box display="flex" alignItems="center">
                             <Typography noWrap variant="h5">
-                              {order.user.familyName} {order.user.givenName}
+                              {order.customer.familyName}{' '}
+                              {order.customer.givenName}
                             </Typography>
                           </Box>
                         </TableCell>

@@ -185,12 +185,12 @@ const List = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {customers.map((user) => {
+                  {customers.map((customer) => {
                     return (
-                      <TableRow hover key={user.id}>
+                      <TableRow hover key={customer.id}>
                         <TableCell>
                           <Typography noWrap align="center">
-                            {user.id}
+                            {customer.id}
                           </Typography>
                         </TableCell>
                         <TableCell>
@@ -201,29 +201,30 @@ const List = () => {
                                 variant="subtitle2"
                                 sx={{ fontSize: 12 }}
                               >
-                                {user.familyNameKana} {user.givenNameKana}
+                                {customer.familyNameKana}{' '}
+                                {customer.givenNameKana}
                               </Typography>
                               <Typography noWrap variant="h5">
-                                {user.familyName} {user.givenName}
+                                {customer.familyName} {customer.givenName}
                               </Typography>
                             </Box>
                           </Box>
                         </TableCell>
                         <TableCell>
                           <Typography noWrap>
-                            {user.address1}
-                            {user.address2}
-                            {user.address3}
+                            {customer.address1}
+                            {customer.address2}
+                            {customer.address3}
                           </Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography noWrap>{user.phoneNumber}</Typography>
+                          <Typography noWrap>{customer.phoneNumber}</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography noWrap>
-                            {user.nextVisitDate
+                            {customer.nextVisitDate
                               ? format(
-                                  new Date(user.nextVisitDate),
+                                  new Date(customer.nextVisitDate),
                                   'MM月dd日 H時mm分'
                                 )
                               : '予約なし'}
@@ -231,7 +232,7 @@ const List = () => {
                         </TableCell>
                         <TableCell>
                           <Typography noWrap align="center">
-                            {user.lastVistDates}日
+                            {customer.lastVistDates}日
                           </Typography>
                         </TableCell>
                         <TableCell align="center">
@@ -247,7 +248,7 @@ const List = () => {
                                 color="inherit"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  navigate(`edit/${user.id}`);
+                                  navigate(`edit/${customer.id}`);
                                 }}
                               >
                                 <EditTwoToneIcon fontSize="small" />
@@ -257,7 +258,7 @@ const List = () => {
                               <IconButton
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  setDeletedId(user.id);
+                                  setDeletedId(customer.id);
                                   handleConfirmDelete();
                                 }}
                                 color="primary"

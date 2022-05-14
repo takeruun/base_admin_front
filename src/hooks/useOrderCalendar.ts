@@ -70,7 +70,7 @@ export const useOrderCalendar = () => {
           description,
           start: o.dateOfVisit,
           end: o.dateOfExit,
-          title: `${o.user.familyName}${o.user.givenName}さん`
+          title: `${o.customer.familyName}${o.customer.givenName}さん`
         };
       });
 
@@ -102,7 +102,7 @@ export const useOrderCalendar = () => {
         return {
           id: String(o.id),
           resourceId: String(o.id),
-          description: `${o.user.familyName}${o.user.givenName}さん`,
+          description: `${o.customer.familyName}${o.customer.givenName}さん`,
           start: o.dateOfVisit,
           end: o.dateOfExit,
           title
@@ -111,7 +111,7 @@ export const useOrderCalendar = () => {
       const resources: Resource[] = response.data.orders.map((o: Order) => {
         return {
           id: String(o.id),
-          title: `${o.user.familyName}${o.user.givenName}さん`
+          title: `${o.customer.familyName}${o.customer.givenName}さん`
         };
       });
 
@@ -169,7 +169,7 @@ export const useOrderCalendar = () => {
             description,
             start: order.dateOfVisit,
             end: order.dateOfExit,
-            title: `${order.user.familyName}${order.user.givenName}さん`
+            title: `${order.customer.familyName}${order.customer.givenName}さん`
           };
           dispatchOrderCalendar(addOrderCalendar(orderCalendar));
           if (successCallback) successCallback();

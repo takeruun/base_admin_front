@@ -56,7 +56,7 @@ const PostalCodeMask = forwardRef<HTMLInputElement, CustomProps>(
   }
 );
 
-const UserForm: VFC = () => {
+const CustomerForm: VFC = () => {
   const { t }: { t: any } = useTranslation();
   const {
     control,
@@ -87,13 +87,13 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('First name')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.familyName"
+            name="customer.familyName"
             render={({ field }) => (
               <TextField
                 size="small"
                 {...field}
-                error={Boolean(errors.user?.familyName)}
-                helperText={errors.user?.familyName?.message}
+                error={Boolean(errors.customer?.familyName)}
+                helperText={errors.customer?.familyName?.message}
                 fullWidth
                 variant="outlined"
                 placeholder="山田"
@@ -105,13 +105,13 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Last name')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.givenName"
+            name="customer.givenName"
             render={({ field }) => (
               <TextField
                 size="small"
                 {...field}
-                error={Boolean(errors.user?.givenName)}
-                helperText={errors.user?.givenName?.message}
+                error={Boolean(errors.customer?.givenName)}
+                helperText={errors.customer?.givenName?.message}
                 fullWidth
                 variant="outlined"
                 placeholder="太郎"
@@ -123,13 +123,13 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('First name kana')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.familyNameKana"
+            name="customer.familyNameKana"
             render={({ field }) => (
               <TextField
                 size="small"
                 {...field}
-                error={Boolean(errors.user?.familyNameKana)}
-                helperText={errors.user?.familyNameKana?.message}
+                error={Boolean(errors.customer?.familyNameKana)}
+                helperText={errors.customer?.familyNameKana?.message}
                 fullWidth
                 variant="outlined"
                 placeholder="ヤマダ"
@@ -141,13 +141,13 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Last name kana')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.givenNameKana"
+            name="customer.givenNameKana"
             render={({ field }) => (
               <TextField
                 size="small"
                 {...field}
-                error={Boolean(errors.user?.givenNameKana)}
-                helperText={errors.user?.givenNameKana?.message}
+                error={Boolean(errors.customer?.givenNameKana)}
+                helperText={errors.customer?.givenNameKana?.message}
                 fullWidth
                 variant="outlined"
                 placeholder="タロウ"
@@ -160,13 +160,13 @@ const UserForm: VFC = () => {
             <FormLabelStyle>{t('Postal code')}</FormLabelStyle>
             <Controller
               control={control}
-              name="user.postalCode"
+              name="customer.postalCode"
               render={({ field }) => (
                 <TextField
                   size="small"
                   {...field}
-                  error={Boolean(errors.user?.postalCode)}
-                  helperText={errors.user?.postalCode?.message}
+                  error={Boolean(errors.customer?.postalCode)}
+                  helperText={errors.customer?.postalCode?.message}
                   fullWidth
                   variant="outlined"
                   InputProps={{
@@ -182,7 +182,7 @@ const UserForm: VFC = () => {
           <Grid item xs={6}>
             <FormLabelStyle>{t('Prefecture')}</FormLabelStyle>
             <Controller
-              name="user.prefecture"
+              name="customer.prefecture"
               control={control}
               render={({ field }) => (
                 <Autocomplete
@@ -191,13 +191,13 @@ const UserForm: VFC = () => {
                   {...field}
                   options={prefectures}
                   onChange={(_, value) => {
-                    setValue('user.prefecture', value);
+                    setValue('customer.prefecture', value);
                   }}
                   renderInput={(params) => (
                     <TextField
                       size="small"
-                      error={Boolean(errors.user?.prefecture)}
-                      helperText={errors.user?.prefecture?.message}
+                      error={Boolean(errors.customer?.prefecture)}
+                      helperText={errors.customer?.prefecture?.message}
                       fullWidth
                       {...params}
                     />
@@ -211,13 +211,13 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Address1')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.address1"
+            name="customer.address1"
             render={({ field }) => (
               <TextField
                 size="small"
                 {...field}
-                error={Boolean(errors.user?.address1)}
-                helperText={errors.user?.address1?.message}
+                error={Boolean(errors.customer?.address1)}
+                helperText={errors.customer?.address1?.message}
                 fullWidth
                 variant="outlined"
                 placeholder="市区町村"
@@ -229,13 +229,13 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Address2')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.address2"
+            name="customer.address2"
             render={({ field }) => (
               <TextField
                 size="small"
                 {...field}
-                error={Boolean(errors.user?.address2)}
-                helperText={errors.user?.address2?.message}
+                error={Boolean(errors.customer?.address2)}
+                helperText={errors.customer?.address2?.message}
                 fullWidth
                 variant="outlined"
                 placeholder="番地"
@@ -247,7 +247,7 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Address3')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.address3"
+            name="customer.address3"
             render={({ field }) => (
               <TextField
                 size="small"
@@ -263,15 +263,15 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Phone number')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.phoneNumber"
+            name="customer.phoneNumber"
             render={({ field }) => (
               <TextField
                 size="small"
                 {...field}
                 fullWidth
                 variant="outlined"
-                error={Boolean(errors.user?.phoneNumber)}
-                helperText={errors.user?.phoneNumber?.message}
+                error={Boolean(errors.customer?.phoneNumber)}
+                helperText={errors.customer?.phoneNumber?.message}
                 placeholder="000-0000-0000"
               />
             )}
@@ -281,15 +281,15 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Home phone number')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.homePhoneNumber"
+            name="customer.homePhoneNumber"
             render={({ field }) => (
               <TextField
                 size="small"
                 {...field}
                 fullWidth
                 variant="outlined"
-                error={Boolean(errors.user?.homePhoneNumber)}
-                helperText={errors.user?.homePhoneNumber?.message}
+                error={Boolean(errors.customer?.homePhoneNumber)}
+                helperText={errors.customer?.homePhoneNumber?.message}
                 placeholder="0000-00-0000"
               />
             )}
@@ -299,7 +299,7 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Email')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.email"
+            name="customer.email"
             render={({ field }) => (
               <TextField
                 size="small"
@@ -307,8 +307,8 @@ const UserForm: VFC = () => {
                 type="email"
                 fullWidth
                 variant="outlined"
-                error={Boolean(errors.user?.email)}
-                helperText={errors.user?.email?.message}
+                error={Boolean(errors.customer?.email)}
+                helperText={errors.customer?.email?.message}
                 placeholder="sample@example.com"
               />
             )}
@@ -319,7 +319,7 @@ const UserForm: VFC = () => {
           <FormControl component="fieldset">
             <Controller
               control={control}
-              name="user.gender"
+              name="customer.gender"
               render={({ field }) => (
                 <RadioGroup {...field} row aria-label="gender">
                   <FormControlLabel
@@ -353,7 +353,7 @@ const UserForm: VFC = () => {
             <LocalizationProvider dateAdapter={AdapterDateFns} locale={ja}>
               <Controller
                 control={control}
-                name="user.birthday"
+                name="customer.birthday"
                 render={({ field }) => (
                   <DesktopDatePicker
                     {...field}
@@ -365,8 +365,8 @@ const UserForm: VFC = () => {
                         {...field}
                         {...params}
                         fullWidth
-                        error={Boolean(errors.user?.birthday)}
-                        helperText={errors.user?.birthday?.message}
+                        error={Boolean(errors.customer?.birthday)}
+                        helperText={errors.customer?.birthday?.message}
                       />
                     )}
                   />
@@ -378,7 +378,7 @@ const UserForm: VFC = () => {
         <Grid item xs={12} sm={6}>
           <FormLabelStyle>{t('Occupation')}</FormLabelStyle>
           <Controller
-            name="user.occupation"
+            name="customer.occupation"
             control={control}
             render={({ field }) => (
               <Autocomplete
@@ -387,13 +387,13 @@ const UserForm: VFC = () => {
                 {...field}
                 options={occupations}
                 onChange={(_, value) => {
-                  setValue('user.occupation', value);
+                  setValue('customer.occupation', value);
                 }}
                 renderInput={(params) => (
                   <TextField
                     size="small"
-                    error={Boolean(errors.user?.occupation)}
-                    helperText={errors.user?.occupation?.message}
+                    error={Boolean(errors.customer?.occupation)}
+                    helperText={errors.customer?.occupation?.message}
                     fullWidth
                     {...params}
                   />
@@ -413,7 +413,7 @@ const UserForm: VFC = () => {
             <LocalizationProvider dateAdapter={AdapterDateFns} locale={ja}>
               <Controller
                 control={control}
-                name="user.firstVisitDate"
+                name="customer.firstVisitDate"
                 render={({ field }) => (
                   <DesktopDatePicker
                     {...field}
@@ -425,8 +425,8 @@ const UserForm: VFC = () => {
                         {...field}
                         {...params}
                         fullWidth
-                        error={Boolean(errors.user?.firstVisitDate)}
-                        helperText={errors.user?.firstVisitDate?.message}
+                        error={Boolean(errors.customer?.firstVisitDate)}
+                        helperText={errors.customer?.firstVisitDate?.message}
                       />
                     )}
                   />
@@ -439,7 +439,7 @@ const UserForm: VFC = () => {
           <FormLabelStyle>{t('Memo')}</FormLabelStyle>
           <Controller
             control={control}
-            name="user.memo"
+            name="customer.memo"
             render={({ field }) => (
               <TextField size="small" {...field} fullWidth multiline rows="4" />
             )}
@@ -450,4 +450,4 @@ const UserForm: VFC = () => {
   );
 };
 
-export default UserForm;
+export default CustomerForm;

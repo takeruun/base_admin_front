@@ -1,7 +1,6 @@
-import React, { VFC, useEffect, useState } from 'react';
+import React, { VFC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import {
   Autocomplete,
   Card,
@@ -16,20 +15,15 @@ import {
   FormControlLabel,
   styled
 } from '@mui/material';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { IMaskInput } from 'react-imask';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import axios from 'axios';
 import ja from 'date-fns/locale/ja';
 
-import request from 'src/hooks/useRequest';
 import type { User } from 'src/models/user';
-import { usePrefectures } from 'src/hooks/usePrefectures';
-import { useOccupations } from 'src/hooks/useOccupations';
 import UserDialogAction from 'src/components/Customer/Form/UserDialogAction';
+import { useUserFormState } from './store';
 
 interface FormPropsType {
   user?: User;
@@ -41,28 +35,6 @@ const FormLabelStyle = styled('p')(
     font-weight: bold;
   `
 );
-
-export type FormInputType = {
-  familyName: string;
-  givenName: string;
-  familyNameKana: string;
-  givenNameKana: string;
-  postalCode: string;
-  prefecture: string;
-  address1: string;
-  address2: string;
-  address3: string;
-  phoneNumber: string;
-  homePhoneNumber: string;
-  email: string;
-  gender: number;
-  birthday: string;
-  occupation: string;
-  firstVisitDate: string;
-  familyUserId: number;
-  familyRelationship: number;
-  memo: string;
-};
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -93,110 +65,28 @@ const PostalCodeMask = React.forwardRef<HTMLInputElement, CustomProps>(
 );
 
 const Form: VFC<FormPropsType> = ({ user }) => {
-  const navigate = useNavigate();
   const { t }: { t: any } = useTranslation();
-  const schema = Yup.object({
-    familyName: Yup.string().required(t('Family name is required.')),
-    givenName: Yup.string().required(t('Given name is required.')),
-    familyNameKana: Yup.string().required(t('Family name kana is required.')),
-    givenNameKana: Yup.string().required(t('Given name kana is required.')),
-    postalCode: Yup.string().required(t('Postal code is required.')),
-    prefecture: Yup.string().required(t('Need select prefecure')),
-    address1: Yup.string().required(t('Municipalities is required.')),
-    address2: Yup.string().required(t('House number is required.')),
-    phoneNumber: Yup.string().required(t('Phone number is required.')),
-    email: Yup.string().required(t('Email is required.'))
-  }).required();
-
   const {
     control,
     setValue,
     handleSubmit,
-    watch,
-    formState: { errors, isSubmitting }
-  } = useForm<FormInputType>({
-    defaultValues: {
-      familyName: '',
-      givenName: '',
-      familyNameKana: '',
-      givenNameKana: '',
-      postalCode: '',
-      prefecture: '',
-      address1: '',
-      address2: '',
-      address3: '',
-      phoneNumber: '',
-      homePhoneNumber: '',
-      email: '',
-      gender: 0,
-      birthday: '',
-      occupation: '',
-      firstVisitDate: '',
-      familyUserId: 0,
-      familyRelationship: 0,
-      memo: ''
-    },
-    resolver: yupResolver(schema)
-  });
-  const onSubmit = async (data) => {
-    request({
-      url: Boolean(user) ? `/v1/users/${user.id}` : '/v1/users',
-      method: Boolean(user) ? 'PUT' : 'POST',
-      reqParams: {
-        data: {
-          ...data
-        }
-      }
-    }).then(() => {
-      navigate('/dashboards/customers');
-    });
-  };
+    formState: { errors, isSubmitting },
+    onSubmit,
 
-  const { getPrefectures, prefectures } = usePrefectures();
-  const { getOccupations, occupations } = useOccupations();
+    setUser,
+    updateAddress,
+    prefectures,
+    occupations,
+    getPrefectures,
+    getOccupations
+  } = useUserFormState(user?.id);
+
+  useEffect(() => setUser(user), [user]);
 
   useEffect(() => {
-    if (Boolean(user)) {
-      setValue('familyName', user.familyName);
-      setValue('givenName', user.givenName);
-      setValue('familyNameKana', user.familyNameKana);
-      setValue('givenNameKana', user.givenNameKana);
-      setValue('postalCode', user.postalCode);
-      setValue('prefecture', user.prefecture);
-      setValue('address1', user.address1);
-      setValue('address2', user.address2);
-      setValue('address3', user.address3);
-      setValue('phoneNumber', user.phoneNumber);
-      setValue('homePhoneNumber', user.homePhoneNumber);
-      setValue('email', user.email);
-      setValue('gender', user.gender);
-      setValue('birthday', user.birthday);
-      setValue('occupation', user.occupation);
-      setValue('firstVisitDate', user.firstVisitDate);
-      setValue('memo', user.memo ? user.memo : '');
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const subscription = watch(async (value, { name, type }) => {
-      if (name === 'postalCode' && value.postalCode.length >= 7) {
-        await axios
-          .get('https://zipcloud.ibsnet.co.jp/api/search', {
-            params: {
-              zipcode: value.postalCode
-            }
-          })
-          .then((res) => {
-            if (res['data']['results']) {
-              setValue('prefecture', res['data']['results'][0]['address1']);
-              setValue('address1', res['data']['results'][0]['address2']);
-              setValue('address2', res['data']['results'][0]['address3']);
-            }
-          });
-      }
-    });
+    const subscription = updateAddress();
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [updateAddress]);
 
   useEffect(() => {
     getPrefectures();

@@ -1,4 +1,4 @@
-export interface User {
+export interface Customer {
   id: number;
   familyName: string;
   givenName: string;
@@ -23,4 +23,7 @@ export interface User {
   nextVisitDate: string;
   previousVisitDate: string;
   lastVistDates: number;
+  avatar: string;
+  name: string;
+  jobtitle: string;
 }

@@ -1,12 +1,4 @@
-import {
-  ChangeEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef,
-  useCallback,
-  useEffect
-} from 'react';
+import { ReactElement, Ref, forwardRef, useEffect } from 'react';
 import {
   Avatar,
   Box,
@@ -27,7 +19,6 @@ import {
   Button,
   Typography,
   Dialog,
-  Zoom,
   styled,
   useTheme
 } from '@mui/material';
@@ -38,11 +29,9 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useSnackbar } from 'notistack';
 import { format } from 'date-fns';
 
-import type { User } from 'src/models/user';
-import request from 'src/hooks/useRequest';
+import { useListState } from './store';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -85,83 +74,33 @@ const Transition = forwardRef(function Transition(
 
 const List = () => {
   const { t }: { t: any } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const {
+    customers,
+    totalCostomerCount,
+    page,
+    limit,
+    query,
+    openConfirmDelete,
+
+    getCustomers,
+    setDeletedId,
+    handleQueryChange,
+    handlePageChange,
+    handleLimitChange,
+    handleConfirmDelete,
+    closeConfirmDelete,
+    handleDeleteCompleted
+  } = useListState();
+
   const navigate = useNavigate();
   const theme = useTheme();
-  const [users, setUsers] = useState<User[]>([]);
-  const [totalUserCount, setTotalUserCount] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-    getCustomers();
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-    getCustomers();
-  };
-
-  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
-  const [deleteId, setDeletedId] = useState<number>(0);
-
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
-
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
-
-  const handleDeleteCompleted = () => {
-    setOpenConfirmDelete(false);
-
-    request({
-      url: `/v1/users/${deleteId}`,
-      method: 'DELETE'
-    }).then(() => {
-      setUsers(users.filter((c) => c.id !== deleteId));
-      enqueueSnackbar(t('The customer account has been removed'), {
-        variant: 'success',
-        anchorOrigin: {
-          vertical: 'top',
-          horizontal: 'right'
-        },
-        TransitionComponent: Zoom
-      });
-    });
-  };
-
-  const getCustomers = useCallback(() => {
-    try {
-      request({
-        url: '/v1/users',
-        method: 'GET',
-        reqParams: {
-          params: {
-            offset: page * limit,
-            limit
-          }
-        }
-      }).then((response) => {
-        setUsers(response.data.users);
-        setTotalUserCount(response.data.totalCount);
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, [page, limit]);
 
   useEffect(() => {
-    getCustomers();
-  }, [getCustomers]);
+    getCustomers({
+      offset: page * limit,
+      limit
+    });
+  }, [page, limit]);
 
   return (
     <>
@@ -190,7 +129,7 @@ const List = () => {
 
         <Divider />
 
-        {users.length === 0 ? (
+        {customers.length === 0 ? (
           <>
             <Typography
               sx={{
@@ -246,7 +185,7 @@ const List = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users.map((user) => {
+                  {customers.map((user) => {
                     return (
                       <TableRow hover key={user.id}>
                         <TableCell>
@@ -316,9 +255,10 @@ const List = () => {
                             </Tooltip>
                             <Tooltip title={t('Delete')} arrow>
                               <IconButton
-                                onClick={() => {
-                                  handleConfirmDelete();
+                                onClick={(e) => {
+                                  e.stopPropagation();
                                   setDeletedId(user.id);
+                                  handleConfirmDelete();
                                 }}
                                 color="primary"
                               >
@@ -336,7 +276,7 @@ const List = () => {
             <Box p={2}>
               <TablePagination
                 component="div"
-                count={totalUserCount}
+                count={totalCostomerCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleLimitChange}
                 page={page}

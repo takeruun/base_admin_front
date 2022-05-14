@@ -1,5 +1,4 @@
-export interface User {
-  id: number;
+export type FormInputType = {
   familyName: string;
   givenName: string;
   familyNameKana: string;
@@ -16,11 +15,7 @@ export interface User {
   birthday: string;
   occupation: string;
   firstVisitDate: string;
-  dmForwardingFlg: string;
-  memo: string;
-  reasonForComing: string;
   familyUserId: number;
-  nextVisitDate: string;
-  previousVisitDate: string;
-  lastVistDates: number;
-}
+  familyRelationship: number;
+  memo: string;
+};

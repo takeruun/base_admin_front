@@ -37,7 +37,7 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import request from 'src/hooks/useRequest';
-import type { Administrators } from 'src/models/administrators';
+import type { Administrator } from 'src/models/administrator';
 import useRefMounted from 'src/hooks/useRefMounted';
 
 const DialogWrapper = styled(Dialog)(
@@ -84,7 +84,7 @@ const List = () => {
   const { enqueueSnackbar } = useSnackbar();
   const isMountedRef = useRefMounted();
 
-  const [administrators, setAdministrators] = useState<Administrators[]>([]);
+  const [administrators, setAdministrators] = useState<Administrator[]>([]);
   const [totalCourseAdministrator, setTotalCourseAdministrator] =
     useState<number>(0);
   const [page, setPage] = useState<number>(0);

@@ -1,12 +1,4 @@
-import {
-  ChangeEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef,
-  useCallback,
-  useEffect
-} from 'react';
+import { ReactElement, Ref, forwardRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
@@ -23,13 +15,11 @@ import {
   TablePagination,
   TableContainer,
   TableRow,
-  Tabs,
   TextField,
   Tooltip,
   Button,
   Typography,
   Dialog,
-  Zoom,
   styled,
   useTheme
 } from '@mui/material';
@@ -39,11 +29,9 @@ import { useTranslation } from 'react-i18next';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import { useSnackbar } from 'notistack';
 import { format } from 'date-fns';
-import type { Order } from 'src/models/order';
-import request from 'src/hooks/useRequest';
 import numeral from 'numeral';
+import { useListState } from './store';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -86,84 +74,29 @@ const Transition = forwardRef(function Transition(
 
 const List = () => {
   const { t }: { t: any } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
+  const {
+    orders,
+    totalOrderCount,
+    page,
+    limit,
+    query,
+    openConfirmDelete,
+
+    setDeletedId,
+    getOrders,
+    handleQueryChange,
+    handlePageChange,
+    handleLimitChange,
+    handleConfirmDelete,
+    closeConfirmDelete,
+    handleDeleteCompleted
+  } = useListState();
   const navigate = useNavigate();
 
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [totalOrderCount, setTotalOrderCount] = useState(0);
-  const [deleteId, setDeletedId] = useState(0);
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
-  const [query, setQuery] = useState('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
-
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
-
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
-
-  const handleDeleteCompleted = () => {
-    setOpenConfirmDelete(false);
-
-    request({
-      url: `/v1/orders/${deleteId}`,
-      method: 'DELETE'
-    }).then(() => {
-      setOrders(orders.filter((c) => c.id !== deleteId));
-      enqueueSnackbar(t('The order has been removed'), {
-        variant: 'success',
-        anchorOrigin: {
-          vertical: 'top',
-          horizontal: 'right'
-        },
-        TransitionComponent: Zoom
-      });
-    });
-  };
-
-  const getOrders = useCallback(() => {
-    try {
-      request({
-        url: '/v1/orders/search',
-        method: 'GET',
-        reqParams: {
-          params: {
-            offset: page * limit,
-            limit,
-            sort_column: 'date_of_visit',
-            sort_by: 'desc'
-          }
-        }
-      }).then((response) => {
-        setOrders(response.data.orders);
-        setTotalOrderCount(response.data.totalCount);
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, [page, limit]);
-
   useEffect(() => {
-    getOrders();
-  }, [getOrders]);
+    getOrders(page, limit);
+  }, [page, limit]);
 
   return (
     <>

@@ -38,7 +38,7 @@ const DialogSelectSearchOrderItem: VFC<DialogSelectSearchOrderItemPropsType> =
       page,
       limit,
       categories,
-      totalCount,
+      totalProductCount,
       products,
 
       register,
@@ -196,7 +196,7 @@ const DialogSelectSearchOrderItem: VFC<DialogSelectSearchOrderItemPropsType> =
                 <Box>
                   <TablePagination
                     component="div"
-                    count={totalCount}
+                    count={totalProductCount}
                     onPageChange={handlePageChange}
                     onRowsPerPageChange={handleLimitChange}
                     page={page}

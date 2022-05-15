@@ -16,7 +16,7 @@ import request from 'src/hooks/useRequest';
 import { usePrefectures } from 'src/hooks/usePrefectures';
 import { useOccupations } from 'src/hooks/useOccupations';
 import { useAllDiscounts } from 'src/hooks/useDiscount';
-import { useAllProducts } from 'src/hooks/useProduct';
+import { useProduct } from 'src/hooks/useProduct';
 import { useCategory } from 'src/hooks/useCategory';
 import {
   OrderFormInputType,
@@ -574,7 +574,7 @@ export const useDialogSelectSearchOrderItemState = () => {
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const { getCategories, categories } = useCategory();
-  const { getProductsSearch, totalCount, products } = useAllProducts();
+  const { getProductsSearch, totalProductCount, products } = useProduct();
 
   const { register, setValue, getValues } =
     useForm<SelectSearchOrderItemFormInputType>({
@@ -634,7 +634,7 @@ export const useDialogSelectSearchOrderItemState = () => {
     page,
     limit,
     categories,
-    totalCount,
+    totalProductCount,
     products,
 
     register,

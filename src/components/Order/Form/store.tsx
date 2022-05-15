@@ -383,7 +383,7 @@ export const useOrderItemsFormState = () => {
 
 export const useSelectCustomerState = () => {
   const { setValue, getValues } = useFormContext<OrderFormInputType>();
-  const { customers, totalCostomerCount, getCustomers } = useCustomer();
+  const { customers, totalCustomerCount, getCustomers } = useCustomer();
 
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState(null);
@@ -431,7 +431,7 @@ export const useSelectCustomerState = () => {
     page,
     limit,
     customers,
-    totalCostomerCount,
+    totalCustomerCount,
 
     getCustomers,
     handleSetFromValue,

@@ -5,10 +5,9 @@ import { Zoom } from '@mui/material';
 import request from 'src/hooks/useRequest';
 import type { Order } from 'src/models/order';
 import {
-  setOrders as sO,
-  updateOrder,
-  useOrderDispatch
-} from 'src/contexts/OrderContext';
+  setDashboardOrders,
+  useDashboardDispatch
+} from 'src/contexts/DashboardContext';
 
 export const useOrder = () => {
   const { t }: { t: any } = useTranslation();
@@ -16,7 +15,7 @@ export const useOrder = () => {
   const [totalOrderCount, setTotalOrderCount] = useState(0);
   const [order, setOrder] = useState<Order>();
   const [loading, setLoading] = useState<boolean>(false);
-  const orderDispatch = useOrderDispatch();
+  const dashboradDispatch = useDashboardDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
   const getOrder = useCallback((orderId: number) => {
@@ -89,33 +88,41 @@ export const useOrder = () => {
           }
         }
       }).then((response) => {
-        orderDispatch(sO(response.data.orders, response.data.totalCount));
+        dashboradDispatch(setDashboardOrders(response.data.orders));
       });
     },
     []
   );
 
-  const putOrderStatus = useCallback((id: number, data: any) => {
-    request({
-      url: `v1/orders/${id}/status`,
-      method: 'PUT',
-      reqParams: {
-        data
-      }
-    });
-  }, []);
+  const putOrderStatus = useCallback(
+    (id: number, data: any, successCallback = null) => {
+      request({
+        url: `v1/orders/${id}/status`,
+        method: 'PUT',
+        reqParams: {
+          data
+        }
+      }).then((response) => {
+        if (successCallback) successCallback(response.data.order);
+      });
+    },
+    []
+  );
 
-  const putOrderTime = useCallback((id: number, data: any) => {
-    request({
-      url: `v1/orders/${id}/time`,
-      method: 'PUT',
-      reqParams: {
-        data
-      }
-    }).then((response) => {
-      orderDispatch(updateOrder(response.data.order));
-    });
-  }, []);
+  const putOrderTime = useCallback(
+    (id: number, data: any, successCallback = null) => {
+      request({
+        url: `v1/orders/${id}/time`,
+        method: 'PUT',
+        reqParams: {
+          data
+        }
+      }).then((response) => {
+        if (successCallback) successCallback(response.data.order);
+      });
+    },
+    []
+  );
 
   return {
     getOrders,

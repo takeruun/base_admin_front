@@ -2,7 +2,7 @@ import { useState, ChangeEvent } from 'react';
 import { useCustomer } from 'src/hooks/useCustomer';
 
 export const useListState = () => {
-  const { customers, totalCostomerCount, getCustomers, deleteCustomer } =
+  const { customers, totalCustomerCount, getCustomers, deleteCustomer } =
     useCustomer();
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
@@ -34,7 +34,7 @@ export const useListState = () => {
 
   const store = {
     customers,
-    totalCostomerCount,
+    totalCustomerCount,
     page,
     limit,
     query,

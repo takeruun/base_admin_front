@@ -42,7 +42,7 @@ const SelectUser: VFC = () => {
     page,
     limit,
     customers,
-    totalCostomerCount,
+    totalCustomerCount,
 
     getCustomers,
     handleSetFromValue,
@@ -154,7 +154,7 @@ const SelectUser: VFC = () => {
                 <Box>
                   <TablePagination
                     component="div"
-                    count={totalCostomerCount}
+                    count={totalCustomerCount}
                     onPageChange={handlePageChange}
                     onRowsPerPageChange={handleLimitChange}
                     page={page}

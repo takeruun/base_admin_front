@@ -10,7 +10,7 @@ export const useCustomer = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [customer, setCustomer] = useState<Customer>();
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [totalCostomerCount, setTotalCostomerCount] = useState(0);
+  const [totalCustomerCount, setTotalCustomerCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const getCustomer = useCallback((customerId: number) => {
@@ -42,7 +42,7 @@ export const useCustomer = () => {
       })
         .then((response) => {
           setCustomers(response.data.customers);
-          setTotalCostomerCount(response.data.totalCount);
+          setTotalCustomerCount(response.data.totalCount);
         })
         .finally(() => {});
     } catch (e) {
@@ -70,7 +70,7 @@ export const useCustomer = () => {
   return {
     customer,
     customers,
-    totalCostomerCount,
+    totalCustomerCount,
     getCustomer,
     getCustomers,
     deleteCustomer

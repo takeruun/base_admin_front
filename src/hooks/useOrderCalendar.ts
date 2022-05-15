@@ -10,19 +10,22 @@ import {
 } from 'date-fns';
 import type { Order } from 'src/models/order';
 import request from 'src/hooks/useRequest';
-import {
-  addOrderCalendar,
-  setOrderCalendar,
-  setOrderCalendarTimeLine,
-  updateOrderCalendar,
-  removeOrderCalendar,
-  useOrderCalendarDispatch
-} from 'src/contexts/OrderCalendarContext';
 import type { OrderEvent, Resource } from 'src/models/calendar';
 import { FormIputType as EasyOrderCreationInputType } from 'src/components/Calendar/EasyOrderCreation';
+import {
+  setEventsResources,
+  useDashboardDispatch
+} from 'src/contexts/DashboardContext';
+import {
+  useCalendarDispatch,
+  setEvents,
+  updateOrderEvent,
+  removeOrderEvent
+} from 'src/contexts/CalendarContext';
 
 export const useOrderCalendar = () => {
-  const dispatchOrderCalendar = useOrderCalendarDispatch();
+  const dispatchDashboard = useDashboardDispatch();
+  const dispatchCalendar = useCalendarDispatch();
 
   const getOrderCalendar = useCallback((date: Date, view: string) => {
     var startDate: Date = setSeconds(setMinutes(setHours(date, 0), 0), 0);
@@ -74,7 +77,7 @@ export const useOrderCalendar = () => {
         };
       });
 
-      dispatchOrderCalendar(setOrderCalendar(events));
+      dispatchCalendar(setEvents(events));
     });
   }, []);
 
@@ -115,13 +118,13 @@ export const useOrderCalendar = () => {
         };
       });
 
-      dispatchOrderCalendar(setOrderCalendarTimeLine(events, resources));
+      dispatchDashboard(setEventsResources(events, resources));
     });
   }, []);
 
   const putOrderCalendar = useCallback(
     (id: string, date: { start: Date; end: Date }) => {
-      dispatchOrderCalendar(updateOrderCalendar(id, date));
+      dispatchCalendar(updateOrderEvent(id, date));
     },
     []
   );
@@ -131,7 +134,7 @@ export const useOrderCalendar = () => {
       url: `/v1/orders/${id}`,
       method: 'DELETE'
     }).then(() => {
-      dispatchOrderCalendar(removeOrderCalendar(id));
+      dispatchCalendar(removeOrderEvent(id));
     });
   }, []);
 
@@ -163,7 +166,7 @@ export const useOrderCalendar = () => {
               description += `${oi.product.name} x ${oi.quantity}\n`;
             }
           });
-          const orderCalendar = {
+          const event: OrderEvent = {
             id: String(order.id),
             allDay: false,
             description,
@@ -171,8 +174,7 @@ export const useOrderCalendar = () => {
             end: order.dateOfExit,
             title: `${order.customer.familyName}${order.customer.givenName}さん`
           };
-          dispatchOrderCalendar(addOrderCalendar(orderCalendar));
-          if (successCallback) successCallback();
+          if (successCallback) successCallback(event);
         });
       } catch (e) {
         console.error(e);

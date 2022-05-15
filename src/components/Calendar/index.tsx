@@ -1,11 +1,8 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
-import FullCalendar, { EventClickArg, EventDropArg } from '@fullcalendar/react';
+import { useEffect } from 'react';
+import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin, {
-  DateClickArg,
-  EventResizeDoneArg
-} from '@fullcalendar/interaction';
+import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import {
@@ -15,19 +12,12 @@ import {
   Drawer,
   Dialog,
   styled,
-  useTheme,
-  useMediaQuery
+  useTheme
 } from '@mui/material';
-import { format } from 'date-fns';
-
-import type { View } from 'src/models/calendar';
-import { useOrderCalendarState } from 'src/contexts/OrderCalendarContext';
-import { useOrderCalendar } from 'src/hooks/useOrderCalendar';
-import { useOrder } from 'src/hooks/useOrder';
-
 import Actions from './Actions';
 import EventDrawer from './EventDrawer';
 import EasyOrderCreation from './EasyOrderCreation';
+import { useCalendarState } from './store';
 
 const FullCalendarWrapper = styled(Box)(
   ({ theme }) => `
@@ -113,123 +103,36 @@ const FullCalendarWrapper = styled(Box)(
 
 const Calender = () => {
   const theme = useTheme();
-  const calendarRef = useRef<FullCalendar | null>(null);
-  const mobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { events } = useOrderCalendarState();
-  const { getOrderCalendar, putOrderCalendar } = useOrderCalendar();
-  const { putOrderTime } = useOrder();
+  const {
+    calendarRef,
+    mobile,
+    events,
+    view,
+    date,
+    isEasyOrderCreationOpen,
+    isDrawerOpen,
+    selectOrderCalendarId,
 
-  const [view, setView] = useState<View>(mobile ? 'listWeek' : 'dayGridMonth');
-  const [date, setDate] = useState(new Date());
-  const [selectDate, setSelectDate] = useState('');
-  const [selectTime, setSelectTime] = useState<string | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectOrderCalendarId, setSelectOrderCalendarId] = useState(0);
-
-  const handleDateToday = useCallback(() => {
-    const calItem = calendarRef.current;
-
-    if (calItem) {
-      const calApi = calItem.getApi();
-      calApi.today();
-      setDate(calApi.getDate());
-    }
-  }, [calendarRef]);
-
-  const changeView = useCallback(
-    (changedView: View) => {
-      const calItem = calendarRef.current;
-
-      if (calItem) {
-        const calApi = calItem.getApi();
-        calApi.changeView(changedView);
-        setView(changedView);
-        setDate(calApi.getDate());
-      }
-    },
-    [calendarRef]
-  );
-
-  const handleDatePrev = useCallback(() => {
-    const calItem = calendarRef.current;
-
-    if (calItem) {
-      const calApi = calItem.getApi();
-      calApi.prev();
-      setDate(calApi.getDate());
-    }
-  }, [calendarRef]);
-
-  const handleDateNext = useCallback(() => {
-    const calItem = calendarRef.current;
-
-    if (calItem) {
-      const calApi = calItem.getApi();
-      calApi.next();
-      setDate(calApi.getDate());
-    }
-  }, [calendarRef]);
-
-  const handleDateClick = (args: DateClickArg) => {
-    if (view !== 'dayGridMonth') setSelectTime(format(args.date, 'HH:mm'));
-    else setSelectTime(null);
-    setSelectDate(args.dateStr);
-    setDialogOpen(true);
-  };
-
-  const handleEventSelect = (arg: EventClickArg): void => {
-    setSelectOrderCalendarId(parseInt(arg.event.id));
-    setDrawerOpen(true);
-  };
-
-  const handleEventResize = ({ event }: EventResizeDoneArg): void => {
-    try {
-      putOrderTime(parseInt(event.id), {
-        dateOfVisit: event.start,
-        dateOfExit: event.end
-      });
-      putOrderCalendar(event.id, {
-        start: event.start,
-        end: event.end
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleEventDrop = ({ event }: EventDropArg): void => {
-    try {
-      putOrderTime(parseInt(event.id), {
-        dateOfVisit: event.start,
-        dateOfExit: event.end
-      });
-      putOrderCalendar(event.id, {
-        start: event.start,
-        end: event.end
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleCloseDialog = useCallback(() => setDialogOpen(false), []);
-  const handleCloseDrawer = useCallback(() => setDrawerOpen(false), []);
+    getOrderCalendar,
+    handleDateToday,
+    changeView,
+    handleDatePrev,
+    handleDateNext,
+    handleDateClick,
+    handleEventSelect,
+    handleEventResize,
+    handleEventDrop,
+    handleCloseDialog,
+    handleCloseDrawer
+  } = useCalendarState();
 
   useEffect(() => {
     getOrderCalendar(date, view);
   }, [date, view]);
 
   useEffect(() => {
-    const calItem = calendarRef.current;
-
-    if (calItem) {
-      const calApi = calItem.getApi();
-      const changedView = mobile ? 'listWeek' : 'dayGridMonth';
-
-      calApi.changeView(changedView);
-      setView(changedView);
-    }
+    const changedView = mobile ? 'listWeek' : 'dayGridMonth';
+    changeView(changedView);
   }, [mobile]);
 
   return (
@@ -288,25 +191,23 @@ const Calender = () => {
         variant="temporary"
         anchor={theme.direction === 'rtl' ? 'left' : 'right'}
         onClose={handleCloseDrawer}
-        open={drawerOpen}
+        open={isDrawerOpen}
         elevation={9}
       >
-        {drawerOpen && (
+        {isDrawerOpen && (
           <EventDrawer
             event={events.find(
               (_event) => _event.id === String(selectOrderCalendarId)
             )}
-            onCancel={handleCloseDrawer}
-            onDeleteComplete={handleCloseDrawer}
           />
         )}
       </Drawer>
-      <Dialog fullWidth open={dialogOpen} onClose={handleCloseDialog}>
-        <EasyOrderCreation
-          onClose={handleCloseDialog}
-          selectDate={selectDate}
-          selectTime={selectTime}
-        />
+      <Dialog
+        fullWidth
+        open={isEasyOrderCreationOpen}
+        onClose={handleCloseDialog}
+      >
+        <EasyOrderCreation />
       </Dialog>
     </>
   );

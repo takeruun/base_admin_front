@@ -1,4 +1,4 @@
-import { VFC, useState, ChangeEvent, useEffect, memo } from 'react';
+import { VFC, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -17,28 +17,29 @@ import {
   InputAdornment
 } from '@mui/material';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import { useCustomer } from 'src/hooks/useCustomer';
+import { useSelectCustomerState } from './store';
 
-interface SelectCustomerIdDialogPropsType {
+interface SelectCustomerPropsType {
   handleSelectCustomer: (customerId: number) => void;
   handleCloseDialog: () => void;
   handleSetUserName: (userName: string) => void;
 }
 
-const SelectCustomerDialog: VFC<SelectCustomerIdDialogPropsType> = memo(
+const SelectCustomer: VFC<SelectCustomerPropsType> = memo(
   ({ handleSelectCustomer, handleCloseDialog, handleSetUserName }) => {
     const { t }: { t: any } = useTranslation();
-    const { customers, totalCostomerCount, getCustomers } = useCustomer();
-    const [query, setQuery] = useState('');
-    const [page, setPage] = useState(0);
-    const [limit, setLimit] = useState(5);
+    const {
+      customers,
+      totalCustomerCount,
+      query,
+      page,
+      limit,
 
-    const handlePageChange = (_event: any, newPage: number): void => {
-      setPage(newPage);
-    };
-    const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-      setLimit(parseInt(event.target.value));
-    };
+      setQuery,
+      getCustomers,
+      handlePageChange,
+      handleLimitChange
+    } = useSelectCustomerState();
 
     useEffect(() => {
       getCustomers({ offset: page * limit, limit });
@@ -128,7 +129,7 @@ const SelectCustomerDialog: VFC<SelectCustomerIdDialogPropsType> = memo(
               </TableContainer>
               <TablePagination
                 component="div"
-                count={totalCostomerCount}
+                count={totalCustomerCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleLimitChange}
                 page={page}
@@ -144,4 +145,4 @@ const SelectCustomerDialog: VFC<SelectCustomerIdDialogPropsType> = memo(
   }
 );
 
-export default SelectCustomerDialog;
+export default SelectCustomer;

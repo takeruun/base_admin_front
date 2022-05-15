@@ -1,8 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import {
   Autocomplete,
   Button,
@@ -16,79 +14,21 @@ import {
   TextField,
   Box
 } from '@mui/material';
-import { yupResolver } from '@hookform/resolvers/yup';
-import request from 'src/hooks/useRequest';
-import { Category } from 'src/models/category';
-
-type FormInputType = {
-  courseName: string;
-  categoryId: number;
-  name: string;
-  price: number;
-};
+import { useProductForm } from './store';
 
 const Form = () => {
-  const navigate = useNavigate();
-  const [categories, setCategories] = useState<Category[]>([]);
   const { t }: { t: any } = useTranslation();
-
-  const schema = Yup.object({
-    categoryId: Yup.number().required(t('Need select category.')),
-    name: Yup.string().required(t('Product name is required.')),
-    price: Yup.number()
-      .min(1, t('Must be a number greater than or equal to 1.'))
-      .required(t('Price is required.'))
-  }).required();
-
   const {
     register,
     control,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting }
-  } = useForm<FormInputType>({
-    defaultValues: {
-      courseName: '',
-      categoryId: 0,
-      name: '',
-      price: 0
-    },
-    resolver: yupResolver(schema)
-  });
+    formState: { errors, isSubmitting },
+    onSubmit,
+    categories,
 
-  const onSubmit = (data: FormInputType) => {
-    try {
-      request({
-        url: '/v1/products',
-        method: 'POST',
-        reqParams: {
-          data: {
-            productType: '商品',
-            categoryId: data.categoryId,
-            name: data.name,
-            price: data.price
-          }
-        }
-      }).then(() => {
-        navigate('/dashboards/products');
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const getCategories = useCallback(async () => {
-    try {
-      request({
-        url: '/v1/categories',
-        method: 'GET'
-      }).then((response) => {
-        setCategories(response.data.categories);
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+    getCategories
+  } = useProductForm();
 
   useEffect(() => {
     getCategories();

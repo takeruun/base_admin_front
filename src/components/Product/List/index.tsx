@@ -1,13 +1,4 @@
-import {
-  VFC,
-  ChangeEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef,
-  useCallback,
-  useEffect
-} from 'react';
+import { VFC, ReactElement, Ref, forwardRef, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import {
@@ -30,15 +21,13 @@ import {
   Button,
   Typography,
   Dialog,
-  Zoom,
   styled
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import type { Product } from 'src/models/product';
-import request from 'src/hooks/useRequest';
+import { useList } from './store';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -72,8 +61,6 @@ const ButtonError = styled(Button)(
   `
 );
 
-interface ResultsProps {}
-
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: ReactElement<any, any> },
   ref: Ref<unknown>
@@ -81,84 +68,29 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const Results: VFC<ResultsProps> = () => {
+const Results: VFC = () => {
   const { t }: { t: any } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const {
+    totalProductCount,
+    products,
+    page,
+    limit,
+    query,
+    openConfirmDelete,
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [totalProductCount, setTotalProductCount] = useState<number>(0);
-  const [deleteId, setDeletedId] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-    getProducts();
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-    getProducts();
-  };
-
-  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
-
-  const getProducts = useCallback(() => {
-    try {
-      request({
-        url: '/v1/products',
-        method: 'GET',
-        reqParams: {
-          params: {
-            productType: 2,
-            offset: page * limit,
-            limit
-          }
-        }
-      }).then((response) => {
-        setProducts(response.data.products);
-        setTotalProductCount(response.data.totalCount);
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, [page, limit]);
+    setDeletedId,
+    getProductsSearch,
+    handleQueryChange,
+    handlePageChange,
+    handleLimitChange,
+    handleConfirmDelete,
+    closeConfirmDelete,
+    handleDeleteCompleted
+  } = useList();
 
   useEffect(() => {
-    getProducts();
-  }, [getProducts]);
-
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
-
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
-
-  const handleDeleteCompleted = () => {
-    setOpenConfirmDelete(false);
-    request({
-      url: `/v1/products/${deleteId}`,
-      method: 'DELETE'
-    }).then(() => {
-      setProducts(products.filter((c) => c.id !== deleteId));
-      enqueueSnackbar(t('The product has been removed'), {
-        variant: 'success',
-        anchorOrigin: {
-          vertical: 'top',
-          horizontal: 'right'
-        },
-        TransitionComponent: Zoom
-      });
-    });
-  };
+    getProductsSearch({ product_type: 2, offset: page * limit, limit });
+  }, [page, limit]);
 
   return (
     <>

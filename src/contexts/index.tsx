@@ -3,7 +3,6 @@ import { SidebarProvider } from './SidebarContext';
 import { AuthProvider } from './JWTAuthContext';
 import { ReceiptTextsProvider } from './ReceiptTextsContext';
 import { ImageProvider } from './ImageContext';
-import { OrderProvider } from './OrderContext';
 import { DashboardProvider } from './DashboardContext';
 import { CalendarProvider } from './CalendarContext';
 
@@ -17,11 +16,9 @@ export const RootContextProvider: VFC<Props> = ({ children }) => {
       <AuthProvider>
         <ReceiptTextsProvider>
           <ImageProvider>
-            <OrderProvider>
-              <DashboardProvider>
-                <CalendarProvider>{children}</CalendarProvider>
-              </DashboardProvider>
-            </OrderProvider>
+            <DashboardProvider>
+              <CalendarProvider>{children}</CalendarProvider>
+            </DashboardProvider>
           </ImageProvider>
         </ReceiptTextsProvider>
       </AuthProvider>

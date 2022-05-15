@@ -11,50 +11,18 @@ import {
   TextField,
   Box
 } from '@mui/material';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
-import request from 'src/hooks/useRequest';
-import { useNavigate } from 'react-router-dom';
-
-type FormInputType = {
-  name: string;
-};
+import { Controller } from 'react-hook-form';
+import { useFormState } from './store';
 
 const Form = () => {
-  const navigate = useNavigate();
   const { t }: { t: any } = useTranslation();
-
-  const schema = Yup.object({
-    name: Yup.string().required(t('Category name is required.'))
-  }).required();
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting }
-  } = useForm<FormInputType>({
-    defaultValues: {
-      name: ''
-    },
-    resolver: yupResolver(schema)
-  });
-  const onSubmit = (data: FormInputType) => {
-    try {
-      request({
-        url: '/v1/categories',
-        method: 'POST',
-        reqParams: {
-          data: {
-            name: data.name
-          }
-        }
-      }).then(() => {
-        navigate('/dashboards/categories');
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+    formState: { errors, isSubmitting },
+
+    onSubmit
+  } = useFormState();
 
   return (
     <>

@@ -1,12 +1,4 @@
-import {
-  VFC,
-  ReactElement,
-  Ref,
-  useState,
-  forwardRef,
-  useContext,
-  memo
-} from 'react';
+import { VFC, ReactElement, Ref, forwardRef, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -19,15 +11,11 @@ import {
   Tooltip,
   Typography,
   Slide,
-  Zoom,
   styled
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
-import { useSnackbar } from 'notistack';
-import { useOrder } from 'src/hooks/useOrder';
-import { Cancel } from 'src/models/order';
-import { FontRateContext } from 'src/theme/ThemeProvider';
+import { useUpdateOrderFormState } from './store';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -80,33 +68,15 @@ interface UpdateOrderFormProps {
 const UpdateOrderForm: VFC<UpdateOrderFormProps> = memo(
   ({ orderInfo, handleClose }) => {
     const { t }: { t: any } = useTranslation();
-    const getFontRate = useContext(FontRateContext);
-    const fontRate = getFontRate();
-    const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
-    const { putOrderStatus } = useOrder();
+    const {
+      fontRate,
+      openConfirmCancel,
 
-    const [openConfirmCancel, setOpenConfirmCancle] = useState<boolean>(false);
-    const handleConfirmCancel = () => setOpenConfirmCancle(true);
-    const closeConfirmCancel = () => setOpenConfirmCancle(false);
-
-    const handleCancelCompleted = () => {
-      handleClose();
-      try {
-        putOrderStatus(orderInfo.orderId, { status: Cancel });
-        setOpenConfirmCancle(false);
-        enqueueSnackbar(t('The order has been canceled'), {
-          variant: 'success',
-          anchorOrigin: {
-            vertical: 'top',
-            horizontal: 'right'
-          },
-          TransitionComponent: Zoom
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    };
+      handleConfirmCancel,
+      closeConfirmCancel,
+      handleCancelCompleted
+    } = useUpdateOrderFormState();
 
     return (
       <>
@@ -219,7 +189,9 @@ const UpdateOrderForm: VFC<UpdateOrderFormProps> = memo(
                 {t('Back')}
               </Button>
               <ButtonError
-                onClick={handleCancelCompleted}
+                onClick={() =>
+                  handleCancelCompleted(orderInfo.orderId, handleClose)
+                }
                 size="large"
                 sx={{
                   mx: 1,

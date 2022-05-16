@@ -1,4 +1,4 @@
-import { VFC, useState, ChangeEvent, useEffect, memo } from 'react';
+import { VFC, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -17,31 +17,32 @@ import {
   InputAdornment
 } from '@mui/material';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import { useAllUsers } from 'src/hooks/useUser';
+import { useSelectCustomerState } from './store';
 
-interface SelectUserDialogPropsType {
-  handleSelectUser: (userId: number) => void;
+interface SelectCustomerPropsType {
+  handleSelectCustomer: (customerId: number) => void;
   handleCloseDialog: () => void;
   handleSetUserName: (userName: string) => void;
 }
 
-const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
-  ({ handleSelectUser, handleCloseDialog, handleSetUserName }) => {
+const SelectCustomer: VFC<SelectCustomerPropsType> = memo(
+  ({ handleSelectCustomer, handleCloseDialog, handleSetUserName }) => {
     const { t }: { t: any } = useTranslation();
-    const { getUsers, totalCount, users } = useAllUsers();
-    const [formValue, setFormValue] = useState('');
-    const [page, setPage] = useState(0);
-    const [limit, setLimit] = useState(5);
+    const {
+      customers,
+      totalCustomerCount,
+      query,
+      page,
+      limit,
 
-    const handlePageChange = (_event: any, newPage: number): void => {
-      setPage(newPage);
-    };
-    const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-      setLimit(parseInt(event.target.value));
-    };
+      setQuery,
+      getCustomers,
+      handlePageChange,
+      handleLimitChange
+    } = useSelectCustomerState();
 
     useEffect(() => {
-      getUsers({ offset: page * limit, limit });
+      getCustomers({ offset: page * limit, limit });
     }, [page, limit]);
 
     return (
@@ -63,7 +64,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                 sx={{
                   m: 0
                 }}
-                onChange={(e) => setFormValue(e.target.value)}
+                onChange={(e) => setQuery(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -76,7 +77,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                         variant="contained"
                         size="small"
                         onClick={() =>
-                          getUsers({ offset: page * limit, limit })
+                          getCustomers({ offset: page * limit, limit, query })
                         }
                       >
                         {t('Search')}
@@ -84,7 +85,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                     </InputAdornment>
                   )
                 }}
-                placeholder={t('Search by user name')}
+                placeholder={t('Search by customer name')}
                 fullWidth
                 variant="outlined"
               />
@@ -99,25 +100,25 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {users.map((user) => {
+                    {customers.map((customer) => {
                       return (
                         <TableRow
                           hover
-                          key={user.id}
+                          key={customer.id}
                           onClick={() => {
-                            handleSelectUser(user.id);
+                            handleSelectCustomer(customer.id);
                             handleSetUserName(
-                              `${user.familyName}${user.givenName}`
+                              `${customer.familyName}${customer.givenName}`
                             );
                             handleCloseDialog();
                           }}
                         >
                           <TableCell>
-                            <Typography noWrap>{user.id}</Typography>
+                            <Typography noWrap>{customer.id}</Typography>
                           </TableCell>
                           <TableCell>
                             <Typography noWrap variant="h5">
-                              {user.familyName} {user.givenName}
+                              {customer.familyName} {customer.givenName}
                             </Typography>
                           </TableCell>
                         </TableRow>
@@ -128,7 +129,7 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
               </TableContainer>
               <TablePagination
                 component="div"
-                count={totalCount}
+                count={totalCustomerCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleLimitChange}
                 page={page}
@@ -144,4 +145,4 @@ const SelectUserDialog: VFC<SelectUserDialogPropsType> = memo(
   }
 );
 
-export default SelectUserDialog;
+export default SelectCustomer;

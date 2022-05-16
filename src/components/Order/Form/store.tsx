@@ -9,15 +9,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ProductType, Course, Goods } from 'src/models/product';
 import type { Order } from 'src/models/order';
-import type { User } from 'src/models/user';
+import type { Customer } from 'src/models/customer';
 import { Discount, Percentage, PriceReduction } from 'src/models/discount';
-import { useUser } from 'src/hooks/useUser';
+import { useCustomer } from 'src/hooks/useCustomer';
 import request from 'src/hooks/useRequest';
 import { usePrefectures } from 'src/hooks/usePrefectures';
 import { useOccupations } from 'src/hooks/useOccupations';
 import { useAllDiscounts } from 'src/hooks/useDiscount';
-import { useAllProducts } from 'src/hooks/useProduct';
-import { useAllCategories } from 'src/hooks/useCategory';
+import { useProduct } from 'src/hooks/useProduct';
+import { useCategory } from 'src/hooks/useCategory';
 import {
   OrderFormInputType,
   SelectSearchOrderItemFormInputType
@@ -28,7 +28,7 @@ export const useFormState = (orderId?: number) => {
   const navigate = useNavigate();
 
   const schema = Yup.object({
-    userId: Yup.number().required(t('You must select a customer.')),
+    customerId: Yup.number().required(t('You must select a customer.')),
     dateOfVisit: Yup.string().required(t('Date of visit is required.')),
     dateOfVisitTime: Yup.string().required(
       t('Date of visit time is required.')
@@ -39,7 +39,7 @@ export const useFormState = (orderId?: number) => {
         productId: Yup.number().required(t('Need select product.'))
       })
     ),
-    user: Yup.object().shape({
+    customer: Yup.object().shape({
       familyName: Yup.string().required(t('Family name is required.')),
       givenName: Yup.string().required(t('Given name is required.')),
       familyNameKana: Yup.string().required(t('Family name kana is required.')),
@@ -55,7 +55,7 @@ export const useFormState = (orderId?: number) => {
 
   const methods = useForm<OrderFormInputType>({
     defaultValues: {
-      userId: 0,
+      customerId: 0,
       dateOfVisit: '',
       dateOfVisitTime: '',
       dateOfExit: '',
@@ -65,7 +65,7 @@ export const useFormState = (orderId?: number) => {
       discountAmount: 0,
       subTotalPrice: 0,
       totalPrice: 0,
-      user: {
+      customer: {
         familyName: '',
         givenName: '',
         familyNameKana: '',
@@ -163,7 +163,7 @@ export const useFormState = (orderId?: number) => {
         };
       });
 
-      setValue('userId', order.userId);
+      setValue('customerId', order.customerId);
       setValue('dateOfVisit', order.dateOfVisit);
       setValue('dateOfVisitTime', format(new Date(order.dateOfVisit), 'HH:mm'));
       setValue('dateOfExit', format(new Date(order.dateOfExit), 'HH:mm'));
@@ -171,24 +171,24 @@ export const useFormState = (orderId?: number) => {
       setValue('orderItems', orderItems);
       setValue('paymentMethod', order.paymentMethod);
 
-      setValue('user.id', order.user.id);
-      setValue('user.familyName', order.user.familyName);
-      setValue('user.givenName', order.user.givenName);
-      setValue('user.familyNameKana', order.user.familyNameKana);
-      setValue('user.givenNameKana', order.user.givenNameKana);
-      setValue('user.postalCode', order.user.postalCode);
-      setValue('user.prefecture', order.user.prefecture);
-      setValue('user.address1', order.user.address1);
-      setValue('user.address2', order.user.address2);
-      setValue('user.address3', order.user.address3);
-      setValue('user.phoneNumber', order.user.phoneNumber);
-      setValue('user.homePhoneNumber', order.user.homePhoneNumber);
-      setValue('user.email', order.user.email);
-      setValue('user.gender', order.user.gender);
-      setValue('user.birthday', order.user.birthday);
-      setValue('user.occupation', order.user.occupation);
-      setValue('user.firstVisitDate', order.user.firstVisitDate);
-      setValue('user.memo', order.user.memo ? order.user.memo : '');
+      setValue('customer.id', order.customer.id);
+      setValue('customer.familyName', order.customer.familyName);
+      setValue('customer.givenName', order.customer.givenName);
+      setValue('customer.familyNameKana', order.customer.familyNameKana);
+      setValue('customer.givenNameKana', order.customer.givenNameKana);
+      setValue('customer.postalCode', order.customer.postalCode);
+      setValue('customer.prefecture', order.customer.prefecture);
+      setValue('customer.address1', order.customer.address1);
+      setValue('customer.address2', order.customer.address2);
+      setValue('customer.address3', order.customer.address3);
+      setValue('customer.phoneNumber', order.customer.phoneNumber);
+      setValue('customer.homePhoneNumber', order.customer.homePhoneNumber);
+      setValue('customer.email', order.customer.email);
+      setValue('customer.gender', order.customer.gender);
+      setValue('customer.birthday', order.customer.birthday);
+      setValue('customer.occupation', order.customer.occupation);
+      setValue('customer.firstVisitDate', order.customer.firstVisitDate);
+      setValue('customer.memo', order.customer.memo ? order.customer.memo : '');
     }
   }, []);
 
@@ -381,9 +381,9 @@ export const useOrderItemsFormState = () => {
   return store;
 };
 
-export const useSelectUserState = () => {
+export const useSelectCustomerState = () => {
   const { setValue, getValues } = useFormContext<OrderFormInputType>();
-  const { getUsers, users, totalCount } = useUser();
+  const { customers, totalCustomerCount, getCustomers } = useCustomer();
 
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState(null);
@@ -395,26 +395,26 @@ export const useSelectUserState = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSelectUser = (user: User) => {
-    setValue('userId', user.id);
-    setValue('user.id', user.id);
-    setValue('user.familyName', user.familyName);
-    setValue('user.givenName', user.givenName);
-    setValue('user.familyNameKana', user.familyNameKana);
-    setValue('user.givenNameKana', user.givenNameKana);
-    setValue('user.postalCode', user.postalCode);
-    setValue('user.prefecture', user.prefecture);
-    setValue('user.address1', user.address1);
-    setValue('user.address2', user.address2);
-    setValue('user.address3', user.address3);
-    setValue('user.phoneNumber', user.phoneNumber);
-    setValue('user.homePhoneNumber', user.homePhoneNumber);
-    setValue('user.email', user.email);
-    setValue('user.gender', user.gender);
-    setValue('user.birthday', user.birthday);
-    setValue('user.occupation', user.occupation);
-    setValue('user.firstVisitDate', user.firstVisitDate);
-    setValue('user.memo', user.memo ? user.memo : '');
+  const handleSelectCustomer = (customer: Customer) => {
+    setValue('customerId', customer.id);
+    setValue('customer.id', customer.id);
+    setValue('customer.familyName', customer.familyName);
+    setValue('customer.givenName', customer.givenName);
+    setValue('customer.familyNameKana', customer.familyNameKana);
+    setValue('customer.givenNameKana', customer.givenNameKana);
+    setValue('customer.postalCode', customer.postalCode);
+    setValue('customer.prefecture', customer.prefecture);
+    setValue('customer.address1', customer.address1);
+    setValue('customer.address2', customer.address2);
+    setValue('customer.address3', customer.address3);
+    setValue('customer.phoneNumber', customer.phoneNumber);
+    setValue('customer.homePhoneNumber', customer.homePhoneNumber);
+    setValue('customer.email', customer.email);
+    setValue('customer.gender', customer.gender);
+    setValue('customer.birthday', customer.birthday);
+    setValue('customer.occupation', customer.occupation);
+    setValue('customer.firstVisitDate', customer.firstVisitDate);
+    setValue('customer.memo', customer.memo ? customer.memo : '');
   };
 
   const handlePageChange = (_event: any, newPage: number): void => {
@@ -430,14 +430,14 @@ export const useSelectUserState = () => {
     formValue,
     page,
     limit,
-    users,
-    totalCount,
+    customers,
+    totalCustomerCount,
 
-    getUsers,
+    getCustomers,
     handleSetFromValue,
     handleOpen,
     handleClose,
-    handleSelectUser,
+    handleSelectCustomer,
     handlePageChange,
     handleLimitChange
   };
@@ -445,7 +445,7 @@ export const useSelectUserState = () => {
   return store;
 };
 
-export const useUserFormState = () => {
+export const useCustomerFormState = () => {
   const {
     control,
     setValue,
@@ -459,25 +459,28 @@ export const useUserFormState = () => {
   const updateAddress = useCallback(
     () =>
       watch((value, { name, type }) => {
-        if (name === 'user.postalCode' && value.user.postalCode.length >= 7) {
+        if (
+          name === 'customer.postalCode' &&
+          value.customer.postalCode.length >= 7
+        ) {
           axios
             .get('https://zipcloud.ibsnet.co.jp/api/search', {
               params: {
-                zipcode: value.user.postalCode
+                zipcode: value.customer.postalCode
               }
             })
             .then((res) => {
               if (res['data']['results']) {
                 setValue(
-                  'user.prefecture',
+                  'customer.prefecture',
                   res['data']['results'][0]['address1']
                 );
                 setValue(
-                  'user.address1',
+                  'customer.address1',
                   res['data']['results'][0]['address2']
                 );
                 setValue(
-                  'user.address2',
+                  'customer.address2',
                   res['data']['results'][0]['address3']
                 );
               }
@@ -570,8 +573,8 @@ export const useDialogSelectSearchOrderItemState = () => {
   );
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
-  const { getCategories, categories } = useAllCategories();
-  const { getProductsSearch, totalCount, products } = useAllProducts();
+  const { getCategories, categories } = useCategory();
+  const { getProductsSearch, totalProductCount, products } = useProduct();
 
   const { register, setValue, getValues } =
     useForm<SelectSearchOrderItemFormInputType>({
@@ -631,7 +634,7 @@ export const useDialogSelectSearchOrderItemState = () => {
     page,
     limit,
     categories,
-    totalCount,
+    totalProductCount,
     products,
 
     register,

@@ -6,7 +6,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/material/styles';
 import { Order } from 'src/models/order';
-import UserForm from './UserForm';
+import CustomerForm from './CustomerForm';
 import OrderForm from './OrderForm';
 import { useFormState } from './store';
 
@@ -65,7 +65,7 @@ const Form: VFC<{ order?: Order }> = ({ order }) => {
             />
             <Divider />
             <Collapse in={userExpand} timeout="auto" unmountOnExit>
-              <UserForm />
+              <CustomerForm />
             </Collapse>
           </Card>
           <Card

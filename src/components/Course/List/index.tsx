@@ -1,12 +1,4 @@
-import {
-  ChangeEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef,
-  useCallback,
-  useEffect
-} from 'react';
+import { ReactElement, Ref, forwardRef, useEffect } from 'react';
 import {
   Avatar,
   Box,
@@ -27,7 +19,6 @@ import {
   Button,
   Typography,
   Dialog,
-  Zoom,
   styled
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
@@ -35,9 +26,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useTranslation } from 'react-i18next';
-import { useSnackbar } from 'notistack';
-import request from 'src/hooks/useRequest';
-import type { Product } from 'src/models/product';
+import { useList } from './store';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -80,82 +69,27 @@ const Transition = forwardRef(function Transition(
 
 const List = () => {
   const { t }: { t: any } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const {
+    courses,
+    totalCourseCount,
+    page,
+    limit,
+    query,
+    openConfirmDelete,
 
-  const [courses, setCourses] = useState<Product[]>([]);
-  const [totalCourseCount, setTotalCourseCount] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-    getCourses();
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-    getCourses();
-  };
-
-  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
-  const [deleteId, setDeletedId] = useState<number>(0);
-
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
-
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
-
-  const handleDeleteCompleted = () => {
-    setOpenConfirmDelete(false);
-    request({
-      url: `/v1/products/${deleteId}`,
-      method: 'DELETE'
-    }).then(() => {
-      setCourses(courses.filter((c) => c.id !== deleteId));
-      enqueueSnackbar(t('The course has been removed'), {
-        variant: 'success',
-        anchorOrigin: {
-          vertical: 'top',
-          horizontal: 'right'
-        },
-        TransitionComponent: Zoom
-      });
-    });
-  };
-
-  const getCourses = useCallback(() => {
-    try {
-      request({
-        url: '/v1/products',
-        method: 'GET',
-        reqParams: {
-          params: {
-            productType: 1,
-            offset: page * limit,
-            limit
-          }
-        }
-      }).then((response) => {
-        setCourses(response.data.products);
-        setTotalCourseCount(response.data.totalCount);
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, [page, limit]);
+    setDeletedId,
+    getCourses,
+    handleQueryChange,
+    handlePageChange,
+    handleLimitChange,
+    handleConfirmDelete,
+    closeConfirmDelete,
+    handleDeleteCompleted
+  } = useList();
 
   useEffect(() => {
-    getCourses();
-  }, [getCourses]);
+    getCourses({ product_type: 1, offset: page * limit, limit });
+  }, [page, limit]);
 
   return (
     <>

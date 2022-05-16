@@ -1,5 +1,5 @@
 import { VFC, ReactNode, createContext, useEffect, useReducer } from 'react';
-import { User } from 'src/models/user';
+import { Administrator } from 'src/models/administrator';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -7,7 +7,7 @@ const baseURL = process.env.REACT_APP_API_URL;
 interface AuthState {
   isInitialized: boolean;
   isAuthenticated: boolean;
-  user: User | null;
+  user: Administrator | null;
 }
 
 interface AuthContextValue extends AuthState {
@@ -25,14 +25,14 @@ type InitializeAction = {
   type: 'INITIALIZE';
   payload: {
     isAuthenticated: boolean;
-    user: User | null;
+    user: Administrator | null;
   };
 };
 
 type LoginAction = {
   type: 'LOGIN';
   payload: {
-    user: User;
+    user: Administrator;
   };
 };
 
@@ -43,7 +43,7 @@ type LogoutAction = {
 type RegisterAction = {
   type: 'REGISTER';
   payload: {
-    user: User;
+    user: Administrator;
   };
 };
 
@@ -125,7 +125,7 @@ export const AuthProvider: VFC<AuthProviderProps> = (props) => {
         if (accessToken) {
           setSession(accessToken);
 
-          const response = await axios.get<{ data: User }>(
+          const response = await axios.get<{ data: Administrator }>(
             baseURL + '/v1/administrators/personal',
             {
               headers: {
@@ -168,7 +168,7 @@ export const AuthProvider: VFC<AuthProviderProps> = (props) => {
 
   const login = async (email: string, password: string): Promise<void> => {
     await axios
-      .request<{ admin: User }>({
+      .request<{ admin: Administrator }>({
         method: 'POST',
         url: baseURL + '/v1/login',
         data: {
@@ -200,14 +200,14 @@ export const AuthProvider: VFC<AuthProviderProps> = (props) => {
     name: string,
     password: string
   ): Promise<void> => {
-    const response = await axios.post<{ accessToken: string; user: User }>(
-      '/api/account/register',
-      {
-        email,
-        name,
-        password
-      }
-    );
+    const response = await axios.post<{
+      accessToken: string;
+      user: Administrator;
+    }>('/api/account/register', {
+      email,
+      name,
+      password
+    });
     const { accessToken, user } = response.data;
 
     window.localStorage.setItem('accessToken', accessToken);

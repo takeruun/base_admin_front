@@ -1,12 +1,4 @@
-import {
-  ChangeEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef,
-  useCallback,
-  useEffect
-} from 'react';
+import { ReactElement, Ref, forwardRef, useEffect } from 'react';
 import {
   Avatar,
   Box,
@@ -27,17 +19,14 @@ import {
   Button,
   Typography,
   Dialog,
-  Zoom,
   styled
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
-import type { Category } from 'src/models/category';
 import { useTranslation } from 'react-i18next';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { useSnackbar } from 'notistack';
-import request from 'src/hooks/useRequest';
+import { useList } from './store';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -80,81 +69,30 @@ const Transition = forwardRef(function Transition(
 
 const List = () => {
   const { t }: { t: any } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const {
+    categories,
+    totalCategoryCount,
+    page,
+    limit,
+    query,
+    openConfirmDelete,
 
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [totalCategoryCount, setTotalCategoryCount] = useState<number>(0);
-  const [deleteId, setDeletedId] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-    getCategories();
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-    getCategories();
-  };
-
-  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
-
-  const getCategories = useCallback(() => {
-    try {
-      request({
-        url: '/v1/categories',
-        method: 'GET',
-        reqParams: {
-          params: {
-            offset: page * limit,
-            limit
-          }
-        }
-      }).then((response) => {
-        setCategories(response.data.categories);
-        setTotalCategoryCount(response.data.totalCount);
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, [page, limit]);
+    setDeletedId,
+    getCategories,
+    handleQueryChange,
+    handlePageChange,
+    handleLimitChange,
+    handleConfirmDelete,
+    closeConfirmDelete,
+    handleDeleteCompleted
+  } = useList();
 
   useEffect(() => {
-    getCategories();
-  }, [getCategories]);
-
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
-
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
-
-  const handleDeleteCompleted = () => {
-    setOpenConfirmDelete(false);
-    request({
-      url: `/v1/categories/${deleteId}`,
-      method: 'DELETE'
-    }).then(() => {
-      setCategories(categories.filter((c) => c.id !== deleteId));
-      enqueueSnackbar(t('The category has been removed'), {
-        variant: 'success',
-        anchorOrigin: {
-          vertical: 'top',
-          horizontal: 'right'
-        },
-        TransitionComponent: Zoom
-      });
+    getCategories({
+      offset: page * limit,
+      limit
     });
-  };
+  }, [page, limit]);
 
   return (
     <>

@@ -80,7 +80,7 @@ const dashboardsRoutes = [
         element: <CreateCustomers />
       },
       {
-        path: 'edit/:userId',
+        path: 'edit/:customerId',
         element: <EditCustomers />
       }
     ]

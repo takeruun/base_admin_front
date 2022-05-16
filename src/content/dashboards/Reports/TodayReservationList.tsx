@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent, Fragment, useCallback } from 'react';
+import { useEffect, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -16,9 +16,8 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { format } from 'date-fns';
 import type { Status } from 'src/models/order';
 import Scrollbar from 'src/components/Scrollbar';
-import { useOrder } from 'src/hooks/useOrder';
-import { useOrderState } from 'src/contexts/OrderContext';
 import UpdateOrderForm from './UpdateOrderForm';
+import { useTodayReservationListState } from './store';
 
 const LabelComplete = styled(Box)(
   ({ theme }) => `
@@ -76,22 +75,20 @@ const getOrderStatusLabel = (status: Status) => {
 
 const TodayReservationList = () => {
   const { t }: { t: any } = useTranslation();
-  const { orders } = useOrderState();
-  const { getTodayReservationOrders } = useOrder();
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
-  const [query, setQuery] = useState('');
+  const {
+    orders,
+    page,
+    limit,
+    query,
+    orderInfo,
+    open,
 
-  const [orderInfo, setOrderInfo] =
-    useState<{ orderId: number; name: string; phoneNumber: string }>();
-  const [open, setOpen] = useState(false);
-  const handleOpen = useCallback(() => setOpen(true), []);
-  const handleClose = useCallback(() => setOpen(false), []);
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
+    getTodayReservationOrders,
+    handleOpen,
+    handleClose,
+    handleQueryChange,
+    setOrderInfo
+  } = useTodayReservationListState();
 
   useEffect(() => {
     getTodayReservationOrders(page, limit);
@@ -158,8 +155,8 @@ const TodayReservationList = () => {
                         onClick={() => {
                           setOrderInfo({
                             orderId: order.id,
-                            name: `${order.user.familyName}${order.user.givenName}`,
-                            phoneNumber: order.user.phoneNumber
+                            name: `${order.customer.familyName}${order.customer.givenName}`,
+                            phoneNumber: order.customer.phoneNumber
                           });
                           handleOpen();
                         }}
@@ -172,7 +169,7 @@ const TodayReservationList = () => {
                             flexBasis: '20%'
                           }}
                         >
-                          {`${order.user.familyName} ${order.user.givenName}`}
+                          {`${order.customer.familyName} ${order.customer.givenName}`}
                         </Typography>
                         <Typography
                           sx={{

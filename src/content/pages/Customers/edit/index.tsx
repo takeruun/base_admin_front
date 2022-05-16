@@ -4,15 +4,14 @@ import { useParams } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import Footer from 'src/components/Footer';
 import Form from 'src/components/Customer/Form';
-
-import { useGetUser } from 'src/hooks/useUser';
+import { useCustomer } from 'src/hooks/useCustomer';
 
 const EditCustomers = () => {
-  const { userId } = useParams();
-  const { getUser, user, loading } = useGetUser();
+  const { customerId } = useParams();
+  const { customer, getCustomer } = useCustomer();
 
   useEffect(() => {
-    getUser(parseInt(userId));
+    getCustomer(parseInt(customerId));
   }, []);
 
   return (
@@ -32,7 +31,7 @@ const EditCustomers = () => {
         spacing={4}
       >
         <Grid item xs={12}>
-          <Form user={user} />
+          <Form customer={customer} />
         </Grid>
       </Grid>
       <Footer />

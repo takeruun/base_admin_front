@@ -1,9 +1,7 @@
 import { ChangeEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useProduct } from 'src/hooks/useProduct';
 
 export const useList = () => {
-  const { t }: { t: any } = useTranslation();
   const { getProductsSearch, deleteProduct, totalProductCount, products } =
     useProduct();
 

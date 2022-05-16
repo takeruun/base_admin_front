@@ -1,5 +1,4 @@
 import { VFC, ReactElement, Ref, forwardRef, useEffect } from 'react';
-import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import {
   Avatar,
@@ -68,7 +67,7 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const Results: VFC = () => {
+const List: VFC = () => {
   const { t }: { t: any } = useTranslation();
   const {
     totalProductCount,
@@ -274,4 +273,4 @@ const Results: VFC = () => {
   );
 };
 
-export default Results;
+export default List;

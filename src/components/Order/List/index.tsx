@@ -7,15 +7,12 @@ import {
   Slide,
   Divider,
   IconButton,
-  InputAdornment,
   Table,
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableContainer,
   TableRow,
-  TextField,
   Tooltip,
   Button,
   Typography,
@@ -26,12 +23,12 @@ import {
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import { format } from 'date-fns';
 import numeral from 'numeral';
 import Search from 'src/components/molecule/Search';
+import Pagination from 'src/components/molecule/Pagination';
 import { useListState } from './store';
 
 const DialogWrapper = styled(Dialog)(
@@ -265,15 +262,12 @@ const List = () => {
               </Table>
             </TableContainer>
             <Box p={2}>
-              <TablePagination
-                component="div"
+              <Pagination
                 count={totalOrderCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleLimitChange}
                 page={page}
                 rowsPerPage={limit}
-                rowsPerPageOptions={[5, 10, 15]}
-                labelRowsPerPage={t('Rows per page')}
               />
             </Box>
           </>

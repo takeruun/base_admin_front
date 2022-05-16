@@ -11,7 +11,6 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableContainer,
   TableRow,
   Button,
@@ -26,9 +25,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Search from 'src/components/molecule/Search';
 import { format } from 'date-fns';
-
+import Search from 'src/components/molecule/Search';
+import Pagination from 'src/components/molecule/Pagination';
 import { useListState } from './store';
 
 const DialogWrapper = styled(Dialog)(
@@ -266,14 +265,12 @@ const List = () => {
               </Table>
             </TableContainer>
             <Box p={2}>
-              <TablePagination
-                component="div"
+              <Pagination
                 count={totalCustomerCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleLimitChange}
                 page={page}
                 rowsPerPage={limit}
-                rowsPerPageOptions={[5, 10, 15]}
               />
             </Box>
           </>

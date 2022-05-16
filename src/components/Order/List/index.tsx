@@ -31,6 +31,7 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import { format } from 'date-fns';
 import numeral from 'numeral';
+import Search from 'src/components/molecule/Search';
 import { useListState } from './store';
 
 const DialogWrapper = styled(Dialog)(
@@ -102,16 +103,9 @@ const List = () => {
     <>
       <Card>
         <Box p={2}>
-          <TextField
+          <Search
             sx={{
               m: 0
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchTwoToneIcon />
-                </InputAdornment>
-              )
             }}
             onChange={handleQueryChange}
             placeholder={t('Search by name, email or phone number...')}

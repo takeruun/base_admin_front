@@ -1,23 +1,15 @@
 import { ChangeEvent, useState } from 'react';
-import { useSnackbar } from 'notistack';
-import { useTranslation } from 'react-i18next';
 import { useCategory } from 'src/hooks/useCategory';
+import { useSearch } from 'src/hooks/useSearch';
 
 export const useList = () => {
-  const { t }: { t: any } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
   const { getCategories, deleteCategory, categories, totalCategoryCount } =
     useCategory();
+  const { query, handleQueryChange } = useSearch();
 
   const [deleteId, setDeletedId] = useState<number>(0);
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
 
   const handlePageChange = (_event: any, newPage: number): void => {
     setPage(newPage);

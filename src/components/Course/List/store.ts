@@ -1,16 +1,12 @@
 import { ChangeEvent, useState } from 'react';
 import { useCourse } from 'src/hooks/useCourse';
+import { useSearch } from 'src/hooks/useSearch';
 
 export const useList = () => {
   const { courses, totalCourseCount, getCourses, deleteCourse } = useCourse();
+  const { query, handleQueryChange } = useSearch();
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
 
   const handlePageChange = (_event: any, newPage: number): void => {
     setPage(newPage);

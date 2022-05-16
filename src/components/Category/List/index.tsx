@@ -7,7 +7,6 @@ import {
   Divider,
   Tooltip,
   IconButton,
-  InputAdornment,
   Table,
   TableBody,
   TableCell,
@@ -15,7 +14,6 @@ import {
   TablePagination,
   TableContainer,
   TableRow,
-  TextField,
   Button,
   Typography,
   Dialog,
@@ -24,8 +22,8 @@ import {
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import Search from 'src/components/molecule/Search';
 import { useList } from './store';
 
 const DialogWrapper = styled(Dialog)(
@@ -98,16 +96,9 @@ const List = () => {
     <>
       <Card>
         <Box p={2}>
-          <TextField
+          <Search
             sx={{
               m: 0
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchTwoToneIcon />
-                </InputAdornment>
-              )
             }}
             onChange={handleQueryChange}
             placeholder={t('Search by category name')}

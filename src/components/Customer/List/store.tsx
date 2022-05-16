@@ -1,17 +1,13 @@
 import { useState, ChangeEvent } from 'react';
 import { useCustomer } from 'src/hooks/useCustomer';
+import { useSearch } from 'src/hooks/useSearch';
 
 export const useListState = () => {
   const { customers, totalCustomerCount, getCustomers, deleteCustomer } =
     useCustomer();
+  const { query, handleQueryChange } = useSearch();
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
 
   const handlePageChange = (_event: any, newPage: number): void => {
     setPage(newPage);

@@ -1,17 +1,13 @@
 import { useState, ChangeEvent } from 'react';
 import { useOrder } from 'src/hooks/useOrder';
+import { useSearch } from 'src/hooks/useSearch';
 
 export const useListState = () => {
   const { orders, totalOrderCount, getOrders, deleteOrder } = useOrder();
+  const { query, handleQueryChange } = useSearch();
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [query, setQuery] = useState('');
   const [deleteId, setDeletedId] = useState(0);
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
 
   const handlePageChange = (_event: any, newPage: number): void => {
     setPage(newPage);

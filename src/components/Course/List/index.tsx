@@ -1,19 +1,5 @@
 import { useEffect } from 'react';
-import {
-  Box,
-  Card,
-  Divider,
-  Tooltip,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableContainer,
-  TableRow,
-  Typography
-} from '@mui/material';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import { Box, Card, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import Search from 'src/components/molecule/Search';
 import Pagination from 'src/components/molecule/Pagination';

@@ -1,10 +1,8 @@
-import { VFC, ReactElement, Ref, forwardRef, useEffect } from 'react';
+import { VFC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Avatar,
   Box,
   Card,
-  Slide,
   Divider,
   Tooltip,
   IconButton,
@@ -14,56 +12,13 @@ import {
   TableHead,
   TableContainer,
   TableRow,
-  Button,
-  Typography,
-  Dialog,
-  styled
+  Typography
 } from '@mui/material';
-import { TransitionProps } from '@mui/material/transitions';
-import CloseIcon from '@mui/icons-material/Close';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import Search from 'src/components/molecule/Search';
 import Pagination from 'src/components/molecule/Pagination';
+import AlertDialog from 'src/components/molecule/AlertDialog';
 import { useList } from './store';
-
-const DialogWrapper = styled(Dialog)(
-  () => `
-      .MuiDialog-paper {
-        overflow: visible;
-      }
-`
-);
-
-const AvatarError = styled(Avatar)(
-  ({ theme }) => `
-      background-color: ${theme.colors.error.lighter};
-      color: ${theme.colors.error.main};
-      width: ${theme.spacing(12)};
-      height: ${theme.spacing(12)};
-
-      .MuiSvgIcon-root {
-        font-size: ${theme.typography.pxToRem(45)};
-      }
-`
-);
-
-const ButtonError = styled(Button)(
-  ({ theme }) => `
-    background: ${theme.colors.error.main};
-    color: ${theme.palette.error.contrastText};
-
-    &:hover {
-      background: ${theme.colors.error.dark};
-    }
-  `
-);
-
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
-) {
-  return <Slide direction="down" ref={ref} {...props} />;
-});
 
 const List: VFC = () => {
   const { t }: { t: any } = useTranslation();
@@ -202,61 +157,16 @@ const List: VFC = () => {
         )}
       </Card>
 
-      <DialogWrapper
+      <AlertDialog
         open={openConfirmDelete}
-        maxWidth="sm"
-        fullWidth
-        TransitionComponent={Transition}
-        keepMounted
         onClose={closeConfirmDelete}
-      >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={5}
-        >
-          <AvatarError>
-            <CloseIcon />
-          </AvatarError>
-
-          <Typography
-            align="center"
-            sx={{
-              py: 4,
-              px: 6
-            }}
-            variant="h3"
-          >
-            {t('Are you sure you want to permanently delete this product')}？
-          </Typography>
-
-          <Box>
-            <Button
-              variant="text"
-              size="large"
-              sx={{
-                mx: 1
-              }}
-              onClick={closeConfirmDelete}
-            >
-              {t('Back')}
-            </Button>
-            <ButtonError
-              onClick={handleDeleteCompleted}
-              size="large"
-              sx={{
-                mx: 1,
-                px: 3
-              }}
-              variant="contained"
-            >
-              {t('Delete')}
-            </ButtonError>
-          </Box>
-        </Box>
-      </DialogWrapper>
+        handleAlertDone={handleDeleteCompleted}
+        mode={'error'}
+        alertMainMessage={`${t(
+          'Are you sure you want to permanently delete this product'
+        )}？`}
+        alertButtomMessage={t('Delete')}
+      />
     </>
   );
 };

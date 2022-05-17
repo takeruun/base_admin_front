@@ -44,9 +44,7 @@ export const useProductForm = () => {
         reqParams: {
           data: {
             productType: '商品',
-            categoryId: data.categoryId,
-            name: data.name,
-            price: data.price
+            ...data
           }
         }
       }).then(() => {

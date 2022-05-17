@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useProduct } from 'src/hooks/useProduct';
 import { useSearch } from 'src/hooks/useSearch';
 import { usePagination } from 'src/hooks/usePagination';
@@ -8,16 +8,16 @@ export const useList = () => {
     useProduct();
   const { query, handleQueryChange } = useSearch();
   const { page, limit, handlePageChange, handleLimitChange } = usePagination();
-  const [deleteId, setDeletedId] = useState<number>(0);
+  const [deleteId, setDeleteId] = useState<number>(0);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
+  const handleConfirmDelete = useCallback(() => setOpenConfirmDelete(true), []);
+  const closeConfirmDelete = useCallback(() => setOpenConfirmDelete(false), []);
 
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
+  const handleSetDeleteId = useCallback(
+    (deleteId: number) => setDeleteId(() => deleteId),
+    []
+  );
 
   const handleDeleteCompleted = () => {
     setOpenConfirmDelete(false);
@@ -32,7 +32,7 @@ export const useList = () => {
     query,
     openConfirmDelete,
 
-    setDeletedId,
+    handleSetDeleteId,
     getProductsSearch,
     handleQueryChange,
     handlePageChange,

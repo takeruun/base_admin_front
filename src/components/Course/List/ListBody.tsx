@@ -54,7 +54,7 @@ const ListBody: VFC<ListBodyPropsType> = memo(
                     <Typography>{product.id}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography noWrap>カット</Typography>
+                    <Typography noWrap>{product.category.name}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography noWrap>{product.name}</Typography>

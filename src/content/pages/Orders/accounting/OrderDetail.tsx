@@ -4,13 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import {
   Autocomplete,
-  Avatar,
   Box,
   Button,
   Card,
   CircularProgress,
   CardContent,
-  Dialog,
   DialogActions,
   Grid,
   Typography,
@@ -26,25 +24,15 @@ import {
   InputAdornment,
   styled
 } from '@mui/material';
-import DoneIcon from '@mui/icons-material/Done';
 import { format } from 'date-fns';
 import numeral from 'numeral';
+import AlertDialog from 'src/components/molecule/AlertDialog';
 import request from 'src/hooks/useRequest';
 import { paymentMethods, Cache, Complete } from 'src/models/order';
 import { Course, Goods } from 'src/models/product';
 import { FontRateContext } from 'src/theme/ThemeProvider';
-import NumberFormatCustom, {
-  Transition
-} from 'src/components/NumberFormatCustom';
+import NumberFormatCustom from 'src/components/NumberFormatCustom';
 import { useOrder } from 'src/hooks/useOrder';
-
-const DialogWrapper = styled(Dialog)(
-  () => `
-      .MuiDialog-paper {
-        overflow: visible;
-      }
-`
-);
 
 const UnderLineTypography = styled(Typography)(
   () => `
@@ -58,19 +46,6 @@ const FormLabelStyle = styled('p')(
     margin-bottom: 8px;
     font-weight: bold;
   `
-);
-
-const AvatarSuccess = styled(Avatar)(
-  ({ theme }) => `
-      background-color: ${theme.colors.success.lighter};
-      color: ${theme.colors.success.main};
-      width: ${theme.spacing(12)};
-      height: ${theme.spacing(12)};
-
-      .MuiSvgIcon-root {
-        font-size: ${theme.typography.pxToRem(45)};
-      }
-`
 );
 
 type FormInputType = {
@@ -686,62 +661,16 @@ const OrderDetail = () => {
                 </DialogActions>
               </form>
             </CardContent>
-            <DialogWrapper
+            <AlertDialog
               open={openComplete}
-              maxWidth="sm"
-              fullWidth
-              TransitionComponent={Transition}
-              keepMounted
               onClose={closeOpenComplete}
-            >
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                flexDirection="column"
-                p={5}
-              >
-                <AvatarSuccess>
-                  <DoneIcon />
-                </AvatarSuccess>
-
-                <Typography
-                  align="center"
-                  sx={{
-                    py: 4,
-                    px: 6
-                  }}
-                  variant="h3"
-                >
-                  {t('Payment has been completed')}
-                </Typography>
-                <Box>
-                  <Button
-                    variant="text"
-                    size="large"
-                    sx={{
-                      mx: 1
-                    }}
-                    onClick={closeOpenComplete}
-                  >
-                    {t('Back')}
-                  </Button>
-                  <Button
-                    size="large"
-                    sx={{
-                      mx: 1,
-                      px: 3
-                    }}
-                    onClick={() =>
-                      navigate(`/dashboards/orders/receipt/${order.id}`)
-                    }
-                    variant="contained"
-                  >
-                    {t('To receipt page')}
-                  </Button>
-                </Box>
-              </Box>
-            </DialogWrapper>
+              handleAlertDone={() =>
+                navigate(`/dashboards/orders/receipt/${order.id}`)
+              }
+              mode={'success'}
+              alertMainMessage={t('Payment has been completed')}
+              alertButtomMessage={t('To receipt page')}
+            />
           </>
         )}
       </Card>

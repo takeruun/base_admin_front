@@ -34,7 +34,7 @@ export const useCategory = () => {
     (categoryId: number, successCallback = null) => {
       try {
         request({
-          url: `/v1/category/${categoryId}`,
+          url: `/v1/categories/${categoryId}`,
           method: 'DELETE'
         })
           .then(() => {

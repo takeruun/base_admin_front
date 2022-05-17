@@ -1,23 +1,10 @@
 import { useEffect } from 'react';
-import {
-  Box,
-  Card,
-  Divider,
-  Tooltip,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableContainer,
-  TableRow,
-  Typography
-} from '@mui/material';
+import { Box, Card, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import Search from 'src/components/molecule/Search';
 import Pagination from 'src/components/molecule/Pagination';
 import AlertDialog from 'src/components/molecule/AlertDialog';
+import ListBody from './ListBody';
 import { useList } from './store';
 
 const List = () => {
@@ -30,7 +17,7 @@ const List = () => {
     query,
     openConfirmDelete,
 
-    setDeletedId,
+    handleSetDeleteId,
     getCategories,
     handleQueryChange,
     handlePageChange,
@@ -85,54 +72,11 @@ const List = () => {
           </>
         ) : (
           <>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">
-                      <Typography noWrap sx={{ fontWeight: 'bold' }}>
-                        {t('Category id')}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography sx={{ fontWeight: 'bold' }}>
-                        {t('Category name')}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center" />
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {categories.map((category) => {
-                    return (
-                      <TableRow hover key={category.id}>
-                        <TableCell align="center">
-                          <Typography>{category.id}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography noWrap>{category.name}</Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography noWrap>
-                            <Tooltip title={t('Delete')} arrow>
-                              <IconButton
-                                onClick={() => {
-                                  handleConfirmDelete();
-                                  setDeletedId(category.id);
-                                }}
-                                color="primary"
-                              >
-                                <DeleteTwoToneIcon fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <ListBody
+              categories={categories}
+              handleConfirmDelete={handleConfirmDelete}
+              handleSetDeleteId={handleSetDeleteId}
+            />
             <Box p={2}>
               <Pagination
                 count={totalCategoryCount}

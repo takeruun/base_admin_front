@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import Search from 'src/components/molecule/Search';
 import Pagination from 'src/components/molecule/Pagination';
 import AlertDialog from 'src/components/molecule/AlertDialog';
+import ListBody from './ListBody';
 import { useList } from './store';
 
 const List = () => {
@@ -30,7 +31,7 @@ const List = () => {
     query,
     openConfirmDelete,
 
-    setDeletedId,
+    handleSetDeleteId,
     getCourses,
     handleQueryChange,
     handlePageChange,
@@ -80,70 +81,11 @@ const List = () => {
           </>
         ) : (
           <>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">
-                      <Typography noWrap sx={{ fontWeight: 'bold' }}>
-                        {t('Course id')}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography sx={{ fontWeight: 'bold' }}>
-                        {t('Category name')}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography sx={{ fontWeight: 'bold' }}>
-                        {t('Course name')}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography noWrap sx={{ fontWeight: 'bold' }}>
-                        {t('Price')}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center" />
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {courses.map((product) => {
-                    return (
-                      <TableRow hover key={product.id}>
-                        <TableCell align="center">
-                          <Typography>{product.id}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography noWrap>カット</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography noWrap>{product.name}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography noWrap>{product.price}</Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography noWrap>
-                            <Tooltip title={t('Delete')} arrow>
-                              <IconButton
-                                onClick={() => {
-                                  handleConfirmDelete();
-                                  setDeletedId(product.id);
-                                }}
-                                color="primary"
-                              >
-                                <DeleteTwoToneIcon fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <ListBody
+              courses={courses}
+              handleConfirmDelete={handleConfirmDelete}
+              handleSetDeleteId={handleSetDeleteId}
+            />
             <Box p={2}>
               <Pagination
                 count={totalCourseCount}

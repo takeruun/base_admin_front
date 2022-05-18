@@ -11,11 +11,8 @@ import {
   TextField,
   styled
 } from '@mui/material';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
-import request from 'src/hooks/useRequest';
-import { useNavigate } from 'react-router-dom';
+import { Controller } from 'react-hook-form';
+import { useAdministratorForm } from './store';
 
 const FormLabelStyle = styled('p')(
   () => `
@@ -24,50 +21,14 @@ const FormLabelStyle = styled('p')(
   `
 );
 
-type FormInputType = {
-  name: string;
-  password: string;
-  email: string;
-};
-
 const Form = () => {
-  const navigate = useNavigate();
   const { t }: { t: any } = useTranslation();
-
-  const schema = Yup.object({
-    name: Yup.string().required(t('Administrator name is required.')),
-    email: Yup.string().required(t('Email is required.')),
-    password: Yup.string().required(t('Password is required.'))
-  }).required();
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting }
-  } = useForm<FormInputType>({
-    defaultValues: {
-      name: '',
-      password: '',
-      email: ''
-    },
-    resolver: yupResolver(schema)
-  });
-  const onSubmit = (data: FormInputType) => {
-    try {
-      request({
-        url: '/v1/administrators',
-        method: 'POST',
-        reqParams: {
-          data: {
-            ...data
-          }
-        }
-      }).then(() => {
-        navigate('/dashboards/administrators');
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+    formState: { errors, isSubmitting },
+    onSubmit
+  } = useAdministratorForm();
 
   return (
     <>

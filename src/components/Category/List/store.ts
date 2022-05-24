@@ -1,46 +1,29 @@
-import { ChangeEvent, useState } from 'react';
-import { useSnackbar } from 'notistack';
-import { useTranslation } from 'react-i18next';
+import { useState, useCallback } from 'react';
 import { useCategory } from 'src/hooks/useCategory';
+import { useSearch } from 'src/hooks/useSearch';
+import { usePagination } from 'src/hooks/usePagination';
 
 export const useList = () => {
-  const { t }: { t: any } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
   const { getCategories, deleteCategory, categories, totalCategoryCount } =
     useCategory();
-
-  const [deleteId, setDeletedId] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
+  const { query, handleQueryChange } = useSearch();
+  const { page, limit, handlePageChange, handleLimitChange } = usePagination();
+  const [deleteId, setDeleteId] = useState<number>(0);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
+  const handleConfirmDelete = useCallback(() => setOpenConfirmDelete(true), []);
+  const closeConfirmDelete = useCallback(() => setOpenConfirmDelete(false), []);
 
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
+  const handleSetDeleteId = useCallback(
+    (deleteId: number) => setDeleteId(() => deleteId),
+    []
+  );
 
-  const handleDeleteCompleted = () => {
+  const handleDeleteCompleted = useCallback(() => {
     deleteCategory(deleteId, () => {
       setOpenConfirmDelete(false);
     });
-  };
+  }, [deleteId]);
 
   const store = {
     categories,
@@ -50,7 +33,7 @@ export const useList = () => {
     query,
     openConfirmDelete,
 
-    setDeletedId,
+    handleSetDeleteId,
     getCategories,
     handleQueryChange,
     handlePageChange,

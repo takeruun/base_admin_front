@@ -1,36 +1,28 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, useCallback } from 'react';
 import { useCustomer } from 'src/hooks/useCustomer';
+import { useSearch } from 'src/hooks/useSearch';
+import { usePagination } from 'src/hooks/usePagination';
 
 export const useListState = () => {
   const { customers, totalCustomerCount, getCustomers, deleteCustomer } =
     useCustomer();
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
-
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
+  const { query, handleQueryChange } = useSearch();
+  const { page, limit, handlePageChange, handleLimitChange } = usePagination();
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
-  const [deleteId, setDeletedId] = useState<number>(0);
+  const [deleteId, setDeleteId] = useState<number>(0);
 
-  const handleConfirmDelete = () => setOpenConfirmDelete(true);
+  const handleConfirmDelete = useCallback(() => setOpenConfirmDelete(true), []);
+  const closeConfirmDelete = useCallback(() => setOpenConfirmDelete(false), []);
 
-  const closeConfirmDelete = () => setOpenConfirmDelete(false);
+  const handleSetDeleteId = useCallback(
+    (deleteId: number) => setDeleteId(() => deleteId),
+    []
+  );
 
-  const handleDeleteCompleted = () => {
+  const handleDeleteCompleted = useCallback(() => {
     setOpenConfirmDelete(false);
     deleteCustomer(deleteId);
-  };
+  }, [deleteId]);
 
   const store = {
     customers,
@@ -41,7 +33,7 @@ export const useListState = () => {
     openConfirmDelete,
 
     getCustomers,
-    setDeletedId,
+    handleSetDeleteId,
     handleQueryChange,
     handlePageChange,
     handleLimitChange,

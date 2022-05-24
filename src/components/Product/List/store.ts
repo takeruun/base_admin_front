@@ -1,35 +1,23 @@
-import { ChangeEvent, useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useProduct } from 'src/hooks/useProduct';
+import { useSearch } from 'src/hooks/useSearch';
+import { usePagination } from 'src/hooks/usePagination';
 
 export const useList = () => {
   const { getProductsSearch, deleteProduct, totalProductCount, products } =
     useProduct();
-
-  const [deleteId, setDeletedId] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const [query, setQuery] = useState<string>('');
+  const { query, handleQueryChange } = useSearch();
+  const { page, limit, handlePageChange, handleLimitChange } = usePagination();
+  const [deleteId, setDeleteId] = useState<number>(0);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    setQuery(event.target.value);
-  };
+  const handleConfirmDelete = useCallback(() => setOpenConfirmDelete(true), []);
+  const closeConfirmDelete = useCallback(() => setOpenConfirmDelete(false), []);
 
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
-
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
+  const handleSetDeleteId = useCallback(
+    (deleteId: number) => setDeleteId(() => deleteId),
+    []
+  );
 
   const handleDeleteCompleted = () => {
     setOpenConfirmDelete(false);
@@ -44,7 +32,7 @@ export const useList = () => {
     query,
     openConfirmDelete,
 
-    setDeletedId,
+    handleSetDeleteId,
     getProductsSearch,
     handleQueryChange,
     handlePageChange,

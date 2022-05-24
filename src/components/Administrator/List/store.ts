@@ -1,12 +1,17 @@
 import { useState, useCallback } from 'react';
-import { useCourse } from 'src/hooks/useCourse';
 import { useSearch } from 'src/hooks/useSearch';
 import { usePagination } from 'src/hooks/usePagination';
+import { useAdministrator } from 'src/hooks/useAdministrator';
 
 export const useList = () => {
-  const { courses, totalCourseCount, getCourses, deleteCourse } = useCourse();
-  const { query, handleQueryChange } = useSearch();
   const { page, limit, handlePageChange, handleLimitChange } = usePagination();
+  const { query, handleQueryChange } = useSearch();
+  const {
+    administrators,
+    totalAdministratorCount,
+    getAdministrators,
+    deleteAdministrator
+  } = useAdministrator();
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [deleteId, setDeleteId] = useState<number>(0);
 
@@ -21,19 +26,19 @@ export const useList = () => {
 
   const handleDeleteCompleted = useCallback(() => {
     setOpenConfirmDelete(false);
-    deleteCourse(deleteId);
+    deleteAdministrator(deleteId);
   }, [deleteId]);
 
   const store = {
-    courses,
-    totalCourseCount,
+    administrators,
+    totalAdministratorCount,
     page,
     limit,
     query,
     openConfirmDelete,
 
+    getAdministrators,
     handleSetDeleteId,
-    getCourses,
     handleQueryChange,
     handlePageChange,
     handleLimitChange,

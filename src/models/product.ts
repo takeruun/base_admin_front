@@ -1,3 +1,4 @@
+import type { Category } from './category';
 export type ProductType = 'コース' | '商品' | 'その他';
 export const Course = 'コース';
 export const Goods = '商品';
@@ -31,4 +32,5 @@ export interface Product {
   productType: ProductType;
   categoryId: string;
   createdAt: string;
+  category: Category;
 }

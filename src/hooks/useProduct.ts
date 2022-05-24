@@ -35,7 +35,7 @@ export const useProduct = () => {
       url: `/v1/products/${deleteId}`,
       method: 'DELETE'
     }).then(() => {
-      setProducts(products.filter((c) => c.id !== deleteId));
+      setProducts((prev) => prev.filter((c) => c.id !== deleteId));
       enqueueSnackbar(t('The product has been removed'), {
         variant: 'success',
         anchorOrigin: {

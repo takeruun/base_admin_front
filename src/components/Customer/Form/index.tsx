@@ -23,7 +23,7 @@ import ja from 'date-fns/locale/ja';
 
 import type { Customer } from 'src/models/customer';
 import UserDialogAction from 'src/components/Customer/Form/UserDialogAction';
-import { useCustomerFormState } from './store';
+import { useCustomerForm } from './store';
 
 interface FormPropsType {
   customer?: Customer;
@@ -79,7 +79,7 @@ const Form: VFC<FormPropsType> = ({ customer }) => {
     occupations,
     getPrefectures,
     getOccupations
-  } = useCustomerFormState(customer?.id);
+  } = useCustomerForm(customer?.id);
 
   useEffect(() => setCustomer(customer), [customer]);
 

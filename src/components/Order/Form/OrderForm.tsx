@@ -20,14 +20,14 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { FontRateContext } from 'src/theme/ThemeProvider';
 import { Order } from 'src/models/order';
 import { Course, Goods } from 'src/models/product';
-import NumberFormatCustom from 'src/components/NumberFormatCustom';
+import NumberFormatCustom from 'src/components/molecule/NumberFormatCustom';
 
 import DialogSelectSearchOrderItem from './DialogSelectSearchOrderItem';
 import DialogSelectSearchDiscount from './DialogSelectSearchDiscount';
 import OrderDialogAction from './OrderDialogAction';
 import SelectCustomer from './SelectCustomer';
 import OrderItemsForm from './OrderItemsForm';
-import { useOrderFormState } from './store';
+import { useOrderIndexForm } from './store';
 
 interface OrderFormPropsType {
   removeOrderItem: (orderItemId?: number) => void;
@@ -64,7 +64,7 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
     handleDiscountClose,
     updateOrderPrice,
     updateSelectProductIds
-  } = useOrderFormState();
+  } = useOrderIndexForm();
 
   const { errors, isSubmitting } = formState;
 

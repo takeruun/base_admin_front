@@ -20,7 +20,7 @@ import {
 import { Course, Goods } from 'src/models/product';
 import { useOrder } from 'src/hooks/useOrder';
 import { FontRateContext } from 'src/theme/ThemeProvider';
-import NumberFormatCustom from 'src/components/NumberFormatCustom';
+import NumberFormatCustom from 'src/components/molecule/NumberFormatCustom';
 import OrderItemInfo from './OrderItemInfo';
 
 const LabelTypography = styled('p')(

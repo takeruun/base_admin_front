@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import SelectCustomer from './SelectCustomer';
-import { useEasyOrderCreationState } from './store';
+import { useEasyOrderCreation } from './store';
 
 export type FormIputType = {
   customerId: number;
@@ -41,7 +41,7 @@ const EasyOrderCreation: VFC = memo(() => {
     handleSelectCustomer,
     handleSetUserName,
     handleCloseEasyOrderCreation
-  } = useEasyOrderCreationState();
+  } = useEasyOrderCreation();
 
   return (
     <>

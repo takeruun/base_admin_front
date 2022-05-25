@@ -17,7 +17,7 @@ import {
   InputAdornment
 } from '@mui/material';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import { useSelectCustomerState } from './store';
+import { useSelectCustomer } from './store';
 
 interface SelectCustomerPropsType {
   handleSelectCustomer: (customerId: number) => void;
@@ -39,7 +39,7 @@ const SelectCustomer: VFC<SelectCustomerPropsType> = memo(
       getCustomers,
       handlePageChange,
       handleLimitChange
-    } = useSelectCustomerState();
+    } = useSelectCustomer();
 
     useEffect(() => {
       getCustomers({ offset: page * limit, limit });

@@ -18,7 +18,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import ja from 'date-fns/locale/ja';
 
-import { useCustomerFormState } from './store';
+import { useCustomerForm } from './store';
 
 const FormLabelStyle = styled('p')(
   () => `
@@ -68,7 +68,7 @@ const CustomerForm: VFC = () => {
     getPrefectures,
     getOccupations,
     updateAddress
-  } = useCustomerFormState();
+  } = useCustomerForm();
 
   useEffect(() => {
     getPrefectures();

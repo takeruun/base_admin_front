@@ -23,7 +23,7 @@ import {
   SelectSearchOrderItemFormInputType
 } from './types';
 
-export const useFormState = (orderId?: number) => {
+export const useOrderForm = (orderId?: number) => {
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
 
@@ -206,7 +206,7 @@ export const useFormState = (orderId?: number) => {
   return store;
 };
 
-export const useOrderFormState = () => {
+export const useOrderIndexForm = () => {
   const { control, getValues, setValue, watch, formState } =
     useFormContext<OrderFormInputType>();
 
@@ -297,7 +297,7 @@ export const useOrderFormState = () => {
   return store;
 };
 
-export const useOrderItemsFormState = () => {
+export const useOrderItemsForm = () => {
   const { control, setValue, getValues, watch } =
     useFormContext<OrderFormInputType>();
   const { remove } = useFieldArray({
@@ -381,7 +381,7 @@ export const useOrderItemsFormState = () => {
   return store;
 };
 
-export const useSelectCustomerState = () => {
+export const useSelectCustomer = () => {
   const { setValue, getValues } = useFormContext<OrderFormInputType>();
   const { customers, totalCustomerCount, getCustomers } = useCustomer();
 
@@ -445,7 +445,7 @@ export const useSelectCustomerState = () => {
   return store;
 };
 
-export const useCustomerFormState = () => {
+export const useCustomerForm = () => {
   const {
     control,
     setValue,
@@ -506,7 +506,7 @@ export const useCustomerFormState = () => {
   return store;
 };
 
-export const useDialogSelectSearchDiscountState = () => {
+export const useDialogSelectSearchDiscount = () => {
   const [formValue, setFormValue] = useState(null);
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
@@ -559,7 +559,7 @@ export const useDialogSelectSearchDiscountState = () => {
   return store;
 };
 
-export const useDialogSelectSearchOrderItemState = () => {
+export const useDialogSelectSearchOrderItem = () => {
   const { control, getValues: orderFormGetValue } =
     useFormContext<OrderFormInputType>();
   const { append } = useFieldArray({

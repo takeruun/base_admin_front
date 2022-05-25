@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import request from 'src/hooks/useRequest';
 import type { FormInputType } from './type';
 
-export const useFormState = () => {
+export const useCategoryForm = () => {
   const navigate = useNavigate();
   const { t }: { t: any } = useTranslation();
 

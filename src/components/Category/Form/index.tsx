@@ -12,7 +12,7 @@ import {
   Box
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { useFormState } from './store';
+import { useCategoryForm } from './store';
 
 const Form = () => {
   const { t }: { t: any } = useTranslation();
@@ -22,7 +22,7 @@ const Form = () => {
     formState: { errors, isSubmitting },
 
     onSubmit
-  } = useFormState();
+  } = useCategoryForm();
 
   return (
     <>

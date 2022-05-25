@@ -1,5 +1,4 @@
-import { VFC, FocusEvent, memo, useEffect, useState } from 'react';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { VFC, memo, useEffect } from 'react';
 import {
   Button,
   Tooltip,
@@ -23,9 +22,8 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import numeral from 'numeral';
 
-import { ProductType, Course, Goods } from 'src/models/product';
-import { OrderFormInputType } from './types';
-import { useOrderItemsFormState } from './store';
+import { ProductType, Goods } from 'src/models/product';
+import { useOrderItemsForm } from './store';
 
 type OrderItemsProps = {
   productType: ProductType;
@@ -75,7 +73,7 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
       productTypeName,
       handleChangeDiscountRate,
       updateOrderItemSubPrice
-    } = useOrderItemsFormState();
+    } = useOrderItemsForm();
 
     const orderItems = getOrderItems(productType);
 

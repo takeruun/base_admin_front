@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import { Order } from 'src/models/order';
 import CustomerForm from './CustomerForm';
 import OrderForm from './OrderForm';
-import { useFormState } from './store';
+import { useOrderForm } from './store';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -37,7 +37,7 @@ const Form: VFC<{ order?: Order }> = ({ order }) => {
     handleOrderExpand,
     handleUserExpand,
     setOrder
-  } = useFormState(order?.id);
+  } = useOrderForm(order?.id);
 
   const { handleSubmit } = methods;
 

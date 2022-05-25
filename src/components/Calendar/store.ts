@@ -12,7 +12,7 @@ import { useOrderCalendar } from 'src/hooks/useOrderCalendar';
 import { useOrder } from 'src/hooks/useOrder';
 import { useCustomer } from 'src/hooks/useCustomer';
 import {
-  useCalendarState as useCalendarContextState,
+  useCalendarState,
   useCalendarDispatch,
   openEasyOrderCreation,
   closeEasyOrderCreation,
@@ -24,12 +24,11 @@ import {
 } from 'src/contexts/CalendarContext';
 import { FormInputType } from './types';
 
-export const useCalendarState = () => {
+export const useCalendar = () => {
   const theme = useTheme();
   const calendarRef = useRef<FullCalendar | null>(null);
   const mobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { events, isEasyOrderCreationOpen, isDrawerOpen } =
-    useCalendarContextState();
+  const { events, isEasyOrderCreationOpen, isDrawerOpen } = useCalendarState();
   const dispatchCalendar = useCalendarDispatch();
   const { getOrderCalendar, putOrderCalendar } = useOrderCalendar();
   const { putOrderTime } = useOrder();
@@ -160,9 +159,9 @@ export const useCalendarState = () => {
   return store;
 };
 
-export const useEasyOrderCreationState = () => {
+export const useEasyOrderCreation = () => {
   const dispatchCalendar = useCalendarDispatch();
-  const { selectDate, selectTime } = useCalendarContextState();
+  const { selectDate, selectTime } = useCalendarState();
   const { postEasyOrderCreation } = useOrderCalendar();
   const {
     setValue,
@@ -223,7 +222,7 @@ export const useEasyOrderCreationState = () => {
   return store;
 };
 
-export const useEventDrawerState = () => {
+export const useEventDrawer = () => {
   const { t }: { t: any } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const dispatchCalendar = useCalendarDispatch();
@@ -260,7 +259,7 @@ export const useEventDrawerState = () => {
   return store;
 };
 
-export const useSelectCustomerState = () => {
+export const useSelectCustomer = () => {
   const { customers, totalCustomerCount, getCustomers } = useCustomer();
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(0);

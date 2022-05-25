@@ -13,7 +13,7 @@ import type { Customer } from 'src/models/customer';
 
 import type { FormInputType } from './types';
 
-export const useCustomerFormState = (customerId?: number) => {
+export const useCustomerForm = (customerId?: number) => {
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
 

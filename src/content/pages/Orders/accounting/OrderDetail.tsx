@@ -31,7 +31,7 @@ import request from 'src/hooks/useRequest';
 import { paymentMethods, Cache, Complete } from 'src/models/order';
 import { Course, Goods } from 'src/models/product';
 import { FontRateContext } from 'src/theme/ThemeProvider';
-import NumberFormatCustom from 'src/components/NumberFormatCustom';
+import NumberFormatCustom from 'src/components/molecule/NumberFormatCustom';
 import { useOrder } from 'src/hooks/useOrder';
 
 const UnderLineTypography = styled(Typography)(

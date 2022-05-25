@@ -21,7 +21,7 @@ import {
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { useTranslation } from 'react-i18next';
 
-import { useSelectCustomerState } from './store';
+import { useSelectCustomer } from './store';
 
 const UnderLineTypography = styled(Typography)(
   () => `
@@ -51,7 +51,7 @@ const SelectUser: VFC = () => {
     handleSelectCustomer,
     handlePageChange,
     handleLimitChange
-  } = useSelectCustomerState();
+  } = useSelectCustomer();
 
   useEffect(() => {
     getCustomers({ offset: page * limit, limit });

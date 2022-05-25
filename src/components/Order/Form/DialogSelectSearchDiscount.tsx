@@ -21,7 +21,7 @@ import {
 import numeral from 'numeral';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 
-import { useDialogSelectSearchDiscountState } from './store';
+import { useDialogSelectSearchDiscount } from './store';
 
 type DialogSelectSearchDiscountProps = {
   open: boolean;
@@ -46,7 +46,7 @@ const DialogSelectSearchDiscount: VFC<DialogSelectSearchDiscountProps> = memo(
       handlePageChange,
       handleLimitChange,
       settingDiscount
-    } = useDialogSelectSearchDiscountState();
+    } = useDialogSelectSearchDiscount();
 
     useEffect(() => {
       getDiscounts({ offset: page * limit, limit });

@@ -17,7 +17,7 @@ import {
 import Actions from './Actions';
 import EventDrawer from './EventDrawer';
 import EasyOrderCreation from './EasyOrderCreation';
-import { useCalendarState } from './store';
+import { useCalendar } from './store';
 
 const FullCalendarWrapper = styled(Box)(
   ({ theme }) => `
@@ -124,7 +124,7 @@ const Calender = () => {
     handleEventDrop,
     handleCloseDialog,
     handleCloseDrawer
-  } = useCalendarState();
+  } = useCalendar();
 
   useEffect(() => {
     getOrderCalendar(date, view);

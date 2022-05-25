@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import type { OrderEvent } from 'src/models/calendar';
-import { useEventDrawerState } from './store';
+import { useEventDrawer } from './store';
 
 const IconButtonError = styled(IconButton)(
   ({ theme }) => `
@@ -43,7 +43,7 @@ interface EventDrawerPropsType {
 
 const EventDrawer: VFC<EventDrawerPropsType> = memo(({ event }) => {
   const { t }: { t: any } = useTranslation();
-  const { handleDelete, handleCloseDrawer } = useEventDrawerState();
+  const { handleDelete, handleCloseDrawer } = useEventDrawer();
   const navigate = useNavigate();
 
   useEffect(() => {

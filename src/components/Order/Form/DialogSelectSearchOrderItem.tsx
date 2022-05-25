@@ -23,7 +23,7 @@ import {
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import numeral from 'numeral';
 import { ProductType, getProdcutTypeValue } from 'src/models/product';
-import { useDialogSelectSearchOrderItemState } from './store';
+import { useDialogSelectSearchOrderItem } from './store';
 
 type DialogSelectSearchOrderItemPropsType = {
   handleCreateOrderItemClose: () => void;
@@ -51,7 +51,7 @@ const DialogSelectSearchOrderItem: VFC<DialogSelectSearchOrderItemPropsType> =
       handlePageChange,
       handleLimitChange,
       handleCreateOrderItem
-    } = useDialogSelectSearchOrderItemState();
+    } = useDialogSelectSearchOrderItem();
 
     useEffect(() => {
       getCategories();

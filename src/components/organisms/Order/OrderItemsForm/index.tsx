@@ -30,6 +30,7 @@ type OrderItemsProps = {
   handleCreateOrderItemOpen: (pt: ProductType) => void;
   removeOrderItem?: (orderItemId?: number) => void;
   handleDiscountOpen: (index: number) => void;
+  another?: boolean;
 };
 
 const HiddeArrowTextField = styled(TextField)(
@@ -59,26 +60,25 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
     productType,
     handleCreateOrderItemOpen,
     removeOrderItem,
-    handleDiscountOpen
+    handleDiscountOpen,
+    another = false
   }) => {
     const { t }: { t: any } = useTranslation();
     const {
       control,
-      setValue,
-      remove,
 
       orderItemSubPrice,
-      getOrderItems,
+      orderItems,
       getOrderItemIndex,
       productTypeName,
       handleChangeDiscountRate,
-      updateOrderItemSubPrice
-    } = useOrderItemsForm();
-
-    const orderItems = getOrderItems(productType);
+      updateOrderItemSubPrice,
+      handleChangeQuantity,
+      handleRemoveOrderItem
+    } = useOrderItemsForm(productType, another);
 
     useEffect(() => {
-      const subscription = updateOrderItemSubPrice(productType);
+      const subscription = updateOrderItemSubPrice();
       return () => subscription.unsubscribe();
     }, [updateOrderItemSubPrice]);
 
@@ -153,11 +153,9 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
                             <TextField
                               {...field}
                               onChange={(e) =>
-                                setValue(
-                                  `orderItems.${getOrderItemIndex(
-                                    item.productId
-                                  )}.quantity`,
-                                  parseInt(e.target.value)
+                                handleChangeQuantity(
+                                  e,
+                                  getOrderItemIndex(item.productId)
                                 )
                               }
                               size="small"
@@ -266,8 +264,10 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
                       <Tooltip arrow title={t('Delete')}>
                         <IconButtonError
                           onClick={() => {
-                            remove(getOrderItemIndex(item.productId));
-                            removeOrderItem(item?.id);
+                            handleRemoveOrderItem(
+                              getOrderItemIndex(item.productId)
+                            );
+                            if (item?.id) removeOrderItem(item.id);
                           }}
                         >
                           <DeleteTwoToneIcon fontSize="small" />
@@ -289,7 +289,7 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
                   variant="outlined"
                   onClick={() => handleCreateOrderItemOpen(productType)}
                 >
-                  {t(`${productTypeName(productType)}`)}
+                  {t(`${productTypeName()}`)}
                 </Button>
               </TableCell>
               <TableCell colSpan={6} align="right" size="small">
@@ -299,7 +299,7 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
                   color="text.secondary"
                   fontWeight="bold"
                 >
-                  {t(`${productTypeName(productType)} sub total price`)}:
+                  {t(`${productTypeName()} sub total price`)}:
                 </Typography>
                 <Typography variant="h3" fontWeight="bold">
                   ¥{numeral(orderItemSubPrice).format(`0,0`)}

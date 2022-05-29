@@ -21,9 +21,9 @@ import ExpandMore from 'src/components/molecule/ExpandMore';
 import { FontRateContext } from 'src/theme/ThemeProvider';
 import NumberFormatCustom from 'src/components/molecule/NumberFormatCustom';
 import { Course, Goods } from 'src/models/product';
-import ReservationAnotherItemsForm from './ReservationAnotherItemsForm';
-import DialogSelectSearchOrderItem from './DialogSelectSearchOrderItem';
-import DialogSelectSearchDiscount from './DialogSelectSearchDiscount';
+import DialogSelectSearchOrderItem from 'src/components/organisms/Order/DialogSelectSearchOrderItem';
+import DialogSelectSearchDiscount from 'src/components/organisms/Order/DialogSelectSearchDiscount';
+import OrderItemsForm from 'src/components/organisms/Order/OrderItemsForm';
 
 import { useReservationAnother } from './store';
 
@@ -44,6 +44,8 @@ const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
     getValues,
     control,
     errors,
+
+    selectProductIds,
     searchProductType,
     orderItemOpen,
     discountOrderItem,
@@ -56,7 +58,9 @@ const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
     handleDiscountOpen,
     handleDiscountClose,
     updateOrderPrice,
-    updateSelectProductIds
+    updateSelectProductIds,
+    selectDiscount,
+    addOrderItem
   } = useReservationAnother(index);
 
   useEffect(() => {
@@ -175,10 +179,11 @@ const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
             <Grid container>
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Grid item xs={8}>
-                  <ReservationAnotherItemsForm
+                  <OrderItemsForm
                     productType={Course}
                     handleCreateOrderItemOpen={handleCreateOrderItemOpen}
                     handleDiscountOpen={handleDiscountOpen}
+                    another={true}
                   />
                 </Grid>
               </Grid>
@@ -189,10 +194,11 @@ const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
                     justifyContent: 'space-between'
                   }}
                 >
-                  <ReservationAnotherItemsForm
+                  <OrderItemsForm
                     productType={Goods}
                     handleCreateOrderItemOpen={handleCreateOrderItemOpen}
                     handleDiscountOpen={handleDiscountOpen}
+                    another={true}
                   />
                   <Box
                     sx={{
@@ -372,19 +378,21 @@ const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
       </CardContent>
       <Dialog
         fullWidth
-        maxWidth="md"
         open={orderItemOpen}
         onClose={handleCreateOrderItemClose}
       >
         <DialogSelectSearchOrderItem
           handleCreateOrderItemClose={handleCreateOrderItemClose}
           productType={searchProductType}
+          selectProductIds={selectProductIds}
+          addOrderItem={addOrderItem}
         />
       </Dialog>
       <DialogSelectSearchDiscount
         open={discoutOpen}
         discountOrderItem={discountOrderItem}
         handleDiscountClose={handleDiscountClose}
+        selectDiscount={selectDiscount}
       />
     </FormProvider>
   );

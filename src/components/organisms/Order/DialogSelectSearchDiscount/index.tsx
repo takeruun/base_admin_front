@@ -15,22 +15,16 @@ import {
   TableRow,
   Typography,
   InputAdornment,
-  DialogTitle,
-  TablePagination
+  DialogTitle
 } from '@mui/material';
 import numeral from 'numeral';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-
+import Pagination from 'src/components/molecule/Pagination';
 import { useDialogSelectSearchDiscount } from './store';
-
-type DialogSelectSearchDiscountProps = {
-  open: boolean;
-  discountOrderItem: number;
-  handleDiscountClose: () => void;
-};
+import { DialogSelectSearchDiscountProps } from './types';
 
 const DialogSelectSearchDiscount: VFC<DialogSelectSearchDiscountProps> = memo(
-  ({ open, discountOrderItem, handleDiscountClose }) => {
+  ({ open, discountOrderItem, handleDiscountClose, selectDiscount }) => {
     const { t }: { t: any } = useTranslation();
     const {
       page,
@@ -41,8 +35,7 @@ const DialogSelectSearchDiscount: VFC<DialogSelectSearchDiscountProps> = memo(
       getDiscounts,
       handleSetFromValue,
       handlePageChange,
-      handleLimitChange,
-      settingDiscount
+      handleLimitChange
     } = useDialogSelectSearchDiscount();
 
     useEffect(() => {
@@ -122,7 +115,7 @@ const DialogSelectSearchDiscount: VFC<DialogSelectSearchDiscountProps> = memo(
                                 hover
                                 key={index}
                                 onClick={() => {
-                                  settingDiscount(discountOrderItem, discount);
+                                  selectDiscount(discountOrderItem, discount);
                                   handleDiscountClose();
                                 }}
                               >
@@ -146,15 +139,12 @@ const DialogSelectSearchDiscount: VFC<DialogSelectSearchDiscountProps> = memo(
                       </Table>
                     </TableContainer>
                     <Box>
-                      <TablePagination
-                        component="div"
+                      <Pagination
                         count={totalCount}
                         onPageChange={handlePageChange}
                         onRowsPerPageChange={handleLimitChange}
                         page={page}
                         rowsPerPage={limit}
-                        rowsPerPageOptions={[5, 10, 15]}
-                        labelRowsPerPage={t('Rows per page')}
                       />
                     </Box>
                   </Box>

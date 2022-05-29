@@ -9,24 +9,32 @@ import {
 
 export type OrderFormStateType = {
   reservationAnotherOpens: { index: number; open: boolean }[];
+  removeOrderItemIds: number[];
 };
 
 const initialState: Readonly<OrderFormStateType> = {
-  reservationAnotherOpens: []
+  reservationAnotherOpens: [],
+  removeOrderItemIds: []
 };
 
 type ADD_RESERVATION_ANOTHER = 'ADD_RESERVATION_ANOTHER';
 type CLOSE_RESERVATION_ANOTHER = 'CLOSE_RESERVATION_ANOTHER';
 type HANDLE_RESERVATION_ANOTHER = 'HANDLE_RESERVATION_ANOTHER';
+type ADD_REMOVE_ORDER_ITEM_ID = 'ADD_REMOVE_ORDER_ITEM_ID';
+type RESET = 'RESET';
 
 const ActionType: {
   ADD_RESERVATION_ANOTHER: ADD_RESERVATION_ANOTHER;
   CLOSE_RESERVATION_ANOTHER: CLOSE_RESERVATION_ANOTHER;
   HANDLE_RESERVATION_ANOTHER: HANDLE_RESERVATION_ANOTHER;
+  ADD_REMOVE_ORDER_ITEM_ID: ADD_REMOVE_ORDER_ITEM_ID;
+  RESET: RESET;
 } = {
   ADD_RESERVATION_ANOTHER: 'ADD_RESERVATION_ANOTHER',
   CLOSE_RESERVATION_ANOTHER: 'CLOSE_RESERVATION_ANOTHER',
-  HANDLE_RESERVATION_ANOTHER: 'HANDLE_RESERVATION_ANOTHER'
+  HANDLE_RESERVATION_ANOTHER: 'HANDLE_RESERVATION_ANOTHER',
+  ADD_REMOVE_ORDER_ITEM_ID: 'ADD_REMOVE_ORDER_ITEM_ID',
+  RESET: 'RESET'
 };
 
 export const addReservationAnother = () => ({
@@ -48,10 +56,23 @@ export const handleReservationAnother = (index: number, open: boolean) => ({
   }
 });
 
+export const addRemoveOrderItemId = (id: number) => ({
+  type: ActionType.ADD_REMOVE_ORDER_ITEM_ID,
+  payload: {
+    id
+  }
+});
+
+export const reset = () => ({
+  type: ActionType.RESET
+});
+
 type OrderFormActionType =
   | ReturnType<typeof addReservationAnother>
   | ReturnType<typeof closeReservationAnother>
-  | ReturnType<typeof handleReservationAnother>;
+  | ReturnType<typeof handleReservationAnother>
+  | ReturnType<typeof addRemoveOrderItemId>
+  | ReturnType<typeof reset>;
 
 const OrderFormReducer = (
   state: OrderFormStateType,
@@ -83,6 +104,16 @@ const OrderFormReducer = (
             ? { index: n.index, open: action.payload.open }
             : n
         )
+      };
+    case ActionType.ADD_REMOVE_ORDER_ITEM_ID:
+      return {
+        ...state,
+        removeOrderItemIds: state.removeOrderItemIds.concat(action.payload.id)
+      };
+    case ActionType.RESET:
+      return {
+        reservationAnotherOpens: [],
+        removeOrderItemIds: []
       };
     default:
       throw new Error('Invalid action type');

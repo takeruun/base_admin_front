@@ -20,17 +20,15 @@ import { FontRateContext } from 'src/theme/ThemeProvider';
 import { Order } from 'src/models/order';
 import { Course, Goods } from 'src/models/product';
 import NumberFormatCustom from 'src/components/molecule/NumberFormatCustom';
-
-import DialogSelectSearchOrderItem from './DialogSelectSearchOrderItem';
-import DialogSelectSearchDiscount from './DialogSelectSearchDiscount';
+import DialogSelectSearchDiscount from 'src/components/organisms/Order/DialogSelectSearchDiscount';
+import DialogSelectSearchOrderItem from 'src/components/organisms/Order/DialogSelectSearchOrderItem';
+import OrderItemsForm from 'src/components/organisms/Order/OrderItemsForm';
 import OrderDialogAction from './OrderDialogAction';
 import SelectCustomer from './SelectCustomer';
-import OrderItemsForm from './OrderItemsForm';
 import ReservationAnother from './ReservationAnother';
 import { useOrderForm } from './store';
 
 interface OrderFormPropsType {
-  removeOrderItem: (orderItemId?: number) => void;
   order?: Order;
 }
 
@@ -42,7 +40,7 @@ const FormLabelStyle = styled('p')(
   `
 );
 
-const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
+const OrderForm: VFC<OrderFormPropsType> = ({ order }) => {
   const { t }: { t: any } = useTranslation();
   const getFontRate = useContext(FontRateContext);
   const fontRate = getFontRate();
@@ -52,6 +50,7 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
     getValues,
     formState,
 
+    selectProductIds,
     searchProductType,
     orderItemOpen,
     discountOrderItem,
@@ -64,7 +63,10 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
     handleDiscountOpen,
     handleDiscountClose,
     updateOrderPrice,
-    updateSelectProductIds
+    updateSelectProductIds,
+    selectDiscount,
+    addOrderItem,
+    handleAddRemoveOrderItemId
   } = useOrderForm();
 
   const { errors, isSubmitting } = formState;
@@ -173,7 +175,7 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
             <OrderItemsForm
               productType={Course}
               handleCreateOrderItemOpen={handleCreateOrderItemOpen}
-              removeOrderItem={removeOrderItem}
+              removeOrderItem={handleAddRemoveOrderItemId}
               handleDiscountOpen={handleDiscountOpen}
             />
           </Grid>
@@ -188,7 +190,7 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
             <OrderItemsForm
               productType={Goods}
               handleCreateOrderItemOpen={handleCreateOrderItemOpen}
-              removeOrderItem={removeOrderItem}
+              removeOrderItem={handleAddRemoveOrderItemId}
               handleDiscountOpen={handleDiscountOpen}
             />
             <Box
@@ -374,19 +376,21 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
       <OrderDialogAction isSubmitting={isSubmitting} editing={Boolean(order)} />
       <Dialog
         fullWidth
-        maxWidth="md"
         open={orderItemOpen}
         onClose={handleCreateOrderItemClose}
       >
         <DialogSelectSearchOrderItem
           handleCreateOrderItemClose={handleCreateOrderItemClose}
           productType={searchProductType}
+          selectProductIds={selectProductIds}
+          addOrderItem={addOrderItem}
         />
       </Dialog>
       <DialogSelectSearchDiscount
         open={discoutOpen}
         discountOrderItem={discountOrderItem}
         handleDiscountClose={handleDiscountClose}
+        selectDiscount={selectDiscount}
       />
     </CardContent>
   );

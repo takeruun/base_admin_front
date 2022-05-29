@@ -2,9 +2,7 @@ import { VFC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider } from 'react-hook-form';
 import { Card, CardHeader, Collapse, Divider } from '@mui/material';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { styled } from '@mui/material/styles';
 import ExpandMore from 'src/components/molecule/ExpandMore';
 import { Order } from 'src/models/order';
 import CustomerForm from './CustomerForm';
@@ -19,16 +17,18 @@ const Form: VFC<{ order?: Order }> = ({ order }) => {
     orderExpand,
     userExpand,
     onSubmit,
-    removeOrderItem,
     handleOrderExpand,
     handleUserExpand,
-    setOrder
+    setOrder,
+    execReset
   } = useOrderIndexForm(order?.id);
 
   const { handleSubmit } = methods;
 
   useEffect(() => {
     setOrder(order);
+
+    return () => execReset();
   }, [order]);
 
   return (
@@ -74,7 +74,7 @@ const Form: VFC<{ order?: Order }> = ({ order }) => {
             />
             <Divider />
             <Collapse in={orderExpand} timeout="auto" unmountOnExit>
-              <OrderForm removeOrderItem={removeOrderItem} order={order} />
+              <OrderForm order={order} />
             </Collapse>
           </Card>
         </form>

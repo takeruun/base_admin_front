@@ -1,4 +1,4 @@
-import { useState, FocusEvent, useCallback, ChangeEvent } from 'react';
+import { useState, useCallback, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -10,9 +10,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useOrderFormState,
   useOrderFormDispatch,
-  addReservationAnother
+  addReservationAnother,
+  addRemoveOrderItemId,
+  reset
 } from 'src/contexts/OrderFormContext';
-import { ProductType, Course, Goods } from 'src/models/product';
+import { Product, ProductType } from 'src/models/product';
 import type { Order } from 'src/models/order';
 import type { Customer } from 'src/models/customer';
 import { Discount, Percentage, PriceReduction } from 'src/models/discount';
@@ -20,17 +22,13 @@ import { useCustomer } from 'src/hooks/useCustomer';
 import request from 'src/hooks/useRequest';
 import { usePrefectures } from 'src/hooks/usePrefectures';
 import { useOccupations } from 'src/hooks/useOccupations';
-import { useAllDiscounts } from 'src/hooks/useDiscount';
-import { useProduct } from 'src/hooks/useProduct';
-import { useCategory } from 'src/hooks/useCategory';
-import {
-  OrderFormInputType,
-  SelectSearchOrderItemFormInputType
-} from './types';
+import { OrderFormInputType } from './types';
 
 export const useOrderIndexForm = (orderId?: number) => {
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
+  const { removeOrderItemIds } = useOrderFormState();
+  const dispatchOrderForm = useOrderFormDispatch();
 
   const schema = Yup.object({
     customerId: Yup.number().required(t('You must select a customer.')),
@@ -101,13 +99,13 @@ export const useOrderIndexForm = (orderId?: number) => {
       data.dateOfVisit.replace('年', '-').replace('月', '-').replace('日', '')
     );
 
-    if (removeOrderItemId.length > 0)
+    if (removeOrderItemIds.length > 0)
       await request({
         url: '/v1/order_items',
         method: 'DELETE',
         reqParams: {
           params: {
-            ids: removeOrderItemId
+            ids: removeOrderItemIds
           }
         }
       });
@@ -130,11 +128,6 @@ export const useOrderIndexForm = (orderId?: number) => {
       navigate('/dashboards/orders');
     });
   };
-
-  const [removeOrderItemId, setRemoveOrderItemId] = useState<number[]>([]);
-  const removeOrderItem = useCallback((orderItemId?: number) => {
-    if (orderItemId) setRemoveOrderItemId((prev) => [...prev, orderItemId]);
-  }, []);
 
   const [orderExpand, setOrderExpand] = useState(true);
   const handleOrderExpand = useCallback(
@@ -197,15 +190,17 @@ export const useOrderIndexForm = (orderId?: number) => {
     }
   }, []);
 
+  const execReset = () => dispatchOrderForm(reset());
+
   const store = {
     methods,
     orderExpand,
     userExpand,
     onSubmit,
-    removeOrderItem,
     handleOrderExpand,
     handleUserExpand,
-    setOrder
+    setOrder,
+    execReset
   };
 
   return store;
@@ -214,8 +209,14 @@ export const useOrderIndexForm = (orderId?: number) => {
 export const useOrderForm = () => {
   const { control, getValues, setValue, watch, formState } =
     useFormContext<OrderFormInputType>();
-  const { reservationAnotherOpens } = useOrderFormState();
+  const { append } = useFieldArray({
+    control,
+    name: 'orderItems',
+    keyName: 'key'
+  });
 
+  const { reservationAnotherOpens } = useOrderFormState();
+  const dispatchOrderForm = useOrderFormDispatch();
   const [selectProductIds, setSelectProductIds] = useState<number[]>([]);
 
   const setInitialSelectProductIds = useCallback((order?: Order) => {
@@ -279,6 +280,43 @@ export const useOrderForm = () => {
     [watch]
   );
 
+  const selectDiscount = (discountOrderItem: number, discount: Discount) => {
+    const price = getValues(`orderItems.${discountOrderItem}.price`);
+    var newPrice = 0;
+    if (discount.discountType == Percentage) {
+      setValue(`orderItems.${discountOrderItem}.discountRate`, discount.amount);
+      newPrice = price * ((100 - discount.amount) / 100);
+    } else if (discount.discountType == PriceReduction) {
+      newPrice = price - discount.amount;
+    }
+
+    setValue(`orderItems.${discountOrderItem}.discountId`, discount.id);
+    setValue(
+      `orderItems.${discountOrderItem}.discountAmount`,
+      price - newPrice
+    );
+    setValue(`orderItems.${discountOrderItem}.discountName`, discount.name);
+  };
+
+  const addOrderItem = useCallback((product: Product) => {
+    append({
+      name: product.name,
+      productId: product.id,
+      price: product.price,
+      taxRate: 10,
+      quantity: 1,
+      otherPerson: false,
+      productType: product.productType,
+      discountAmount: 0,
+      discountRate: 0
+    });
+  }, []);
+
+  const handleAddRemoveOrderItemId = useCallback(
+    (id: number) => dispatchOrderForm(addRemoveOrderItemId(id)),
+    []
+  );
+
   const store = {
     control,
     getValues,
@@ -297,91 +335,10 @@ export const useOrderForm = () => {
     handleDiscountOpen,
     handleDiscountClose,
     updateOrderPrice,
-    updateSelectProductIds
-  };
-
-  return store;
-};
-
-export const useOrderItemsForm = () => {
-  const { control, setValue, getValues, watch } =
-    useFormContext<OrderFormInputType>();
-  const { remove } = useFieldArray({
-    control,
-    name: 'orderItems',
-    keyName: 'key'
-  });
-
-  const watchOrderItems = watch('orderItems');
-  const getOrderItems = useCallback(
-    (productType: ProductType) =>
-      watchOrderItems.filter((field, index) => {
-        if (watchOrderItems[index].productType === productType)
-          return {
-            ...field,
-            ...watchOrderItems[index]
-          };
-      }),
-    [watchOrderItems]
-  );
-
-  const [orderItemSubPrice, setOrderItemSubPrice] = useState(0);
-
-  const getOrderItemIndex = (productId: number): number =>
-    watchOrderItems.findIndex((orderItem) => orderItem.productId === productId);
-
-  const productTypeName = (productType: ProductType): string => {
-    if (productType == Course) return 'Course';
-    else if (productType == Goods) return 'Goods';
-    else return 'Other';
-  };
-
-  const handleChangeDiscountRate = (
-    event: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>,
-    orderItemIndex: number
-  ) => {
-    const price = getValues(`orderItems.${orderItemIndex}.price`);
-    setValue(
-      `orderItems.${orderItemIndex}.discountAmount`,
-      price - price * ((100 - parseInt(event.target.value)) / 100)
-    );
-    setValue(
-      `orderItems.${orderItemIndex}.discountRate`,
-      parseInt(event.target.value)
-    );
-  };
-
-  const updateOrderItemSubPrice = useCallback(
-    (productType: ProductType) =>
-      watch((value, { name }) => {
-        if (name.includes('orderItems')) {
-          var orderItemSubPrice = 0;
-          value.orderItems.map((orderItem) => {
-            if (orderItem.productType === productType) {
-              orderItemSubPrice +=
-                (orderItem.price - orderItem.discountAmount) *
-                orderItem.quantity;
-            }
-          });
-          setOrderItemSubPrice(orderItemSubPrice);
-        }
-      }),
-    [watch]
-  );
-
-  const store = {
-    control,
-    setValue,
-    getValues,
-    watch,
-    remove,
-
-    orderItemSubPrice,
-    getOrderItems,
-    getOrderItemIndex,
-    productTypeName,
-    handleChangeDiscountRate,
-    updateOrderItemSubPrice
+    updateSelectProductIds,
+    selectDiscount,
+    addOrderItem,
+    handleAddRemoveOrderItemId
   };
 
   return store;
@@ -507,149 +464,6 @@ export const useCustomerForm = () => {
     getPrefectures,
     getOccupations,
     updateAddress
-  };
-
-  return store;
-};
-
-export const useDialogSelectSearchDiscount = () => {
-  const [formValue, setFormValue] = useState(null);
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
-  const { getDiscounts, totalCount, discounts } = useAllDiscounts();
-  const { setValue, getValues } = useFormContext<OrderFormInputType>();
-
-  const handleSetFromValue = (value: string) => setFormValue(value);
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const settingDiscount = (discountOrderItem: number, discount: Discount) => {
-    const price = getValues(`orderItems.${discountOrderItem}.price`);
-    var newPrice = 0;
-    if (discount.discountType == Percentage) {
-      setValue(`orderItems.${discountOrderItem}.discountRate`, discount.amount);
-      newPrice = price * ((100 - discount.amount) / 100);
-    } else if (discount.discountType == PriceReduction) {
-      newPrice = price - discount.amount;
-    }
-
-    setValue(`orderItems.${discountOrderItem}.discountId`, discount.id);
-    setValue(
-      `orderItems.${discountOrderItem}.discountAmount`,
-      price - newPrice
-    );
-    setValue(`orderItems.${discountOrderItem}.discountName`, discount.name);
-  };
-
-  const store = {
-    page,
-    limit,
-    discounts,
-    totalCount,
-
-    getDiscounts,
-    handleSetFromValue,
-    handlePageChange,
-    handleLimitChange,
-    settingDiscount
-  };
-
-  return store;
-};
-
-export const useDialogSelectSearchOrderItem = () => {
-  const { control, getValues: orderFormGetValue } =
-    useFormContext<OrderFormInputType>();
-  const { append } = useFieldArray({
-    control,
-    name: 'orderItems',
-    keyName: 'key'
-  });
-
-  const [selectedProducts, setSelectedProducts] = useState<number[]>(
-    orderFormGetValue('orderItems').map((orderItem) => orderItem.productId)
-  );
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
-  const { getCategories, categories } = useCategory();
-  const { getProductsSearch, totalProductCount, products } = useProduct();
-
-  const { register, setValue, getValues } =
-    useForm<SelectSearchOrderItemFormInputType>({
-      defaultValues: {
-        categoryId: 0,
-        name: ''
-      }
-    });
-
-  const handleSelectOneProduct = (
-    _event: ChangeEvent<HTMLInputElement>,
-    productId: number
-  ) => {
-    if (!selectedProducts.includes(productId)) {
-      setSelectedProducts((prevSelected) => [...prevSelected, productId]);
-    } else {
-      setSelectedProducts((prevSelected) =>
-        prevSelected.filter((id) => id !== productId)
-      );
-    }
-  };
-
-  const handlePageChange = (_event: any, newPage: number) => {
-    setPage(newPage);
-  };
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const handleCreateOrderItem = () => {
-    selectedProducts.forEach((itemId) => {
-      const product = products.find(
-        (p) =>
-          p.id == itemId &&
-          !orderFormGetValue('orderItems')
-            .map((orderItem) => orderItem.productId)
-            .includes(itemId)
-      );
-      if (product) {
-        append({
-          name: product.name,
-          productId: product.id,
-          price: product.price,
-          taxRate: 10,
-          quantity: 1,
-          otherPerson: false,
-          productType: product.productType,
-          discountAmount: 0,
-          discountRate: 0
-        });
-      }
-    });
-  };
-
-  const store = {
-    selectedProducts,
-    page,
-    limit,
-    categories,
-    totalProductCount,
-    products,
-
-    register,
-    setValue,
-    getValues,
-
-    getCategories,
-    getProductsSearch,
-    handleSelectOneProduct,
-    handlePageChange,
-    handleLimitChange,
-    handleCreateOrderItem
   };
 
   return store;

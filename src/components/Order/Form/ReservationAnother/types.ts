@@ -16,30 +16,7 @@ type OrderItemFormInputType = {
   discountName?: string;
 };
 
-type CustomerFormInputType = {
-  id?: number | null;
-  familyName: string;
-  givenName: string;
-  familyNameKana: string;
-  givenNameKana: string;
-  postalCode: string;
-  prefecture: string;
-  address1: string;
-  address2: string;
-  address3: string;
-  phoneNumber: string;
-  homePhoneNumber: string;
-  email: string;
-  gender: number;
-  birthday: string;
-  occupation: string;
-  firstVisitDate: string;
-  familyUserId: number;
-  familyRelationship: number;
-  memo: string;
-};
-
-export type OrderFormInputType = {
+export type ReservationAnotherInputType = {
   customerId: number;
   dateOfVisit: string;
   dateOfVisitTime: string;
@@ -50,7 +27,6 @@ export type OrderFormInputType = {
   discountAmount: number;
   subTotalPrice: number;
   totalPrice: number;
-  customer: CustomerFormInputType;
 };
 
 export type SelectSearchOrderItemFormInputType = {

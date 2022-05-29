@@ -5,6 +5,7 @@ import { ReceiptTextsProvider } from './ReceiptTextsContext';
 import { ImageProvider } from './ImageContext';
 import { DashboardProvider } from './DashboardContext';
 import { CalendarProvider } from './CalendarContext';
+import { OrderFormProvider } from './OrderFormContext';
 
 type Props = {
   children: ReactNode;
@@ -17,7 +18,9 @@ export const RootContextProvider: VFC<Props> = ({ children }) => {
         <ReceiptTextsProvider>
           <ImageProvider>
             <DashboardProvider>
-              <CalendarProvider>{children}</CalendarProvider>
+              <CalendarProvider>
+                <OrderFormProvider>{children}</OrderFormProvider>
+              </CalendarProvider>
             </DashboardProvider>
           </ImageProvider>
         </ReceiptTextsProvider>

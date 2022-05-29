@@ -1,36 +1,27 @@
 import { useState, FocusEvent, useCallback, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useForm, useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import { format } from 'date-fns';
-import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import {
   useOrderFormState,
   useOrderFormDispatch,
-  addReservationAnother
+  handleReservationAnother
 } from 'src/contexts/OrderFormContext';
 import { ProductType, Course, Goods } from 'src/models/product';
-import type { Order } from 'src/models/order';
-import type { Customer } from 'src/models/customer';
 import { Discount, Percentage, PriceReduction } from 'src/models/discount';
-import { useCustomer } from 'src/hooks/useCustomer';
-import request from 'src/hooks/useRequest';
-import { usePrefectures } from 'src/hooks/usePrefectures';
-import { useOccupations } from 'src/hooks/useOccupations';
 import { useAllDiscounts } from 'src/hooks/useDiscount';
 import { useProduct } from 'src/hooks/useProduct';
 import { useCategory } from 'src/hooks/useCategory';
 import {
-  OrderFormInputType,
+  ReservationAnotherInputType,
   SelectSearchOrderItemFormInputType
 } from './types';
 
-export const useOrderIndexForm = (orderId?: number) => {
+export const useReservationAnother = (index: number) => {
   const { t }: { t: any } = useTranslation();
-  const navigate = useNavigate();
+  const { reservationAnotherOpens } = useOrderFormState();
+  const dispatchOrderForm = useOrderFormDispatch();
 
   const schema = Yup.object({
     customerId: Yup.number().required(t('You must select a customer.')),
@@ -58,7 +49,7 @@ export const useOrderIndexForm = (orderId?: number) => {
     })
   }).required();
 
-  const methods = useForm<OrderFormInputType>({
+  const methods = useForm<ReservationAnotherInputType>({
     defaultValues: {
       customerId: 0,
       dateOfVisit: '',
@@ -69,165 +60,20 @@ export const useOrderIndexForm = (orderId?: number) => {
       paymentMethod: '未設定',
       discountAmount: 0,
       subTotalPrice: 0,
-      totalPrice: 0,
-      customer: {
-        familyName: '',
-        givenName: '',
-        familyNameKana: '',
-        givenNameKana: '',
-        postalCode: '',
-        prefecture: '',
-        address1: '',
-        address2: '',
-        address3: '',
-        phoneNumber: '',
-        homePhoneNumber: '',
-        email: '',
-        gender: 0,
-        birthday: '',
-        occupation: '',
-        firstVisitDate: '',
-        familyUserId: 0,
-        familyRelationship: 0,
-        memo: ''
-      }
+      totalPrice: 0
     },
     resolver: yupResolver(schema)
   });
-  const { setValue } = methods;
 
-  const onSubmit = async (data: OrderFormInputType) => {
-    const dateOfVisit = new Date(
-      data.dateOfVisit.replace('年', '-').replace('月', '-').replace('日', '')
-    );
-
-    if (removeOrderItemId.length > 0)
-      await request({
-        url: '/v1/order_items',
-        method: 'DELETE',
-        reqParams: {
-          params: {
-            ids: removeOrderItemId
-          }
-        }
-      });
-
-    request({
-      url: Boolean(orderId) ? `/v1/orders/${orderId}` : '/v1/orders',
-      method: Boolean(orderId) ? 'PUT' : 'POST',
-      reqParams: {
-        data: {
-          ...data,
-          dateOfVisit: new Date(
-            `${format(dateOfVisit, 'yyyy-MM-dd')} ${data.dateOfVisitTime}`
-          ),
-          dateOfExit: new Date(
-            `${format(dateOfVisit, 'yyyy-MM-dd')} ${data.dateOfExit}`
-          )
-        }
-      }
-    }).then(() => {
-      navigate('/dashboards/orders');
-    });
-  };
-
-  const [removeOrderItemId, setRemoveOrderItemId] = useState<number[]>([]);
-  const removeOrderItem = useCallback((orderItemId?: number) => {
-    if (orderItemId) setRemoveOrderItemId((prev) => [...prev, orderItemId]);
-  }, []);
-
-  const [orderExpand, setOrderExpand] = useState(true);
-  const handleOrderExpand = useCallback(
-    () => setOrderExpand((prev) => !prev),
-    []
-  );
-
-  const [userExpand, setUserExpand] = useState(false);
-  const handleUserExpand = useCallback(
-    () => setUserExpand((prev) => !prev),
-    []
-  );
-
-  const setOrder = useCallback((order?: Order) => {
-    if (Boolean(order)) {
-      const orderItems = order.orderItems.map((oi) => {
-        return {
-          id: oi.id,
-          key: oi.id,
-          name: oi.product.name,
-          productId: oi.productId,
-          price: oi.price,
-          quantity: oi.quantity,
-          taxRate: oi.taxRate,
-          otherPerson: oi.otherPerson,
-          productType: oi.product.productType,
-          discountId: oi.discountId,
-          discountAmount: oi.discountAmount,
-          discountRate: oi.discountRate,
-          discountName: oi.discount.name
-        };
-      });
-
-      setValue('customerId', order.customerId);
-      setValue('dateOfVisit', order.dateOfVisit);
-      setValue('dateOfVisitTime', format(new Date(order.dateOfVisit), 'HH:mm'));
-      setValue('dateOfExit', format(new Date(order.dateOfExit), 'HH:mm'));
-      setValue('status', order.status);
-      setValue('orderItems', orderItems);
-      setValue('paymentMethod', order.paymentMethod);
-
-      setValue('customer.id', order.customer.id);
-      setValue('customer.familyName', order.customer.familyName);
-      setValue('customer.givenName', order.customer.givenName);
-      setValue('customer.familyNameKana', order.customer.familyNameKana);
-      setValue('customer.givenNameKana', order.customer.givenNameKana);
-      setValue('customer.postalCode', order.customer.postalCode);
-      setValue('customer.prefecture', order.customer.prefecture);
-      setValue('customer.address1', order.customer.address1);
-      setValue('customer.address2', order.customer.address2);
-      setValue('customer.address3', order.customer.address3);
-      setValue('customer.phoneNumber', order.customer.phoneNumber);
-      setValue('customer.homePhoneNumber', order.customer.homePhoneNumber);
-      setValue('customer.email', order.customer.email);
-      setValue('customer.gender', order.customer.gender);
-      setValue('customer.birthday', order.customer.birthday);
-      setValue('customer.occupation', order.customer.occupation);
-      setValue('customer.firstVisitDate', order.customer.firstVisitDate);
-      setValue('customer.memo', order.customer.memo ? order.customer.memo : '');
-    }
-  }, []);
-
-  const store = {
-    methods,
-    orderExpand,
-    userExpand,
-    onSubmit,
-    removeOrderItem,
-    handleOrderExpand,
-    handleUserExpand,
-    setOrder
-  };
-
-  return store;
-};
-
-export const useOrderForm = () => {
-  const { control, getValues, setValue, watch, formState } =
-    useFormContext<OrderFormInputType>();
-  const { reservationAnotherOpens } = useOrderFormState();
+  const {
+    control,
+    getValues,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting }
+  } = methods;
 
   const [selectProductIds, setSelectProductIds] = useState<number[]>([]);
-
-  const setInitialSelectProductIds = useCallback((order?: Order) => {
-    if (Boolean(order)) {
-      var productIds = [];
-      order.orderItems.forEach((orderItem) => {
-        productIds.push(orderItem.productId);
-      });
-      setSelectProductIds(productIds);
-    }
-  }, []);
-
   const [searchProductType, setSearchProductType] = useState<ProductType>();
   const [orderItemOpen, setOrderItemOpen] = useState(false);
   const handleCreateOrderItemOpen = useCallback((pt: ProductType) => {
@@ -238,9 +84,9 @@ export const useOrderForm = () => {
     () => setOrderItemOpen(false),
     []
   );
-
   const [discountOrderItem, setDiscountOrderItem] = useState(0);
   const [discoutOpen, setDiscountOpen] = useState(false);
+
   const handleDiscountOpen = useCallback((index: number) => {
     setDiscountOrderItem(index);
     setDiscountOpen(true);
@@ -279,19 +125,30 @@ export const useOrderForm = () => {
     [watch]
   );
 
+  const expand = reservationAnotherOpens.find(
+    (reservation) => reservation.index === index
+  ).open;
+
+  const handleExpand = useCallback(
+    () => dispatchOrderForm(handleReservationAnother(index, !expand)),
+    [expand]
+  );
+
   const store = {
+    methods,
     control,
     getValues,
-    formState,
+    errors,
+    isSubmitting,
+    expand,
 
     selectProductIds,
     searchProductType,
     orderItemOpen,
     discountOrderItem,
     discoutOpen,
-    reservationAnotherOpens,
 
-    setInitialSelectProductIds,
+    handleExpand,
     handleCreateOrderItemOpen,
     handleCreateOrderItemClose,
     handleDiscountOpen,
@@ -303,9 +160,9 @@ export const useOrderForm = () => {
   return store;
 };
 
-export const useOrderItemsForm = () => {
+export const useReservationAnotherItemsForm = () => {
   const { control, setValue, getValues, watch } =
-    useFormContext<OrderFormInputType>();
+    useFormContext<ReservationAnotherInputType>();
   const { remove } = useFieldArray({
     control,
     name: 'orderItems',
@@ -387,137 +244,12 @@ export const useOrderItemsForm = () => {
   return store;
 };
 
-export const useSelectCustomer = () => {
-  const { setValue, getValues } = useFormContext<OrderFormInputType>();
-  const { customers, totalCustomerCount, getCustomers } = useCustomer();
-
-  const [open, setOpen] = useState(false);
-  const [formValue, setFormValue] = useState(null);
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
-
-  const handleSetFromValue = (value: string) => setFormValue(value);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleSelectCustomer = (customer: Customer) => {
-    setValue('customerId', customer.id);
-    setValue('customer.id', customer.id);
-    setValue('customer.familyName', customer.familyName);
-    setValue('customer.givenName', customer.givenName);
-    setValue('customer.familyNameKana', customer.familyNameKana);
-    setValue('customer.givenNameKana', customer.givenNameKana);
-    setValue('customer.postalCode', customer.postalCode);
-    setValue('customer.prefecture', customer.prefecture);
-    setValue('customer.address1', customer.address1);
-    setValue('customer.address2', customer.address2);
-    setValue('customer.address3', customer.address3);
-    setValue('customer.phoneNumber', customer.phoneNumber);
-    setValue('customer.homePhoneNumber', customer.homePhoneNumber);
-    setValue('customer.email', customer.email);
-    setValue('customer.gender', customer.gender);
-    setValue('customer.birthday', customer.birthday);
-    setValue('customer.occupation', customer.occupation);
-    setValue('customer.firstVisitDate', customer.firstVisitDate);
-    setValue('customer.memo', customer.memo ? customer.memo : '');
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const store = {
-    getValues,
-    open,
-    formValue,
-    page,
-    limit,
-    customers,
-    totalCustomerCount,
-
-    getCustomers,
-    handleSetFromValue,
-    handleOpen,
-    handleClose,
-    handleSelectCustomer,
-    handlePageChange,
-    handleLimitChange
-  };
-
-  return store;
-};
-
-export const useCustomerForm = () => {
-  const {
-    control,
-    setValue,
-    watch,
-    formState: { errors }
-  } = useFormContext<OrderFormInputType>();
-
-  const { getPrefectures, prefectures } = usePrefectures();
-  const { getOccupations, occupations } = useOccupations();
-
-  const updateAddress = useCallback(
-    () =>
-      watch((value, { name, type }) => {
-        if (
-          name === 'customer.postalCode' &&
-          value.customer.postalCode.length >= 7
-        ) {
-          axios
-            .get('https://zipcloud.ibsnet.co.jp/api/search', {
-              params: {
-                zipcode: value.customer.postalCode
-              }
-            })
-            .then((res) => {
-              if (res['data']['results']) {
-                setValue(
-                  'customer.prefecture',
-                  res['data']['results'][0]['address1']
-                );
-                setValue(
-                  'customer.address1',
-                  res['data']['results'][0]['address2']
-                );
-                setValue(
-                  'customer.address2',
-                  res['data']['results'][0]['address3']
-                );
-              }
-            });
-        }
-      }),
-    [watch]
-  );
-
-  const store = {
-    control,
-    setValue,
-    formState: { errors },
-
-    prefectures,
-    occupations,
-
-    getPrefectures,
-    getOccupations,
-    updateAddress
-  };
-
-  return store;
-};
-
 export const useDialogSelectSearchDiscount = () => {
   const [formValue, setFormValue] = useState(null);
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
   const { getDiscounts, totalCount, discounts } = useAllDiscounts();
-  const { setValue, getValues } = useFormContext<OrderFormInputType>();
+  const { setValue, getValues } = useFormContext<ReservationAnotherInputType>();
 
   const handleSetFromValue = (value: string) => setFormValue(value);
 
@@ -564,7 +296,7 @@ export const useDialogSelectSearchDiscount = () => {
 
 export const useDialogSelectSearchOrderItem = () => {
   const { control, getValues: orderFormGetValue } =
-    useFormContext<OrderFormInputType>();
+    useFormContext<ReservationAnotherInputType>();
   const { append } = useFieldArray({
     control,
     name: 'orderItems',
@@ -651,17 +383,6 @@ export const useDialogSelectSearchOrderItem = () => {
     handleLimitChange,
     handleCreateOrderItem
   };
-
-  return store;
-};
-
-export const useOrderDialogAction = () => {
-  const dispatchOrderForm = useOrderFormDispatch();
-
-  const handleAddReservationAnother = () =>
-    dispatchOrderForm(addReservationAnother());
-
-  const store = { handleAddReservationAnother };
 
   return store;
 };

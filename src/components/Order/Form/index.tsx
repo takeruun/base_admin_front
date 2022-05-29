@@ -5,25 +5,11 @@ import { Card, CardHeader, Collapse, Divider } from '@mui/material';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/material/styles';
+import ExpandMore from 'src/components/molecule/ExpandMore';
 import { Order } from 'src/models/order';
 import CustomerForm from './CustomerForm';
 import OrderForm from './OrderForm';
-import { useOrderForm } from './store';
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest
-  })
-}));
+import { useOrderIndexForm } from './store';
 
 const Form: VFC<{ order?: Order }> = ({ order }) => {
   const { t }: { t: any } = useTranslation();
@@ -37,7 +23,7 @@ const Form: VFC<{ order?: Order }> = ({ order }) => {
     handleOrderExpand,
     handleUserExpand,
     setOrder
-  } = useOrderForm(order?.id);
+  } = useOrderIndexForm(order?.id);
 
   const { handleSubmit } = methods;
 

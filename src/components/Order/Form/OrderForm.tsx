@@ -13,7 +13,6 @@ import {
   Typography,
   FormControl
 } from '@mui/material';
-
 import { styled } from '@mui/material/styles';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
@@ -27,7 +26,8 @@ import DialogSelectSearchDiscount from './DialogSelectSearchDiscount';
 import OrderDialogAction from './OrderDialogAction';
 import SelectCustomer from './SelectCustomer';
 import OrderItemsForm from './OrderItemsForm';
-import { useOrderIndexForm } from './store';
+import ReservationAnother from './ReservationAnother';
+import { useOrderForm } from './store';
 
 interface OrderFormPropsType {
   removeOrderItem: (orderItemId?: number) => void;
@@ -56,6 +56,7 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
     orderItemOpen,
     discountOrderItem,
     discoutOpen,
+    reservationAnotherOpens,
 
     setInitialSelectProductIds,
     handleCreateOrderItemOpen,
@@ -64,7 +65,7 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
     handleDiscountClose,
     updateOrderPrice,
     updateSelectProductIds
-  } = useOrderIndexForm();
+  } = useOrderForm();
 
   const { errors, isSubmitting } = formState;
 
@@ -82,93 +83,93 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
 
   return (
     <CardContent>
-      <Grid item xs={12}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Box
-              sx={{
-                justifyContent: 'flex-start',
-                display: 'flex',
-                flexWrap: 'wrap'
-              }}
-            >
-              <Box sx={{ alignSelf: 'flex-end' }}>
-                <SelectCustomer />
-              </Box>
-              <Box sx={{ pl: 4 }}>
-                <FormControl
-                  component="fieldset"
-                  sx={{
-                    width: '100%'
-                  }}
-                >
-                  <FormLabelStyle sx={{ mb: 0 }}>
-                    {t('Date of visit')}
-                  </FormLabelStyle>
-                  <Controller
-                    control={control}
-                    name="dateOfVisit"
-                    render={({ field }) => (
-                      <DesktopDatePicker
-                        {...field}
-                        inputFormat="yyyy年MM月dd日"
-                        mask="____年__月__日"
-                        renderInput={(params) => (
-                          <TextField
-                            {...field}
-                            {...params}
-                            fullWidth
-                            error={Boolean(errors.dateOfVisit)}
-                            helperText={errors.dateOfVisit?.message}
-                            size="small"
-                          />
-                        )}
-                      />
-                    )}
-                  />
-                </FormControl>
-              </Box>
-              <Box sx={{ px: 2 }}>
-                <FormLabelStyle sx={{ mb: 0 }}>
-                  {t('Date of visit time')}
-                </FormLabelStyle>
-                <Controller
-                  control={control}
-                  name="dateOfVisitTime"
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      type="time"
-                      size="small"
-                      fullWidth
-                      error={Boolean(errors.dateOfVisitTime)}
-                      helperText={errors.dateOfVisitTime?.message}
-                    />
-                  )}
-                />
-              </Box>
-              <Box>
-                <FormLabelStyle sx={{ mb: 0 }}>
-                  {t('Date of exit')}
-                </FormLabelStyle>
-                <Controller
-                  control={control}
-                  name="dateOfExit"
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      type="time"
-                      size="small"
-                      fullWidth
-                      error={Boolean(errors.dateOfExit)}
-                      helperText={errors.dateOfExit?.message}
-                    />
-                  )}
-                />
-              </Box>
+      <Grid container>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              justifyContent: 'flex-start',
+              display: 'flex',
+              flexWrap: 'wrap'
+            }}
+          >
+            <Box sx={{ alignSelf: 'flex-end' }}>
+              <SelectCustomer />
             </Box>
-          </Grid>
-          <Grid item xs={12}>
+            <Box sx={{ pl: 4 }}>
+              <FormControl
+                component="fieldset"
+                sx={{
+                  width: '100%'
+                }}
+              >
+                <FormLabelStyle sx={{ mb: 0 }}>
+                  {t('Date of visit')}
+                </FormLabelStyle>
+                <Controller
+                  control={control}
+                  name="dateOfVisit"
+                  render={({ field }) => (
+                    <DesktopDatePicker
+                      {...field}
+                      inputFormat="yyyy年MM月dd日"
+                      mask="____年__月__日"
+                      renderInput={(params) => (
+                        <TextField
+                          {...field}
+                          {...params}
+                          fullWidth
+                          error={Boolean(errors.dateOfVisit)}
+                          helperText={errors.dateOfVisit?.message}
+                          size="small"
+                        />
+                      )}
+                    />
+                  )}
+                />
+              </FormControl>
+            </Box>
+            <Box sx={{ px: 2 }}>
+              <FormLabelStyle sx={{ mb: 0 }}>
+                {t('Date of visit time')}
+              </FormLabelStyle>
+              <Controller
+                control={control}
+                name="dateOfVisitTime"
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    type="time"
+                    size="small"
+                    fullWidth
+                    error={Boolean(errors.dateOfVisitTime)}
+                    helperText={errors.dateOfVisitTime?.message}
+                  />
+                )}
+              />
+            </Box>
+            <Box>
+              <FormLabelStyle sx={{ mb: 0 }}>
+                {t('Date of exit')}
+              </FormLabelStyle>
+              <Controller
+                control={control}
+                name="dateOfExit"
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    type="time"
+                    size="small"
+                    fullWidth
+                    error={Boolean(errors.dateOfExit)}
+                    helperText={errors.dateOfExit?.message}
+                  />
+                )}
+              />
+            </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <Grid item xs={8}>
             <OrderItemsForm
               productType={Course}
               handleCreateOrderItemOpen={handleCreateOrderItemOpen}
@@ -176,23 +177,29 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
               handleDiscountOpen={handleDiscountOpen}
             />
           </Grid>
-          <Grid item xs={12}>
+        </Grid>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}
+          >
             <OrderItemsForm
               productType={Goods}
               handleCreateOrderItemOpen={handleCreateOrderItemOpen}
               removeOrderItem={removeOrderItem}
               handleDiscountOpen={handleDiscountOpen}
             />
-          </Grid>
-          <Grid item xs={12}>
             <Box
               sx={{
                 justifyContent: 'flex-end',
-                alignItems: 'center',
-                display: 'flex'
+                alignItems: 'flex-end',
+                display: 'flex',
+                width: '50%'
               }}
             >
-              <List disablePadding sx={{ width: '40%' }}>
+              <List disablePadding>
                 <ListItem
                   sx={{
                     justifyContent: 'space-between',
@@ -354,8 +361,15 @@ const OrderForm: VFC<OrderFormPropsType> = ({ removeOrderItem, order }) => {
                 </ListItem>
               </List>
             </Box>
-          </Grid>
+          </Box>
         </Grid>
+        {reservationAnotherOpens.map((r) => {
+          return (
+            <Grid item xs={12} key={r.index}>
+              <ReservationAnother index={r.index} />
+            </Grid>
+          );
+        })}
       </Grid>
       <OrderDialogAction isSubmitting={isSubmitting} editing={Boolean(order)} />
       <Dialog

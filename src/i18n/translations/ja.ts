@@ -183,7 +183,8 @@ const jaJSON = {
   'Increase storage': '容量増加',
   'Bulk select': '一括選択',
   'Bulk delete': '一括削除',
-  'Search by file name': 'ファイル名で検索'
+  'Search by file name': 'ファイル名で検索',
+  'Reservation another day': '別日も予約'
 };
 
 export default jaJSON;

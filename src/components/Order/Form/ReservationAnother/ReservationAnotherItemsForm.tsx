@@ -23,12 +23,11 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import numeral from 'numeral';
 
 import { ProductType, Goods } from 'src/models/product';
-import { useOrderItemsForm } from './store';
+import { useReservationAnotherItemsForm } from './store';
 
 type OrderItemsProps = {
   productType: ProductType;
   handleCreateOrderItemOpen: (pt: ProductType) => void;
-  removeOrderItem?: (orderItemId?: number) => void;
   handleDiscountOpen: (index: number) => void;
 };
 
@@ -54,13 +53,8 @@ const IconButtonError = styled(IconButton)(
 `
 );
 
-const OrderItemsForm: VFC<OrderItemsProps> = memo(
-  ({
-    productType,
-    handleCreateOrderItemOpen,
-    removeOrderItem,
-    handleDiscountOpen
-  }) => {
+const ReservationAnotherItemsForm: VFC<OrderItemsProps> = memo(
+  ({ productType, handleCreateOrderItemOpen, handleDiscountOpen }) => {
     const { t }: { t: any } = useTranslation();
     const {
       control,
@@ -73,7 +67,7 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
       productTypeName,
       handleChangeDiscountRate,
       updateOrderItemSubPrice
-    } = useOrderItemsForm();
+    } = useReservationAnotherItemsForm();
 
     const orderItems = getOrderItems(productType);
 
@@ -267,7 +261,6 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
                         <IconButtonError
                           onClick={() => {
                             remove(getOrderItemIndex(item.productId));
-                            removeOrderItem(item?.id);
                           }}
                         >
                           <DeleteTwoToneIcon fontSize="small" />
@@ -313,4 +306,4 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
   }
 );
 
-export default OrderItemsForm;
+export default ReservationAnotherItemsForm;

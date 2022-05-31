@@ -7,13 +7,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import {
-  useOrderFormState,
-  useOrderFormDispatch,
-  addReservationAnother,
-  addRemoveOrderItemId,
-  reset
-} from 'src/contexts/OrderFormContext';
+
 import { Product, ProductType, Course, Goods } from 'src/models/product';
 import type { Order } from 'src/models/order';
 import type { Customer } from 'src/models/customer';
@@ -22,15 +16,12 @@ import { useCustomer } from 'src/hooks/useCustomer';
 import request from 'src/hooks/useRequest';
 import { usePrefectures } from 'src/hooks/usePrefectures';
 import { useOccupations } from 'src/hooks/useOccupations';
-import { OrderFormInputType, ReservationAnotherInputType } from './types';
+import { OrderFormInputType } from './types';
 
 export const useOrderItemsForm = (
   productType: ProductType,
-  another: boolean
 ) => {
-  const { control, setValue, getValues, watch } = another
-    ? useFormContext<ReservationAnotherInputType>()
-    : useFormContext<OrderFormInputType>();
+  const { control, setValue, getValues, watch } = useFormContext<OrderFormInputType>();
   const { remove } = useFieldArray({
     control,
     name: 'orderItems',

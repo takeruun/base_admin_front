@@ -10,9 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useOrderFormState,
   useOrderFormDispatch,
-  addReservationAnother,
   addRemoveOrderItemId,
-  execOnRegisterAnother,
   setCustomerId,
   reset
 } from 'src/contexts/OrderFormContext';
@@ -112,8 +110,6 @@ export const useOrderIndexForm = (orderId?: number) => {
           }
         }
       });
-
-    dispatchOrderForm(execOnRegisterAnother());
 
     request({
       url: Boolean(orderId) ? `/v1/orders/${orderId}` : '/v1/orders',
@@ -463,17 +459,6 @@ export const useCustomerForm = () => {
     getOccupations,
     updateAddress
   };
-
-  return store;
-};
-
-export const useOrderDialogAction = () => {
-  const dispatchOrderForm = useOrderFormDispatch();
-
-  const handleAddReservationAnother = () =>
-    dispatchOrderForm(addReservationAnother());
-
-  const store = { handleAddReservationAnother };
 
   return store;
 };

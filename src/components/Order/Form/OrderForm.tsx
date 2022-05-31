@@ -25,7 +25,6 @@ import DialogSelectSearchOrderItem from 'src/components/organisms/Order/DialogSe
 import OrderItemsForm from 'src/components/organisms/Order/OrderItemsForm';
 import OrderDialogAction from './OrderDialogAction';
 import SelectCustomer from './SelectCustomer';
-import ReservationAnother from './ReservationAnother';
 import { useOrderForm } from './store';
 
 interface OrderFormPropsType {
@@ -55,7 +54,6 @@ const OrderForm: VFC<OrderFormPropsType> = ({ order }) => {
     orderItemOpen,
     discountOrderItem,
     discoutOpen,
-    reservationAnotherOpens,
 
     setInitialSelectProductIds,
     handleCreateOrderItemOpen,
@@ -365,14 +363,6 @@ const OrderForm: VFC<OrderFormPropsType> = ({ order }) => {
             </Box>
           </Box>
         </Grid>
-        {reservationAnotherOpens.map((r) => {
-          if (r.registerFlg)
-            return (
-              <Grid item xs={12} key={r.index}>
-                <ReservationAnother index={r.index} />
-              </Grid>
-            );
-        })}
       </Grid>
       <OrderDialogAction isSubmitting={isSubmitting} editing={Boolean(order)} />
       <Dialog

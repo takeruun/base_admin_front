@@ -12,6 +12,8 @@ import {
   useOrderFormDispatch,
   addReservationAnother,
   addRemoveOrderItemId,
+  execOnRegisterAnother,
+  setCustomerId,
   reset
 } from 'src/contexts/OrderFormContext';
 import { Product, ProductType } from 'src/models/product';
@@ -22,6 +24,7 @@ import { useCustomer } from 'src/hooks/useCustomer';
 import request from 'src/hooks/useRequest';
 import { usePrefectures } from 'src/hooks/usePrefectures';
 import { useOccupations } from 'src/hooks/useOccupations';
+import { usePagination } from 'src/hooks/usePagination';
 import { OrderFormInputType } from './types';
 
 export const useOrderIndexForm = (orderId?: number) => {
@@ -110,6 +113,8 @@ export const useOrderIndexForm = (orderId?: number) => {
         }
       });
 
+    dispatchOrderForm(execOnRegisterAnother());
+
     request({
       url: Boolean(orderId) ? `/v1/orders/${orderId}` : '/v1/orders',
       method: Boolean(orderId) ? 'PUT' : 'POST',
@@ -160,7 +165,7 @@ export const useOrderIndexForm = (orderId?: number) => {
           discountName: oi.discount.name
         };
       });
-
+      dispatchOrderForm(setCustomerId(order.customerId));
       setValue('customerId', order.customerId);
       setValue('dateOfVisit', order.dateOfVisit);
       setValue('dateOfVisitTime', format(new Date(order.dateOfVisit), 'HH:mm'));
@@ -346,12 +351,11 @@ export const useOrderForm = () => {
 
 export const useSelectCustomer = () => {
   const { setValue, getValues } = useFormContext<OrderFormInputType>();
+  const dispatchOrderForm = useOrderFormDispatch();
   const { customers, totalCustomerCount, getCustomers } = useCustomer();
-
+  const { page, limit, handlePageChange, handleLimitChange } = usePagination();
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState(null);
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
 
   const handleSetFromValue = (value: string) => setFormValue(value);
 
@@ -359,6 +363,7 @@ export const useSelectCustomer = () => {
   const handleClose = () => setOpen(false);
 
   const handleSelectCustomer = (customer: Customer) => {
+    dispatchOrderForm(setCustomerId(customer.id));
     setValue('customerId', customer.id);
     setValue('customer.id', customer.id);
     setValue('customer.familyName', customer.familyName);
@@ -378,13 +383,6 @@ export const useSelectCustomer = () => {
     setValue('customer.occupation', customer.occupation);
     setValue('customer.firstVisitDate', customer.firstVisitDate);
     setValue('customer.memo', customer.memo ? customer.memo : '');
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
   };
 
   const store = {

@@ -45,17 +45,7 @@ export const useDialogSelectSearchOrderItem = (
         (p) => p.id == productId && !selectedProductIds.includes(productId)
       );
       if (product) {
-        addOrderItem({
-          name: product.name,
-          productId: product.id,
-          price: product.price,
-          taxRate: 10,
-          quantity: 1,
-          otherPerson: false,
-          productType: product.productType,
-          discountAmount: 0,
-          discountRate: 0
-        });
+        addOrderItem(product);
       }
     });
   };

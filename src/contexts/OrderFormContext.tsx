@@ -8,44 +8,51 @@ import {
 } from 'react';
 
 export type OrderFormStateType = {
-  reservationAnotherOpens: { index: number; open: boolean }[];
+  reservationAnotherOpens: {
+    index: number;
+    open: boolean;
+    registerFlg: boolean;
+  }[];
   removeOrderItemIds: number[];
+  registerAnotherFlg: boolean;
+  customerId: number;
 };
 
 const initialState: Readonly<OrderFormStateType> = {
   reservationAnotherOpens: [],
-  removeOrderItemIds: []
+  removeOrderItemIds: [],
+  registerAnotherFlg: false,
+  customerId: 0
 };
 
 type ADD_RESERVATION_ANOTHER = 'ADD_RESERVATION_ANOTHER';
-type CLOSE_RESERVATION_ANOTHER = 'CLOSE_RESERVATION_ANOTHER';
 type HANDLE_RESERVATION_ANOTHER = 'HANDLE_RESERVATION_ANOTHER';
 type ADD_REMOVE_ORDER_ITEM_ID = 'ADD_REMOVE_ORDER_ITEM_ID';
+type EXEC_REGISTER_ANOTHER = 'EXEC_REGISTER_ANOTHER';
 type RESET = 'RESET';
+type SET_CUSTOMER_ID = 'SET_CUSTOMER_ID';
+type DELETE_RESERVATION_ANOTHER = 'DELETE_RESERVATION_ANOTHER';
 
 const ActionType: {
   ADD_RESERVATION_ANOTHER: ADD_RESERVATION_ANOTHER;
-  CLOSE_RESERVATION_ANOTHER: CLOSE_RESERVATION_ANOTHER;
   HANDLE_RESERVATION_ANOTHER: HANDLE_RESERVATION_ANOTHER;
   ADD_REMOVE_ORDER_ITEM_ID: ADD_REMOVE_ORDER_ITEM_ID;
+  EXEC_REGISTER_ANOTHER: EXEC_REGISTER_ANOTHER;
+  SET_CUSTOMER_ID: SET_CUSTOMER_ID;
+  DELETE_RESERVATION_ANOTHER: DELETE_RESERVATION_ANOTHER;
   RESET: RESET;
 } = {
   ADD_RESERVATION_ANOTHER: 'ADD_RESERVATION_ANOTHER',
-  CLOSE_RESERVATION_ANOTHER: 'CLOSE_RESERVATION_ANOTHER',
   HANDLE_RESERVATION_ANOTHER: 'HANDLE_RESERVATION_ANOTHER',
   ADD_REMOVE_ORDER_ITEM_ID: 'ADD_REMOVE_ORDER_ITEM_ID',
+  EXEC_REGISTER_ANOTHER: 'EXEC_REGISTER_ANOTHER',
+  SET_CUSTOMER_ID: 'SET_CUSTOMER_ID',
+  DELETE_RESERVATION_ANOTHER: 'DELETE_RESERVATION_ANOTHER',
   RESET: 'RESET'
 };
 
 export const addReservationAnother = () => ({
   type: ActionType.ADD_RESERVATION_ANOTHER
-});
-
-export const closeReservationAnother = (closeIndex: number) => ({
-  type: ActionType.CLOSE_RESERVATION_ANOTHER,
-  payload: {
-    closeIndex
-  }
 });
 
 export const handleReservationAnother = (index: number, open: boolean) => ({
@@ -63,15 +70,35 @@ export const addRemoveOrderItemId = (id: number) => ({
   }
 });
 
+export const execOnRegisterAnother = () => ({
+  type: ActionType.EXEC_REGISTER_ANOTHER
+});
+
+export const setCustomerId = (customerId: number) => ({
+  type: ActionType.SET_CUSTOMER_ID,
+  payload: {
+    customerId
+  }
+});
+
+export const deleteReservationAnother = (deleteIndex: number) => ({
+  type: ActionType.DELETE_RESERVATION_ANOTHER,
+  payload: {
+    deleteIndex
+  }
+});
+
 export const reset = () => ({
   type: ActionType.RESET
 });
 
 type OrderFormActionType =
   | ReturnType<typeof addReservationAnother>
-  | ReturnType<typeof closeReservationAnother>
   | ReturnType<typeof handleReservationAnother>
   | ReturnType<typeof addRemoveOrderItemId>
+  | ReturnType<typeof execOnRegisterAnother>
+  | ReturnType<typeof setCustomerId>
+  | ReturnType<typeof deleteReservationAnother>
   | ReturnType<typeof reset>;
 
 const OrderFormReducer = (
@@ -84,24 +111,16 @@ const OrderFormReducer = (
         ...state,
         reservationAnotherOpens: state.reservationAnotherOpens.concat({
           index: state.reservationAnotherOpens.length + 1,
-          open: false
+          open: false,
+          registerFlg: true
         })
-      };
-    case ActionType.CLOSE_RESERVATION_ANOTHER:
-      return {
-        ...state,
-        reservationAnotherOpens: state.reservationAnotherOpens.map((n) =>
-          n.index === action.payload.closeIndex
-            ? { index: n.index, open: false }
-            : n
-        )
       };
     case ActionType.HANDLE_RESERVATION_ANOTHER:
       return {
         ...state,
         reservationAnotherOpens: state.reservationAnotherOpens.map((n) =>
           n.index === action.payload.index
-            ? { index: n.index, open: action.payload.open }
+            ? { ...n, open: action.payload.open }
             : n
         )
       };
@@ -110,11 +129,27 @@ const OrderFormReducer = (
         ...state,
         removeOrderItemIds: state.removeOrderItemIds.concat(action.payload.id)
       };
-    case ActionType.RESET:
+    case ActionType.EXEC_REGISTER_ANOTHER:
       return {
-        reservationAnotherOpens: [],
-        removeOrderItemIds: []
+        ...state,
+        registerAnotherFlg: true
       };
+    case ActionType.SET_CUSTOMER_ID:
+      return {
+        ...state,
+        customerId: action.payload.customerId
+      };
+    case ActionType.DELETE_RESERVATION_ANOTHER:
+      return {
+        ...state,
+        reservationAnotherOpens: state.reservationAnotherOpens.map((n) =>
+          n.index === action.payload.deleteIndex
+            ? { ...n, registerFlg: false }
+            : n
+        )
+      };
+    case ActionType.RESET:
+      return initialState;
     default:
       throw new Error('Invalid action type');
   }

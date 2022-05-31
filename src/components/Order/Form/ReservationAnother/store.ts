@@ -2,19 +2,23 @@ import { useState, useCallback } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
+import { format } from 'date-fns';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useOrderFormState,
   useOrderFormDispatch,
-  handleReservationAnother
+  handleReservationAnother,
+  deleteReservationAnother
 } from 'src/contexts/OrderFormContext';
+import request from 'src/hooks/useRequest';
 import { Product, ProductType } from 'src/models/product';
 import { Discount, Percentage, PriceReduction } from 'src/models/discount';
 import { ReservationAnotherInputType } from './types';
 
 export const useReservationAnother = (index: number) => {
   const { t }: { t: any } = useTranslation();
-  const { reservationAnotherOpens } = useOrderFormState();
+  const { reservationAnotherOpens, registerAnotherFlg, customerId } =
+    useOrderFormState();
   const dispatchOrderForm = useOrderFormDispatch();
 
   const schema = Yup.object({
@@ -42,10 +46,9 @@ export const useReservationAnother = (index: number) => {
       email: Yup.string().required(t('Email is required.'))
     })
   }).required();
-
   const methods = useForm<ReservationAnotherInputType>({
     defaultValues: {
-      customerId: 0,
+      customerId,
       dateOfVisit: '',
       dateOfVisitTime: '',
       dateOfExit: '',
@@ -165,6 +168,35 @@ export const useReservationAnother = (index: number) => {
     [expand]
   );
 
+  const execRegisterAnother = useCallback(() => {
+    if (registerAnotherFlg) {
+      const data = getValues();
+      request({
+        url: '/v1/orders',
+        method: 'POST',
+        reqParams: {
+          data: {
+            ...data,
+            customerId,
+            dateOfVisit: new Date(
+              `${format(new Date(data.dateOfVisit), 'yyyy-MM-dd')} ${
+                data.dateOfVisitTime
+              }`
+            ),
+            dateOfExit: new Date(
+              `${format(new Date(data.dateOfVisit), 'yyyy-MM-dd')} ${
+                data.dateOfExit
+              }`
+            )
+          }
+        }
+      });
+    }
+  }, [registerAnotherFlg]);
+
+  const handleDeleteAnother = () =>
+    dispatchOrderForm(deleteReservationAnother(index));
+
   const store = {
     methods,
     control,
@@ -187,7 +219,9 @@ export const useReservationAnother = (index: number) => {
     updateOrderPrice,
     updateSelectProductIds,
     selectDiscount,
-    addOrderItem
+    addOrderItem,
+    execRegisterAnother,
+    handleDeleteAnother
   };
 
   return store;

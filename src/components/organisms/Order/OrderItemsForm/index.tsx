@@ -22,16 +22,9 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import numeral from 'numeral';
 
-import { ProductType, Goods } from 'src/models/product';
+import { Goods } from 'src/models/product';
 import { useOrderItemsForm } from './store';
-
-type OrderItemsProps = {
-  productType: ProductType;
-  handleCreateOrderItemOpen: (pt: ProductType) => void;
-  removeOrderItem?: (orderItemId?: number) => void;
-  handleDiscountOpen: (index: number) => void;
-  another?: boolean;
-};
+import { OrderItemsProps } from './types';
 
 const HiddeArrowTextField = styled(TextField)(
   () => `

@@ -10,11 +10,14 @@ import {
   List,
   ListItem,
   InputAdornment,
+  IconButton,
   TextField,
   Typography,
-  FormControl
+  FormControl,
+  lighten
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import CloseIcon from '@mui/icons-material/Close';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandMore from 'src/components/molecule/ExpandMore';
@@ -33,6 +36,18 @@ const FormLabelStyle = styled('p')(
     margin-bottom: 8px;
     font-weight: bold;
   `
+);
+
+const IconButtonError = styled(IconButton)(
+  ({ theme }) => `
+    background: ${theme.colors.error.lighter};
+    olor: ${theme.colors.error.main};
+    padding: ${theme.spacing(0.5)};
+
+    &:hover {
+      background: ${lighten(theme.colors.error.lighter, 0.4)};
+    }
+`
 );
 
 const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
@@ -60,7 +75,9 @@ const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
     updateOrderPrice,
     updateSelectProductIds,
     selectDiscount,
-    addOrderItem
+    addOrderItem,
+    execRegisterAnother,
+    handleDeleteAnother
   } = useReservationAnother(index);
 
   useEffect(() => {
@@ -73,13 +90,15 @@ const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
     return () => subscription.unsubscribe();
   }, [updateSelectProductIds]);
 
+  useEffect(() => execRegisterAnother(), [execRegisterAnother]);
+
   return (
     <FormProvider {...methods}>
       <CardContent
         sx={{
           borderTop: '2px dotted grey',
           borderBottom: '2px dotted grey',
-          p: 1,
+          py: '3px',
           '&:last-child': { pb: 0 }
         }}
       >
@@ -172,6 +191,11 @@ const ReservationAnother: VFC<{ index: number }> = ({ index }) => {
                     />
                   )}
                 />
+              </Box>
+              <Box sx={{ margin: 'auto', marginRight: 0 }}>
+                <IconButtonError onClick={handleDeleteAnother}>
+                  <CloseIcon fontSize="small" />
+                </IconButtonError>
               </Box>
             </Box>
           </Grid>

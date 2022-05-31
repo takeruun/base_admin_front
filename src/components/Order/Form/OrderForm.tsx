@@ -366,11 +366,12 @@ const OrderForm: VFC<OrderFormPropsType> = ({ order }) => {
           </Box>
         </Grid>
         {reservationAnotherOpens.map((r) => {
-          return (
-            <Grid item xs={12} key={r.index}>
-              <ReservationAnother index={r.index} />
-            </Grid>
-          );
+          if (r.registerFlg)
+            return (
+              <Grid item xs={12} key={r.index}>
+                <ReservationAnother index={r.index} />
+              </Grid>
+            );
         })}
       </Grid>
       <OrderDialogAction isSubmitting={isSubmitting} editing={Boolean(order)} />

@@ -46,3 +46,11 @@ export type SelectSearchOrderItemFormInputType = {
   categoryId: number;
   name: string;
 };
+
+export type OrderItemsProps = {
+  productType: ProductType;
+  handleCreateOrderItemOpen: (pt: ProductType) => void;
+  removeOrderItem?: (orderItemId?: number) => void;
+  handleDiscountOpen: (index: number) => void;
+  another?: boolean;
+};

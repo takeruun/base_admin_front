@@ -8,7 +8,7 @@ import {
 } from 'react';
 
 export type OrderFormStateType = {
-  removeOrderItemIds: number[];
+  removeOrderItemIds: number[],
   customerId: number;
 };
 

@@ -16,19 +16,6 @@ type OrderItemFormInputType = {
   discountName?: string;
 };
 
-export type ReservationAnotherInputType = {
-  customerId: number;
-  dateOfVisit: string;
-  dateOfVisitTime: string;
-  dateOfExit: string;
-  orderItems: OrderItemFormInputType[];
-  status: Status;
-  paymentMethod: PaymentMethod;
-  discountAmount: number;
-  subTotalPrice: number;
-  totalPrice: number;
-};
-
 export type OrderFormInputType = {
   customerId: number;
   dateOfVisit: string;
@@ -52,5 +39,4 @@ export type OrderItemsProps = {
   handleCreateOrderItemOpen: (pt: ProductType) => void;
   removeOrderItem?: (orderItemId?: number) => void;
   handleDiscountOpen: (index: number) => void;
-  another?: boolean;
 };

@@ -34,70 +34,69 @@ const Form = () => {
     <>
       <Card
         sx={{
-          width: '100%'
+          width: '50%'
         }}
       >
         <CardHeader title={t('Administrator info')} />
         <Divider />
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid item xs={12}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <FormLabelStyle>{t('Administrator name')}</FormLabelStyle>
-                  <Controller
-                    control={control}
-                    name="name"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.name)}
-                        helperText={errors.name?.message}
-                        fullWidth
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabelStyle>{t('Email')}</FormLabelStyle>
-                  <Controller
-                    control={control}
-                    name="email"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        type="email"
-                        error={Boolean(errors.email)}
-                        helperText={errors.email?.message}
-                        fullWidth
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabelStyle>{t('Password')}</FormLabelStyle>
-                  <Controller
-                    control={control}
-                    name="password"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        type="password"
-                        error={Boolean(errors.password)}
-                        helperText={errors.password?.message}
-                        fullWidth
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <FormLabelStyle>{t('Administrator name')}</FormLabelStyle>
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      error={Boolean(errors.name)}
+                      helperText={errors.name?.message}
+                      fullWidth
+                      variant="outlined"
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormLabelStyle>{t('Email')}</FormLabelStyle>
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      type="email"
+                      error={Boolean(errors.email)}
+                      helperText={errors.email?.message}
+                      fullWidth
+                      variant="outlined"
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormLabelStyle>{t('Password')}</FormLabelStyle>
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      type="password"
+                      error={Boolean(errors.password)}
+                      helperText={errors.password?.message}
+                      fullWidth
+                      variant="outlined"
+                    />
+                  )}
+                />
               </Grid>
             </Grid>
             <DialogActions
               sx={{
-                p: 3
+                p: 2,
+                pb: 0
               }}
             >
               <Button color="secondary">{t('Cancel')}</Button>

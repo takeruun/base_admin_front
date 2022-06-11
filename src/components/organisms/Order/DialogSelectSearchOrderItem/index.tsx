@@ -108,7 +108,7 @@ const DialogSelectSearchOrderItem: VFC<DialogSelectSearchOrderItemPropsType> =
                   />
                 </Box>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={9}>
                 <Box>
                   <TextField
                     sx={{
@@ -214,8 +214,7 @@ const DialogSelectSearchOrderItem: VFC<DialogSelectSearchOrderItemPropsType> =
 
           <DialogActions
             sx={{
-              p: 3,
-              pt: 0
+              p: 2
             }}
           >
             <Button

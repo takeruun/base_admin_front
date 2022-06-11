@@ -7,7 +7,6 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-
 import { Product, ProductType, Course, Goods } from 'src/models/product';
 import type { Order } from 'src/models/order';
 import type { Customer } from 'src/models/customer';

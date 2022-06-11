@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import request from 'src/hooks/useRequest';
-import type { FormInputType } from './type';
+import type { FormInputType } from './types';
 
 export const useCategoryForm = () => {
   const navigate = useNavigate();

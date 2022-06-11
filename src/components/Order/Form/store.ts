@@ -216,7 +216,6 @@ export const useOrderForm = () => {
     keyName: 'key'
   });
 
-  const { reservationAnotherOpens } = useOrderFormState();
   const dispatchOrderForm = useOrderFormDispatch();
   const [selectProductIds, setSelectProductIds] = useState<number[]>([]);
 
@@ -328,7 +327,6 @@ export const useOrderForm = () => {
     orderItemOpen,
     discountOrderItem,
     discoutOpen,
-    reservationAnotherOpens,
 
     setInitialSelectProductIds,
     handleCreateOrderItemOpen,

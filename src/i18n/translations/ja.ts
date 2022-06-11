@@ -125,7 +125,7 @@ const jaJSON = {
     'このカテゴリを削除してもよろしですか',
   'Category id': 'カテゴリID',
   'Category info': 'カテゴリ情報',
-  'Add new category': '新しいカテゴリ追加',
+  'Add new category': 'カテゴリ追加',
   'Administrators Management': '管理者管理',
   'Create Administrator': '管理者作成',
   'The administrator has been removed': 'この管理者を削除しました。',
@@ -136,7 +136,7 @@ const jaJSON = {
   'Administrator name': '管理者名',
   'Administrator info': '管理者情報',
   Password: 'パスワード',
-  'Add new administrator': '新しい管理者追加',
+  'Add new administrator': '管理者追加',
   'Are you sure you want to permanently delete this administrator':
     'この管理者を削除してもよろしですか',
   'No reservations for today': '本日の予約はありません。',
@@ -184,7 +184,11 @@ const jaJSON = {
   'Bulk select': '一括選択',
   'Bulk delete': '一括削除',
   'Search by file name': 'ファイル名で検索',
-  'Reservation another day': '別日も予約'
+  'Select discount': '割引選択',
+  'Search by discount name': '割引名で検索',
+  'Discount id': '割引ID',
+  'Discount name': '割引名',
+  'Search by customer name': 'お客様名で検索'
 };
 
 export default jaJSON;

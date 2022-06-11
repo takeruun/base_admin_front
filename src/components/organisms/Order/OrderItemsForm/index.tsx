@@ -54,7 +54,6 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
     handleCreateOrderItemOpen,
     removeOrderItem,
     handleDiscountOpen,
-    another = false
   }) => {
     const { t }: { t: any } = useTranslation();
     const {
@@ -68,7 +67,7 @@ const OrderItemsForm: VFC<OrderItemsProps> = memo(
       updateOrderItemSubPrice,
       handleChangeQuantity,
       handleRemoveOrderItem
-    } = useOrderItemsForm(productType, another);
+    } = useOrderItemsForm(productType);
 
     useEffect(() => {
       const subscription = updateOrderItemSubPrice();

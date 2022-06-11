@@ -44,12 +44,7 @@ const DialogSelectSearchDiscount: VFC<DialogSelectSearchDiscountProps> = memo(
 
     return (
       <>
-        <Dialog
-          fullWidth
-          maxWidth="md"
-          open={open}
-          onClose={handleDiscountClose}
-        >
+        <Dialog fullWidth open={open} onClose={handleDiscountClose}>
           <DialogTitle
             sx={{
               p: 3

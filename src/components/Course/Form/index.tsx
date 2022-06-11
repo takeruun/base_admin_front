@@ -11,6 +11,8 @@ import {
   DialogActions,
   Grid,
   TextField,
+  Typography,
+  InputAdornment,
   styled
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
@@ -45,75 +47,93 @@ const Form = () => {
     <>
       <Card
         sx={{
-          width: '100%'
+          width: '50%'
         }}
       >
         <CardHeader title={t('Course info')} />
         <Divider />
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid item xs={12}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <FormLabelStyle>{t('Category')}</FormLabelStyle>
-                  <Autocomplete
-                    disablePortal
-                    options={categories}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(_, v) => {
-                      if (v) {
-                        setValue('categoryId', v['id']);
-                      }
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...register('courseName')}
-                        error={Boolean(errors.courseName)}
-                        helperText={errors.courseName?.message}
-                        fullWidth
-                        {...params}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabelStyle>{t('Course name')}</FormLabelStyle>
-                  <Controller
-                    control={control}
-                    name="name"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.name)}
-                        helperText={errors.name?.message}
-                        fullWidth
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabelStyle>{t('Price')}</FormLabelStyle>
-                  <Controller
-                    control={control}
-                    name="price"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        type="number"
-                        error={Boolean(errors.price)}
-                        helperText={errors.price?.message}
-                        fullWidth
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <FormLabelStyle>{t('Category')}</FormLabelStyle>
+                <Autocomplete
+                  disablePortal
+                  options={categories}
+                  getOptionLabel={(option) => option.name}
+                  onChange={(_, v) => {
+                    if (v) {
+                      setValue('categoryId', v['id']);
+                    }
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...register('courseName')}
+                      error={Boolean(errors.courseName)}
+                      helperText={errors.courseName?.message}
+                      fullWidth
+                      {...params}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormLabelStyle>{t('Course name')}</FormLabelStyle>
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      error={Boolean(errors.name)}
+                      helperText={errors.name?.message}
+                      fullWidth
+                      variant="outlined"
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormLabelStyle>{t('Price')}</FormLabelStyle>
+                <Controller
+                  control={control}
+                  name="price"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      type="number"
+                      error={Boolean(errors.price)}
+                      helperText={errors.price?.message}
+                      fullWidth
+                      variant="outlined"
+                      InputProps={{
+                        inputProps: {
+                          style: { textAlign: 'right' }
+                        },
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Typography
+                              p={0}
+                              m={0}
+                              variant="body1"
+                              sx={{
+                                lineHeight: 0
+                              }}
+                            >
+                              ¥
+                            </Typography>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  )}
+                />
               </Grid>
             </Grid>
             <DialogActions
               sx={{
-                p: 3
+                p: 2,
+                pb: 0
               }}
             >
               <Button color="secondary">{t('Cancel')}</Button>

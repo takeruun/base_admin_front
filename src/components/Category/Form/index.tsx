@@ -9,10 +9,17 @@ import {
   DialogActions,
   Grid,
   TextField,
-  Box
+  styled
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { useCategoryForm } from './store';
+
+const FormLabelStyle = styled('p')(
+  () => `
+    margin-bottom: 8px;
+    font-weight: bold;
+  `
+);
 
 const Form = () => {
   const { t }: { t: any } = useTranslation();
@@ -28,38 +35,35 @@ const Form = () => {
     <>
       <Card
         sx={{
-          width: '100%'
+          width: '50%'
         }}
       >
         <CardHeader title={t('Category info')} />
         <Divider />
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid item xs={12}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Box pb={0} pt={0} sx={{ fontWeight: 'bold' }}>
-                    <p>{t('Category name')}</p>
-                  </Box>
-                  <Controller
-                    control={control}
-                    name="name"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.name)}
-                        helperText={errors.name?.message}
-                        fullWidth
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <FormLabelStyle>{t('Category name')}</FormLabelStyle>
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      error={Boolean(errors.name)}
+                      helperText={errors.name?.message}
+                      fullWidth
+                      variant="outlined"
+                    />
+                  )}
+                />
               </Grid>
             </Grid>
             <DialogActions
               sx={{
-                p: 3
+                p: 2,
+                pb: 0
               }}
             >
               <Button color="secondary">{t('Cancel')}</Button>

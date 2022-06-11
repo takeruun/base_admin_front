@@ -1,20 +1,7 @@
 import { useState, FocusEvent, useCallback, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm, useFormContext, useFieldArray } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import * as Yup from 'yup';
-import { format } from 'date-fns';
-import axios from 'axios';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 
-import { Product, ProductType, Course, Goods } from 'src/models/product';
-import type { Order } from 'src/models/order';
-import type { Customer } from 'src/models/customer';
-import { Discount, Percentage, PriceReduction } from 'src/models/discount';
-import { useCustomer } from 'src/hooks/useCustomer';
-import request from 'src/hooks/useRequest';
-import { usePrefectures } from 'src/hooks/usePrefectures';
-import { useOccupations } from 'src/hooks/useOccupations';
+import { ProductType, Course, Goods } from 'src/models/product';
 import { OrderFormInputType } from './types';
 
 export const useOrderItemsForm = (

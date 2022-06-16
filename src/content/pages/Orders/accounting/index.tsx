@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
 import Footer from 'src/components/Footer';
-import OrderDetail from './OrderDetail';
+import OrderDetail from 'src/components/Order/OrderDetail';
 
 const Accounting = () => {
   const { t }: { t: any } = useTranslation();

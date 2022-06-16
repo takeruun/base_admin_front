@@ -111,7 +111,7 @@ const OrderForm: VFC<OrderFormPropsType> = ({ order }) => {
                   render={({ field }) => (
                     <DesktopDatePicker
                       {...field}
-                      inputFormat="yyyy年MM月dd日"
+                      inputFormat="yyyy年M月d日"
                       mask="____年__月__日"
                       renderInput={(params) => (
                         <TextField

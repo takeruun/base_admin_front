@@ -42,6 +42,13 @@ const List = () => {
             sx={{
               m: 0
             }}
+            search={() =>
+              getCustomers({
+                query,
+                offset: page * limit,
+                limit
+              })
+            }
             onChange={handleQueryChange}
             placeholder={t('Search by name, email or phone number...')}
             value={query}

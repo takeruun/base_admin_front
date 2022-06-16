@@ -39,6 +39,7 @@ const List = () => {
             sx={{
               m: 0
             }}
+            search={() => getOrders(page, limit)}
             onChange={handleQueryChange}
             placeholder={t('Search by name, email or phone number...')}
             value={query}

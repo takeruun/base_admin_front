@@ -42,6 +42,13 @@ const List = () => {
             sx={{
               m: 0
             }}
+            search={() =>
+              getCategories({
+                offset: page * limit,
+                limit,
+                query
+              })
+            }
             onChange={handleQueryChange}
             placeholder={t('Search by category name')}
             value={query}

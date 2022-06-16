@@ -39,6 +39,14 @@ const List: VFC = () => {
             sx={{
               m: 0
             }}
+            search={() =>
+              getProductsSearch({
+                product_type: 2,
+                offset: page * limit,
+                limit,
+                query
+              })
+            }
             onChange={handleQueryChange}
             placeholder={t('Search by product name')}
             value={query}

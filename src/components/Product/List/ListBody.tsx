@@ -10,6 +10,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
+import numeral from 'numeral';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useTranslation } from 'react-i18next';
 import { ListBodyPropsType } from './types';
@@ -60,7 +61,9 @@ const ListBody: VFC<ListBodyPropsType> = memo(
                     <Typography noWrap>{product.name}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography noWrap>{product.price}</Typography>
+                    <Typography noWrap>
+                      ¥{numeral(product.price).format('0,0')}
+                    </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography noWrap>

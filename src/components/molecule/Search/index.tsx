@@ -1,10 +1,12 @@
 import { VFC, memo } from 'react';
-import { InputAdornment, TextField } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { Button, InputAdornment, TextField } from '@mui/material';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { SearchPropsType } from './types';
 
 const Search: VFC<SearchPropsType> = memo(
   ({
+    search,
     onChange,
     value,
     sx,
@@ -14,6 +16,7 @@ const Search: VFC<SearchPropsType> = memo(
     margin = 'normal',
     variant
   }) => {
+    const { t }: { t: any } = useTranslation();
     return (
       <TextField
         sx={sx}
@@ -21,6 +24,18 @@ const Search: VFC<SearchPropsType> = memo(
           startAdornment: (
             <InputAdornment position="start">
               <SearchTwoToneIcon />
+            </InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ py: 0.5 }}
+                onClick={search}
+              >
+                {t('Search')}
+              </Button>
             </InputAdornment>
           )
         }}

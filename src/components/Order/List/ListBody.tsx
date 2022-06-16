@@ -102,12 +102,12 @@ const ListBody: VFC<ListBodyPropsType> = memo(
                   </TableCell>
                   <TableCell>
                     <Typography noWrap>
-                      {format(new Date(order.dateOfVisit), 'MM月dd日 H時mm分')}
+                      {format(new Date(order.dateOfVisit), 'M月d日 H時mm分')}
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography noWrap>
-                      {format(new Date(order.createdAt), 'MM月dd日 H時mm分')}
+                      {format(new Date(order.createdAt), 'M月d日 H時mm分')}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">

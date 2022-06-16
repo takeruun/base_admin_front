@@ -39,6 +39,14 @@ const List = () => {
             sx={{
               m: 0
             }}
+            search={() =>
+              getCourses({
+                product_type: 1,
+                offset: page * limit,
+                limit,
+                query
+              })
+            }
             onChange={handleQueryChange}
             placeholder={t('Search by course name')}
             value={query}

@@ -184,6 +184,7 @@ const jaJSON = {
   'Bulk select': '一括選択',
   'Bulk delete': '一括削除',
   'Search by file name': 'ファイル名で検索',
+  'Reservation another day': '別日も予約',
   'Select discount': '割引選択',
   'Search by discount name': '割引名で検索',
   'Discount id': '割引ID',

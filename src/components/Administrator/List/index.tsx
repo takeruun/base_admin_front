@@ -39,6 +39,13 @@ const List = () => {
             sx={{
               m: 0
             }}
+            search={() =>
+              getAdministrators({
+                query,
+                offset: page * limit,
+                limit
+              })
+            }
             onChange={handleQueryChange}
             placeholder={t('Search by administrator name')}
             value={query}

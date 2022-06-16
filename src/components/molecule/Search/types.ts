@@ -2,6 +2,7 @@ import { Theme } from '@mui/material/styles';
 import { SxProps } from '@mui/system';
 
 export type SearchPropsType = {
+  search?: () => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   sx?: SxProps<Theme>;

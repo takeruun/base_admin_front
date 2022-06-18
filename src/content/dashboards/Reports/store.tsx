@@ -11,6 +11,7 @@ import type { ApexOptions } from 'apexcharts';
 import { useOrder } from 'src/hooks/useOrder';
 import { Cancel } from 'src/models/order';
 import { productTypes } from 'src/models/product';
+import { SalesData } from 'src/models/salesData';
 import request from 'src/hooks/useRequest';
 import { FontRateContext } from 'src/theme/ThemeProvider';
 import {
@@ -186,9 +187,7 @@ export const useSaleDataState = () => {
 
   const [currentTab, setCurrentTab] = useState('course');
   const [options, setOptions] = useState<ApexOptions>(chartOptions);
-  const [chartData, setChartData] = useState<
-    { name: string; type: string; data: number[] }[] | null
-  >([]);
+  const [chartData, setChartData] = useState<SalesData[] | null>([]);
   const [data, setData] = useState<{
     totalPrice: number;
     rate: number;
@@ -214,7 +213,7 @@ export const useSaleDataState = () => {
         };
       } else {
         params = {
-          product_type: currentTab == 'course' ? 1 : 2
+          product_types: currentTab == 'course' ? [1] : [2]
         };
       }
       request({
@@ -224,103 +223,34 @@ export const useSaleDataState = () => {
           params: {
             ...params,
             section,
-            date_of_exit_from: format(
+            period,
+            date_of_exit_ymd_from: format(
               section == 'day'
                 ? subDays(now, period)
                 : setDay(subMonths(now, period), 1),
               'yyyy-MM-dd'
             ),
-            date_of_exit_to: format(
+            date_of_exit_ymd_to: format(
               section == 'day' ? now : subDays(setDay(addMonths(now, 1), 1), 1),
               'yyyy-MM-dd'
             )
           }
         }
       }).then((response) => {
-        if (response.data.salesData) {
-          const priceIndex = currentTab == 'course' ? 1 : 2;
-          var days = [];
-          var prices = [];
-          if (currentTab == 'all') {
-            prices[1] = [];
-            prices[2] = [];
-          } else {
-            prices[priceIndex] = [];
-          }
-
-          for (let i = period; i > 0; i--) {
-            const salesData = response.data.salesData.filter((sd) => {
-              if (
-                sd.day ==
-                format(
-                  section == 'day' ? subDays(now, i) : subMonths(now, i),
-                  section == 'day' ? 'yyyy-M-d' : 'yyyy-M'
-                )
-              )
-                return sd;
-            });
-
-            days.push(
-              format(
-                section == 'day' ? subDays(now, i) : subMonths(now, i),
-                section == 'day' ? 'M/d' : 'yyyy/M'
-              )
-            );
-            if (salesData.length > 0) {
-              if (salesData.find((s) => s.productType == 1))
-                prices[1].push(
-                  salesData.find((s) => s.productType == 1).totalPrice
-                );
-              if (salesData.find((s) => s.productType == 2))
-                prices[2].push(
-                  salesData.find((s) => s.productType == 2).totalPrice
-                );
-              if (
-                salesData.find((s) => s.productType == 2) == undefined &&
-                currentTab == 'all'
-              )
-                prices[2].push(0);
-
-              if (
-                salesData.find((s) => s.productType == 1) == undefined &&
-                currentTab == 'all'
-              )
-                prices[1].push(0);
-            } else {
-              if (currentTab == 'all') {
-                prices[1].push(0);
-                prices[2].push(0);
-              } else {
-                prices[priceIndex].push(0);
-              }
-            }
-          }
-
+        if (response.data.salesChartData) {
           setData({
             totalPrice: response.data.salesResult.totalPrice,
             rate: response.data.salesResult.rate,
             up: response.data.salesResult.up
           });
 
-          const chartData = [];
-          if (currentTab == 'all') {
-            prices.forEach((price, i) => {
-              chartData.push({
-                name: productTypes.find((p) => p.value == i)['label'],
-                type: 'column',
-                data: price
-              });
-            });
-            setOptions({ ...options, labels: days, legend: { show: true } });
-          } else {
-            chartData.push({
-              name: response.data.salesData[0].productType,
-              type: 'column',
-              data: prices[response.data.salesData[0].productType]
-            });
-            setOptions({ ...options, labels: days });
-          }
-          setChartData(chartData);
+          setOptions({
+            ...options,
+            labels: response.data.salesChartData.days,
+            legend: { show: currentTab == 'all' }
+          });
+
+          setChartData(response.data.salesChartData.chartData);
         } else setChartData(null);
       });
     } catch (e) {

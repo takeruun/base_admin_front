@@ -14,7 +14,7 @@ const Loader = (Component) =>
 
 // Pages
 const ReceiptPreview = Loader(
-  lazy(() => import('src/content/pages/Orders/receipt_preview'))
+  lazy(() => import('src/content/pages/Orders/receiptPreview'))
 );
 
 // Status

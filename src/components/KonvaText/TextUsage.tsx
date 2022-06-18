@@ -1,6 +1,6 @@
 import { VFC, useRef, useEffect, memo } from 'react';
 import { Rect, Transformer } from 'react-konva';
-import { textHtmlProps } from 'src/content/pages/Orders/receipt';
+import { textHtmlProps } from 'src/components/Order/ReceiptContent/types';
 import TextHtml from './TextHtml';
 import TextInputHtml from './TextInputHtml';
 

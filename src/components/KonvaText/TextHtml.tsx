@@ -1,7 +1,7 @@
 import { VFC, memo } from 'react';
 import { Html } from 'react-konva-utils';
 import { styled } from '@mui/material';
-import { textHtmlProps } from 'src/content/pages/Orders/receipt';
+import { textHtmlProps } from 'src/components/Order/ReceiptContent/types';
 
 interface TextHtmlProps {
   textProps: textHtmlProps;

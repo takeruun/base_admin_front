@@ -1,6 +1,6 @@
 import { VFC, useState, useEffect, memo } from 'react';
 import { Html } from 'react-konva-utils';
-import { textHtmlProps } from 'src/content/pages/Orders/receipt';
+import { textHtmlProps } from 'src/components/Order/ReceiptContent/types';
 import { convertToRaw, EditorState, ContentState } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import { Editor } from 'react-draft-wysiwyg';

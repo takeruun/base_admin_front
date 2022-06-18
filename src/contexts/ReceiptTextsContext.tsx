@@ -1,5 +1,5 @@
 import { VFC, useState, createContext, ReactNode } from 'react';
-import { textHtmlProps } from 'src/content/pages/Orders/receipt';
+import { textHtmlProps } from 'src/components/Order/ReceiptContent/types';
 
 type newProps = textHtmlProps & {
   current: any;

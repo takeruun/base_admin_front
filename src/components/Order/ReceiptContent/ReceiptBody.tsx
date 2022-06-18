@@ -11,9 +11,9 @@ import {
   INITIAL_IMAGE_WIDTH,
   INITIAL_IMAGE_HEIGHT
 } from 'src/constant/index';
-import { textHtmlProps } from './index';
+import { textHtmlProps } from './types';
 
-interface ReceiptBodyProps {
+interface ReceiptContentProps {
   texts: textHtmlProps[];
   handleSetTexts: (text: textHtmlProps) => void;
   handleCHangeWidth: (id: number, width: number, height: number) => void;
@@ -25,7 +25,7 @@ const BaseImage = () => {
   return <Image image={image} height={350} width={850} />;
 };
 
-const ReceiptBody: VFC<ReceiptBodyProps> = ({
+const ReceiptContent: VFC<ReceiptContentProps> = ({
   texts,
   handleSetTexts,
   handleCHangeWidth,
@@ -130,4 +130,4 @@ const ReceiptBody: VFC<ReceiptBodyProps> = ({
   );
 };
 
-export default ReceiptBody;
+export default ReceiptContent;
